@@ -10,7 +10,7 @@ Code cloud session.
 
 ## Response 1
 
-*2026-11-01 17:04 PST (01:04 UTC 2026-11-02) to 2026-11-01 about 20:30 PST, one sitting.*
+*2026-11-01 17:04 PST (01:04 UTC 2026-11-02) to 2026-11-01 20:00 PST (04:00 UTC), one sitting.*
 
 ### What was built
 
@@ -46,7 +46,8 @@ script-generated project in the style of `motor-pid` and `op-amp-pcb`, following
   decoded back off the board, keyed parts, 3D models, every LCSC code against JLCPCB's
   own description and stock); the generated `docs/MANUFACTURING.md`, order form and
   `PLACEMENT_CHECKS.txt`; the claims check on the hand-written documents.
-- `make.py` — all of it in one command, about a minute and a half.
+- `make.py` — all of it in one command, about 70 seconds; a second run changes no committed file
+  (the tilted 3D view, which KiCad renders a little differently each time, goes to `build/`).
 - `README.md`, `docs/HANDBOOK.md`, `docs/DESIGN_NOTES.md`, this log.
 
 ![the board](docs/history/r1-render-top.png)

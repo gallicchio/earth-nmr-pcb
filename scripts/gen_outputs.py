@@ -372,7 +372,10 @@ def export_images(stem, layers):
         ("render-iso", ["--side", "top", "--perspective",
                         "--rotate", "-30,0,-20", "--zoom", "0.75"]))
     for name, extra in renders:
-        out = os.path.join(IMAGES, f"{stem}-{name}.png")
+        # the tilted view is not reproducible (KiCad 10.0.8 renders it a little differently every
+        # run, the straight-on views byte for byte the same): it goes to build/, not into git
+        out = os.path.join(ROOT, "build" if name == "render-iso" else os.path.relpath(IMAGES, ROOT), f"{stem}-{name}.png")
+        os.makedirs(os.path.dirname(out), exist_ok=True)
         # "basic" rather than "high": the raytraced setting samples
         # stochastically, so an unchanged board renders differently every time
         # and the image churns in git.  The difference is soft shadows.
