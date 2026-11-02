@@ -976,13 +976,30 @@ class Board:
                                   pcbnew.GR_TEXT_H_ALIGN_RIGHT if off[0] < -0.5 else pcbnew.GR_TEXT_H_ALIGN_CENTER)
 
     def silk_boxes(self):
-        for (x0, y0, x1, y1, titles) in L.BOXES:
-            for (a, b) in (((x0, y0), (x1, y0)), ((x1, y0), (x1, y1)), ((x1, y1), (x0, y1)), ((x0, y1), (x0, y0))):
+        """The dashed stage boxes: a rectangle (x0, y0, x1, y1) or a polygon's
+        corners; their dashes stop short of pads, part bodies and every text."""
+        saved = list(self.boxes)
+        for t in self.board.GetDrawings():
+            if isinstance(t, pcbnew.PCB_TEXT) and t.GetLayer() == pcbnew.F_SilkS:
+                bb = t.GetBoundingBox()
+                self.boxes.append((tomm(bb.GetLeft()) - 0.3, tomm(bb.GetTop()) - 0.3,
+                                   tomm(bb.GetRight()) + 0.3, tomm(bb.GetBottom()) + 0.3))
+        for fp in self.fps.values():
+            for f in (fp.Reference(), fp.Value()):
+                if f.IsVisible() and f.GetLayer() == pcbnew.F_SilkS:
+                    bb = f.GetBoundingBox()
+                    self.boxes.append((tomm(bb.GetLeft()) - 0.3, tomm(bb.GetTop()) - 0.3,
+                                       tomm(bb.GetRight()) + 0.3, tomm(bb.GetBottom()) + 0.3))
+        for box in L.BOXES:
+            if isinstance(box[0], (int, float)):
+                x0, y0, x1, y1 = box[:4]
+                pts = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+            else:
+                pts = list(box[0])
+            for a, b in zip(pts, pts[1:] + pts[:1]):
                 for (p, q) in self.clip(a, b):
                     self._dashed(p, q)
-            for t in titles:
-                title, tx, ty = t[:3]
-                self._text(tx, ty, title, t[3] if len(t) > 3 else 0.95, 0.18, justify="left")
+        self.boxes = saved
 
     def silk_texts(self):
         for (x, y, txt, size, thick, just, ang) in L.TEXTS:
@@ -1092,8 +1109,8 @@ class Board:
         self.silk_opamps()
         self.silk_transistors()
         self.silk_fields()
-        self.silk_boxes()
         self.silk_texts()
+        self.silk_boxes()
         self.silk_back()
         self.fiducials()
         stabilise_uuids(self.board)

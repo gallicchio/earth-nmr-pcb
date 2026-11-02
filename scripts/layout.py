@@ -40,7 +40,10 @@ would not put it; MULTI_VIAS gives the polarizing current's ground pads
 several big ones; MARKS draws a ground symbol or rail flag at a through-hole
 pin that reaches its plane by itself).
 """
+import json, math, os
 import parts
+
+D = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "sim", "design.json")))
 
 W_SIG, W_POL, W_COIL = 0.35, 2.0, 1.5          # signals, the polarizing current, the coil's leads
 OA_IN = 2.5                                     # an op-amp's inputs enter its triangle at cy -/+ OA_IN
@@ -268,8 +271,8 @@ for k, caps in enumerate(BANK):
 assert cref == 30
 P("TP5", 108.5, TP_Y - 3.6, 0)
 W(W_SIG, (108.5, TP_Y), ("TP5", "1"))
-P("TP6", 108.5, TN_Y + 3.6, 0)
-W(W_SIG, (108.5, TN_Y), ("TP6", "1"))
+P("TP6", TANK_END, TN_Y + 4.6, 0)
+W(W_SIG, (TANK_END, TN_Y), ("TP6", "1"))
 # CAL IN from the top edge: 51 ohm across the jack, 1M down into TANK+
 P("J4", 62.0, BNC_IN, 90)
 P("R13", 65.5, 14.0, 0)
@@ -646,7 +649,7 @@ for r in ("R2", "LED2"):
     FIELD_AT[r] = ((1.7, -0.7, "left"), (1.7, 0.7, "left"))
 
 # ================================================ probe grounds, holes, marks
-GROUND_LOOPS = [("TP100", 112.0, 90.0), ("TP101", 175.0, 80.0), ("TP102", 222.0, 80.0), ("TP103", 190.0, 124.0)]
+GROUND_LOOPS = [("TP100", 112.0, 90.0), ("TP101", 175.0, 80.0), ("TP102", 222.0, 80.0), ("TP103", 200.0, 126.0)]
 for (ref, x, y) in GROUND_LOOPS:
     P(ref, x, y, 0)
 P("MH1", 4.0, 4.0)
@@ -654,9 +657,130 @@ P("MH2", BOARD_W - 4.0, BOARD_H - 4.0)
 P("MH3", 4.0, BOARD_H - 4.0)
 P("MH4", BOARD_W - 4.0, 4.0)
 
-FIDUCIALS = [(10.0, BOARD_H - 14.0), (120.0, 4.0), (BOARD_W - 10.0, BOARD_H - 14.0)]
+# ============================================================ the words ======
+STORY_CHARS = 112                              # the story's lines, to fit 165-242 mm
+c, site, bank = D["coil"], D["site"], D["bank"]
+f_L, C_res = site["f_L"], c["C_res"]
+
+
+def lines(x, y, rows, size=0.8, pitch=1.45, title=None, tsize=1.2):
+    """A title and the lines under it, left-justified from (x, y)."""
+    if title:
+        T(x, y, title, tsize, "left", thick=0.22)
+        y += tsize * 0.9 + 0.9
+    for i, r in enumerate(rows):
+        T(x, y + pitch * i, r, size)
+
+
+T(103.0, 4.2, parts.BOARD_NAME.upper(), 2.5, "left", thick=0.4)
+T(103.0, 7.6, "a proton precession magnetometer for a bottle of water", 0.9)
+T(103.0, 9.2, f"rev {parts.REV}, {parts.BOARD_DATE}    {parts.PROJECT_URL}", 0.9)
+step_df = f_L * bank["step"] / (2 * C_res)
+f_min = 1 / (2 * math.pi * math.sqrt(c["L"] * bank["C_max"]))
+on = [str(i + 1) for i in range(8) if c["dip_code"] >> i & 1]
+story = (f"1 POLARIZE: the timer closes K1 and turns Q1 on; {c['I_pol']:.1f} A from {c['V_pol']:.0f} V through the coil "
+         f"makes {c['B_p'] * 1e3:.1f} mT, {c['B_p'] / (site['F_nT'] * 1e-9):.0f} times Earth's field, and lines up the "
+         f"protons in the litre of water inside it.  2 SWITCH OFF: Q1 opens, D7 holds the drain near "
+         f"{D['switch_off']['v_clamp_3A']:.0f} V, and the coil's {c['energy'] * 1e3:.0f} mJ is gone in "
+         f"{D['switch_off']['t_ramp_ref'] * 1e3:.1f} ms, too fast for the protons to follow.  3 LISTEN: K1 drops back, the "
+         f"coil is the tank's inductor, and the protons precess about Earth's field at {f_L:.0f} Hz here "
+         f"({site['F_nT'] / 1e3:.1f} uT), inducing {c['emf'] * 1e6:.1f} uV that fades over a second or two.  "
+         f"PREAMP x{D['ina']['gain']:.0f}, {D['filter_band']['f_lo']:.0f} Hz to {D['filter_band']['f_hi'] / 1e3:.1f} kHz, "
+         f"GAIN x{D['gain']['lo']:.0f} or x{D['gain']['hi']:.0f}: about {D['fid_out_hi']:.1f} V at OUT on HIGH.  "
+         f"Point the coil east-west, away from steel and mains.")
+import textwrap
+lines(165.5, 37.0, textwrap.wrap(story, STORY_CHARS), pitch=1.45, title="HOW IT WORKS", tsize=1.0)
+lines(2.0, 27.2, [f"{D['pol_supply']['V'][0]:.0f}-{D['pol_supply']['V'][1]:.0f} V, up to {D['pol_supply']['I_max']:.0f} A",
+                  "F1 resets; D5 blows it", "if the supply is reversed"], title="POLARIZING SUPPLY", tsize=1.0)
+T(10.6, 18.9, "+", 1.0, "center")
+T(1.5, 35.4, "COIL", 1.2, "left", thick=0.22)
+T(9.0, 35.4, f"{c['N']} turns {c['wire'].split(' (')[0]}, {c['L'] * 1e3:.1f} mH, {c['R']:.1f} ohm", 0.8)
+T(8.0, 45.2, "A", 0.9, "center")
+T(8.0, 50.3, "B", 0.9, "center")
+T(9.4, CHAN - 5.0, "shield", 0.8)
+lines(12.0, 65.0, ["Q1 off: the coil's current", f"dies in D7, near {D['switch_off']['v_clamp_3A']:.0f} V,",
+                   f"in {D['switch_off']['t_ramp_ref'] * 1e3:.1f} ms; I POL: 0.1 V/A"], title="POLARIZING SWITCH", tsize=1.0)
+lines(53.0, 75.6, ["RELAY high: Q2 pulls K1", "in and LED4 lights"], title="RELAY DRIVER", tsize=1.0)
+lines(70.5, 19.8, [
+    f"the coil ({c['L'] * 1e3:.1f} mH) and SW1's C0G capacitors,",
+    f"tuned to the protons: {f_L:.0f} Hz needs {C_res * 1e9:.0f} nF,",
+    f"switches {' '.join(on)} ON.  Each switch adds the column",
+    f"under it: {bank['step'] * 1e9:.1f} nF steps, {step_df:.0f} Hz near 2 kHz;",
+    f"all eight {bank['C_max'] * 1e9:.0f} nF ({f_min:.0f} Hz).  D9 clamps it."], title="TANK")
+T(DIPX, 35.6, "SW1  TUNE", 0.9, "center")
+T(DIPX + 11.6, DIPY + 3.6, "ON", 0.8)
+T(DIPX + 11.6, DIPY - 3.6, "OFF", 0.8)
+for k, sw in enumerate(bank["switches"]):
+    cx = COL0 + COL_PITCH * k
+    T(cx + 0.35, LY0 - 2.2, str(sw["sw"]), 0.8, "center")
+    v = sw["C"] * 1e9
+    T(cx, TN_Y + 2.0, f"{v:.1f}n" if v < 10 else f"{v:.0f}n", 0.8, "center")
+lines(70.0, 3.0, ["a test signal through R14 into the tank:", "1 uA per volt; R13 is a 51 ohm load"], title="CAL IN")
+lines(141.0, 30.0, [f"U1-U3, x{D['ina']['gain']:.0f} (Rg is R19)"], title="PREAMPLIFIER", tsize=1.0)
+lines(166.0, 49.2, [], title=f"HIGH-PASS, -3 dB at {D['filter_band']['f_lo']:.0f} Hz: U4, U5", tsize=1.0)
+lines(215.0, 49.2, [], title=f"LOW-PASS, {D['filter_band']['f_hi'] / 1e3:.1f} kHz: U6", tsize=1.0)
+lines(186.5, 88.6, [f"x{D['gain']['lo']:.0f} or", f"x{D['gain']['hi']:.0f}"], title="GAIN", tsize=1.0)
+T(SWX - 4.6, SW2_PINS + 6.6, "LOW", 0.8, "center")
+T(SWX + 5.4, SW2_PINS + 6.6, "HIGH", 0.8, "center")
+T(SWX + 0.4, SW2_PINS + 8.2, f"SW2: x{D['gain']['total_lo']:.0f} or x{D['gain']['total_hi']:.0f} in all", 0.8, "center")
+lines(229.0, 105.6, ["through 1k"], title="OUT")
+T(165.5, 3.0, "POWER", 1.2, "left", thick=0.22)
+T(165.5, 5.0, "J1: +15 V, ground, -15 V", 0.8)
+lines(2.0, 89.4, [], title="SEQUENCER")
+lines(1.8, 106.0, [f"{D['delay']['v_th']:.1f} V,", "R51 R52"], title="THRESHOLD", tsize=0.9)
+lines(88.5, 102.0, [f"POL CMD up: RELAY at once, GATE",
+                    f"{D['delay']['t_gate'] * 1e3:.0f} ms later (R49, C55); down: GATE",
+                    f"off at once, RELAY {D['delay']['t_hold'] * 1e3:.0f} ms later (R50, C56)"], title="DELAY, HOLD", tsize=0.9)
+lines(46.0, 140.0, ["POL CMD, high", "while polarizing"], title="SYNC OUT", tsize=0.9)
+lines(72.2, 144.2, [f"high (> {D['ext']['v_th']:.1f} V): polarize"], title="POLARIZE IN", tsize=0.9)
+T(X3 - 1.5, P4 - 8.6, "MODE", 0.8, "center")
+T(X3 - 5.0, P4 - 7.2, "LISTEN", 0.8, "center")
+T(X3 + 1.8, P4 - 7.2, "RUN", 0.8, "center")
+T(X3 - 3.5, SW3_PINS + 6.0, "EXT", 0.8, "center")
+T(X3 + 4.5, SW3_PINS + 6.0, "TIMER", 0.8, "center")
+T(X3 + 0.5, SW3_PINS + 7.5, "SEQUENCE", 0.8, "center")
+lines(141.0, 94.5, [f"U11, a 555: POLARIZE TIME (RV1) and",
+                    f"LISTEN TIME (RV2), each {D['timer']['t_pol'][0]:.1f} to {D['timer']['t_pol'][1]:.1f} s"], title="TIMER", tsize=0.9)
+T(RV1X + 4.2, DIS_Y - 3.5 + 0.4, "POLARIZE", 0.8)
+T(RV1X + 4.2, DIS_Y - 3.5 + 1.6, "TIME", 0.8)
+T(RVX + 4.2, DIS_Y + 6.1 + 0.4, "LISTEN", 0.8)
+T(RVX + 4.2, DIS_Y + 6.1 + 1.6, "TIME", 0.8)
+lines(117.0, 134.0, ["U11 NE555: 1 GND, 2 TRIG, 3 OUT, 4 RESET,", "5 CONT, 6 THRESH, 7 DISCH, 8 +15 V"], size=0.8)
+lines(2.0, 120.0 - 4.0, [], title=None)
+T(186.5, 140.5, "U1-U7 OPA197, U8-U10 TS391; C80-C97", 0.8)
+T(186.5, 141.95, "100 nF at each IC's supply pins", 0.8)
+
+BOXES += [
+    (1.5, 1.5, 40.6, 33.0),                                   # POLARIZING SUPPLY
+    (43.0, 1.0, 101.0, 16.5),                                 # CAL IN
+    (69.2, 17.5, 114.5, 86.0),                                # TANK
+    (114.8, 28.5, 163.0, 95.5),                               # PREAMPLIFIER
+    (163.6, 47.0, 213.9, 73.5),                               # HIGH-PASS
+    (214.4, 47.0, 241.5, 73.5),                               # LOW-PASS
+    (186.0, 86.0, 228.0, 121.5),                              # GAIN
+    (228.5, 86.0, 241.5, 110.0),                              # OUT
+    (159.0, 1.5, 241.5, 36.0),                                # POWER
+    ([(1.5, 88.0), (113.0, 88.0), (113.0, 96.5), (184.0, 96.5), (184.0, 148.5), (1.5, 148.5)],),   # SEQUENCER
+]
+
+FIDUCIALS = [(10.0, BOARD_H - 14.0), (154.0, 14.0), (BOARD_W - 10.0, BOARD_H - 14.0)]
 LAYER_MARK_AT = (BOARD_W - 40.0, BOARD_H - 6.0)
 QR_AT, QR_MODULE = (BOARD_W - 28.0, 132.0), 0.6
-BACK_TITLE_AT = (BOARD_W / 2, 20.0)
-BACK_X, BACK_Y, BACK_PITCH, BACK_SIZE = 150.0, 30.0, 1.6, 0.9
-BACK_TEXT = ["EARTH'S FIELD NMR"]
+BACK_TITLE_AT = (BOARD_W / 2, 14.0)
+BACK_X, BACK_Y, BACK_PITCH, BACK_SIZE = 228.0, 26.0, 1.75, 1.0
+GAMMA = 42.577                                  # Hz per uT, the proton's gyromagnetic ratio over 2 pi
+BACK_TEXT = [
+    "USING IT  (docs/HANDBOOK.md has the whole story)",
+    f"1  Wind the coil: {c['N']} turns of {c['wire'].split(' (')[0]} in {c['layers']} layers on a {c['former_od'] * 1e3:.0f} mm former, "
+    f"{c['length'] * 1e3:.0f} mm long ({c['L'] * 1e3:.1f} mH, {c['R']:.1f} ohm); fill it with {c['sample_litres']:.0f} litre of water.",
+    f"2  Power: +15 V and -15 V at J1; {D['pol_supply']['V'][0]:.0f}-{D['pol_supply']['V'][1]:.0f} V, up to "
+    f"{D['pol_supply']['I_max']:.0f} A, at POLARIZE SUPPLY (a battery is the quietest).",
+    f"3  Tune SW1 to the protons where you are: f = {GAMMA} Hz/uT x B.  Claremont, {site['F_nT'] / 1e3:.1f} uT: {f_L:.0f} Hz, "
+    f"switches {' '.join(on)} ON.",
+    f"   Earth's field runs {D['world']['F_nT'][0] / 1e3:.0f}-{D['world']['F_nT'][1] / 1e3:.0f} uT, "
+    f"{D['world']['f_L'][0]:.0f}-{D['world']['f_L'][1]:.0f} Hz: SW1 reaches it everywhere with the coil above.",
+    "4  MODE RUN, SEQUENCE TIMER: RV1 sets how long it polarizes, RV2 how long it listens; or drive POLARIZE IN.",
+    "5  Watch OUT on a scope, triggered on SYNC OUT falling; CAL IN puts a known signal into the tank.",
+    "CAUTION: the coil and Q1's drain reach about 130 V for half a millisecond at every switch-off.",
+    "Copper: 1 (top) every drawn wire; 2 ground; 3 +15 V; 4 -15 V and the three hops.",
+]
