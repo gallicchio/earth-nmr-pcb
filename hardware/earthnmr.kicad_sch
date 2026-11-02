@@ -5942,6 +5942,17 @@
 		)
 		(uuid "1080908e-76dd-5e6c-9615-18fa5b145e38")
 	)
+	(text "A (2), B (1): the coil's two leads"
+		(exclude_from_sim no)
+		(at 20.32 135.2 0)
+		(effects
+			(font
+				(size 1.05 1.05)
+			)
+			(justify left)
+		)
+		(uuid "15079cf3-db0d-52a0-b9d5-95ce164c8fb8")
+	)
 	(text "6.8n"
 		(exclude_from_sim no)
 		(at 160.96 204.4 0)
@@ -6129,16 +6140,16 @@
 		)
 		(uuid "3e44fcb9-0d5b-5449-9282-26781e8b6244")
 	)
-	(text "A, B: the coil's two leads"
+	(text "S (3): its shield, if any"
 		(exclude_from_sim no)
-		(at 20.32 135.2 0)
+		(at 20.32 137.09 0)
 		(effects
 			(font
 				(size 1.05 1.05)
 			)
 			(justify left)
 		)
-		(uuid "3f17a033-f5d3-5c0d-9d92-6854004133a3")
+		(uuid "42aa0391-e3d4-5b00-93c7-33df43cc50ea")
 	)
 	(text "10-200 mH, up to 3 A, 1/2 L I^2 < 1 J"
 		(exclude_from_sim no)
@@ -6161,17 +6172,6 @@
 			(justify right)
 		)
 		(uuid "444ecdda-ad0e-540e-a5d6-b513fe628418")
-	)
-	(text "S: its shield, if any"
-		(exclude_from_sim no)
-		(at 20.32 137.09 0)
-		(effects
-			(font
-				(size 1.05 1.05)
-			)
-			(justify left)
-		)
-		(uuid "45e313d0-3ac8-5643-abfe-d7e18b7b4e5e")
 	)
 	(text "unless a fault dumps"
 		(exclude_from_sim no)
@@ -7983,16 +7983,6 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 172.72) (xy 58.42 182.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "08963e6c-7162-5846-aba6-a8588b89c312")
-	)
-	(wire
-		(pts
 			(xy 320.04 223.52) (xy 320.04 228.6)
 		)
 		(stroke
@@ -9173,6 +9163,16 @@
 	)
 	(wire
 		(pts
+			(xy 63.5 172.72) (xy 63.5 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fafd89c-e1be-597f-8c6f-081cae7421e7")
+	)
+	(wire
+		(pts
 			(xy 96.52 91.44) (xy 96.52 93.98)
 		)
 		(stroke
@@ -9463,16 +9463,6 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 175.26) (xy 43.18 180.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5e392c2f-dba6-5d3b-8d40-09c0e245c98a")
-	)
-	(wire
-		(pts
 			(xy 335.28 398.78) (xy 335.28 403.86)
 		)
 		(stroke
@@ -9723,16 +9713,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 170.18) (xy 63.5 162.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "71a1481c-6442-51de-b72c-13e0fcffeeca")
-	)
-	(wire
-		(pts
 			(xy 259.08 196.85) (xy 259.08 199.39)
 		)
 		(stroke
@@ -9840,6 +9820,16 @@
 			(type default)
 		)
 		(uuid "7ab54dc7-8986-5853-8600-d4025be81aeb")
+	)
+	(wire
+		(pts
+			(xy 43.18 170.18) (xy 43.18 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ae516de-a16a-572f-8534-139c48489715")
 	)
 	(wire
 		(pts
@@ -10373,16 +10363,6 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 170.18) (xy 63.5 170.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9d6f2d5e-c22a-5631-a434-f618dc63e276")
-	)
-	(wire
-		(pts
 			(xy 83.82 101.6) (xy 83.82 104.14)
 		)
 		(stroke
@@ -10770,6 +10750,16 @@
 			(type default)
 		)
 		(uuid "b5dfdfa8-2801-5a4e-be5f-69bb8330592c")
+	)
+	(wire
+		(pts
+			(xy 40.64 172.72) (xy 63.5 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b63f4427-6655-5f5a-884a-7aeee0e6c97f")
 	)
 	(wire
 		(pts
@@ -11453,16 +11443,6 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 175.26) (xy 43.18 175.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d99c716e-2eec-500c-9452-d73e24806bc1")
-	)
-	(wire
-		(pts
 			(xy 111.76 370.84) (xy 127 370.84)
 		)
 		(stroke
@@ -11573,6 +11553,16 @@
 	)
 	(wire
 		(pts
+			(xy 40.64 170.18) (xy 43.18 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "df655c2a-0624-55fd-beaa-d43a7817de59")
+	)
+	(wire
+		(pts
 			(xy 43.18 452.12) (xy 43.18 455.93)
 		)
 		(stroke
@@ -11663,16 +11653,6 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 172.72) (xy 58.42 172.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e3037f5b-5c45-5394-b313-6214db2bb526")
-	)
-	(wire
-		(pts
 			(xy 248.92 196.85) (xy 248.92 199.39)
 		)
 		(stroke
@@ -11750,6 +11730,16 @@
 			(type default)
 		)
 		(uuid "e8a9c5c2-0df5-591e-a0d5-f53d6d0ac9f7")
+	)
+	(wire
+		(pts
+			(xy 40.64 175.26) (xy 58.42 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8fc58f7-38ba-51c6-82dc-4e4bb7da1122")
 	)
 	(wire
 		(pts
@@ -11880,6 +11870,16 @@
 			(type default)
 		)
 		(uuid "f04c01b5-a7a4-5a89-b805-6d460f3d5c83")
+	)
+	(wire
+		(pts
+			(xy 58.42 175.26) (xy 58.42 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0e5ec35-4d1a-51f8-bb4a-a762baa88d34")
 	)
 	(wire
 		(pts
@@ -12141,16 +12141,6 @@
 		)
 		(uuid "01b656a8-835a-5cef-80c5-1869e1d58402")
 	)
-	(label "COIL_A"
-		(at 43.18 170.18 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "2d84bbc4-3d8a-597d-b424-9de94adc5b93")
-	)
 	(label "POL_CMD"
 		(at 198.12 381 0)
 		(effects
@@ -12181,7 +12171,7 @@
 		)
 		(uuid "3dbcf6b9-8c8b-5d66-a103-7f7ca4b38862")
 	)
-	(label "COIL_B"
+	(label "COIL_A"
 		(at 43.18 172.72 0)
 		(effects
 			(font
@@ -12189,7 +12179,7 @@
 			)
 			(justify left)
 		)
-		(uuid "49231bc4-cb5b-5ce2-a160-af069de2bc6d")
+		(uuid "442270e3-5980-54be-9764-04f715a1b297")
 	)
 	(label "GATE"
 		(at 71.12 284.48 0)
@@ -12200,6 +12190,16 @@
 			(justify left)
 		)
 		(uuid "5e329241-ecac-5685-bdc4-a1947169c1c0")
+	)
+	(label "COIL_B"
+		(at 43.18 175.26 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "84022376-2db1-5481-aefa-80ac7b581808")
 	)
 	(label "DRAIN"
 		(at 85.09 185.42 0)
@@ -19510,7 +19510,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 43.18 180.34 0)
+		(at 43.18 165.1 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -19520,7 +19520,7 @@
 		(dnp no)
 		(uuid "4888da3b-e7d1-5124-a964-59f5e4fa50c7")
 		(property "Reference" "#PWR0006"
-			(at 43.18 172.72 0)
+			(at 43.18 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19531,7 +19531,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 43.18 187.96 0)
+			(at 43.18 172.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19542,7 +19542,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 43.18 180.34 0)
+			(at 43.18 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19553,7 +19553,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 180.34 0)
+			(at 43.18 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19564,7 +19564,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 43.18 180.34 0)
+			(at 43.18 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22882,8 +22882,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Screw_Terminal_01x03")
-		(at 35.56 172.72 0)
-		(mirror y)
+		(at 35.56 172.72 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -22893,18 +22892,18 @@
 		(dnp no)
 		(uuid "68c16484-7a26-57ad-bc61-8523d695b4b8")
 		(property "Reference" "J3"
-			(at 32.56 168.12 0)
+			(at 38.56 177.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(property "Value" "COIL"
-			(at 32.56 178.72 0)
+			(at 38.56 178.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -22912,7 +22911,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(property "Footprint" "earthnmr:TerminalBlock_KF301_1x03_P5.00mm"

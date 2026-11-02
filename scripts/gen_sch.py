@@ -364,15 +364,18 @@ def build():
     # ============================================ the COIL and the RELAY ======
     POLE_X = g(30)
     YA, YB = g(64), g(72)
-    s.place(sym("TERM3"), "J3", "COIL", g(14), g(68), mirror="y", footprint=fp("TERM3"),
-            fields=part_fields("TERM3"), ref_off=(-3.0, -4.6), val_off=(-3.0, 6.0), hide_value=True,
+    # turned 180 so the shield (3) is on top and pin 1 at the bottom, as on the board:
+    # the middle pin goes to pole A's common, the bottom pin to pole B's
+    s.place(sym("TERM3"), "J3", "COIL", g(14), g(68), rot=180, footprint=fp("TERM3"),
+            fields=part_fields("TERM3"), ref_off=(3.0, 4.6), val_off=(3.0, 6.0), hide_value=True,
             ref_justify="right", val_justify="right")
-    j3a, j3b, j3s = s.pin("J3", 1, "1"), s.pin("J3", 1, "2"), s.pin("J3", 1, "3")
-    d.title("COIL", g(8), g(52.0), ["A, B: the coil's two leads", "S: its shield, if any",
+    j3b, j3a, j3s = s.pin("J3", 1, "1"), s.pin("J3", 1, "2"), s.pin("J3", 1, "3")
+    assert j3s[1] < j3a[1] < j3b[1], (j3s, j3a, j3b)
+    d.title("COIL", g(8), g(52.0), ["A (2), B (1): the coil's two leads", "S (3): its shield, if any",
                                     "up to 130 V at switch-off:", "do not touch",
                                     "10-200 mH, up to 3 A, 1/2 L I^2 < 1 J"], size=2.4)
-    s.wire(j3s, (j3s[0] + g(1), j3s[1]), (j3s[0] + g(1), j3s[1] + g(2)))
-    d.gnd(j3s[0] + g(1), j3s[1] + g(2))
+    s.wire(j3s, (j3s[0] + g(1), j3s[1]), (j3s[0] + g(1), j3s[1] - g(2)))
+    d.gnd(j3s[0] + g(1), j3s[1] - g(2), up=True)
     # pole A turned so its common faces the coil and normally-open looks up;
     # pole B so normally-open looks down, to the switch under it
     s.place(sym("RELAY"), "K1", "HFD3/12", POLE_X, YA, rot=270, mirror="x", unit=2,
