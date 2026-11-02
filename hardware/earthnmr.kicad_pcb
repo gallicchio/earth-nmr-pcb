@@ -28556,7 +28556,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C20617849"
+		(property "LCSC" "C5451690"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -28567,7 +28567,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206N473J101T"
+		(property "MPN" "C1206N473J050T"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)

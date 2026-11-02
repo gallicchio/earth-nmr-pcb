@@ -279,11 +279,41 @@ def cli(*args, check=True, capture=True, timeout=1800):
     return r
 
 
+_PCBNEW_PY = []
+
+
+def pcbnew_python():
+    """A Python that can `import pcbnew`, for a KiCad installed from a
+    distribution package (no AppImage): the module is built for the system's
+    own Python (Ubuntu's KiCad 10 PPA: /usr/bin/python3, 3.12), which need not
+    be the one running this build (a newer python3 earlier on PATH has no
+    pcbnew).  KICAD_PYTHON names one outright."""
+    if _PCBNEW_PY:
+        return _PCBNEW_PY[0]
+    cands = [os.environ.get("KICAD_PYTHON"), sys.executable, "/usr/bin/python3",
+             shutil.which("python3"), shutil.which("python3.12"), shutil.which("python3.11")]
+    for c in cands:
+        if not c or not os.path.exists(c):
+            continue
+        try:
+            r = subprocess.run([c, "-c", "import pcbnew"], capture_output=True, timeout=120)
+        except Exception:
+            continue
+        if r.returncode == 0:
+            _PCBNEW_PY.append(c)
+            return c
+    raise SystemExit("no Python here can import pcbnew: install KiCad 10's Python module, or set KICAD_PYTHON")
+
+
+def python_cmd(script, *args):
+    """The command that runs `script` with pcbnew importable."""
+    run = runner()
+    return [run, "python3.11", script, *args] if run else [pcbnew_python(), script, *args]
+
+
 def python(script, *args, check=True, timeout=1800):
     """Run a script under KiCad's bundled Python (the one with `pcbnew`)."""
-    run = runner()
-    cmd = [run, "python3.11", script, *args] if run \
-        else [sys.executable, script, *args]
+    cmd = python_cmd(script, *args)
     r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     if check and r.returncode != 0:
         sys.stderr.write((r.stdout or "") + (r.stderr or ""))

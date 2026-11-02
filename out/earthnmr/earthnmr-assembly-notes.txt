@@ -1,0 +1,34 @@
+EARTH'S FIELD NMR -- notes for the assembler
+=========================================
+
+PLACEMENTS
+  Use earthnmr_cpl_jlcpcb_upload.csv for JLCPCB.  It is earthnmr_cpl_kicad_native.csv
+  with JLCPCB's own per-part rotations and datum offsets applied; use the native
+  file anywhere else.  Every part is on the top side.
+
+U1-U10 -- OPA197 (U1-U7) and TS391 (U8-U10) in SOT-23-5, all at the same
+  orientation: pins 3, 2, 1 along the TOP edge of the package, 4 and 5 along the
+  bottom.  Each sits inside a silkscreen triangle pointing right; pin 1 is the
+  upper-right pad, toward the triangle's point.
+U11 -- NE555 in SOIC-8, pin 1 at the upper left (the silkscreen dot).
+
+Q1 -- IRFS4227 in D2PAK (TO-263-2): the tab (drain) up, the two leads down.
+Q2, Q3 -- MMBT3904 in SOT-23, collector pad up, inside a silkscreen circle.
+D12 -- BAV99 in SOT-23: pin 3 (the common) up.
+
+K1 -- HFD3/12 relay, through-hole; pin 1 (the coil's +) is the square pad, at
+  the upper right of the two rows.
+SW1 -- KingTek DSIC08 eight-way DIP switch; its ON side faces DOWN (toward
+  pads 1-8, away from the TANK+ line).  The silkscreen says ON and OFF.
+SW2, SW3, SW4 -- MSK12C02 slide switches; their two posts key them.
+RV1, RV2 -- 3362P trimmers, keyed by their three holes.
+C50-C52 -- 1 uF film capacitors, 5 mm pitch, through-hole, unpolarised.
+
+J1, J3 -- 3-way 5 mm screw terminals; J2 -- 2-way.  The wire openings face
+  the board edge: J1's the top edge, J2's and J3's the left edge.
+J4, J5, J7, J8 -- BNC jacks, through-hole.  The barrel points OFF the board
+  edge: J4 off the top, J5 off the right, J7 and J8 off the bottom.
+
+D1-D14, LED1-LED4, C1, C2, C5 -- polarised; the cathode / negative end is pad 1,
+  the end the footprint's silkscreen bar marks.  D9 (SMBJ12CA) is bidirectional.
+TP1-TP21, TP100-TP103 -- RH-5019 test loops (SMD).

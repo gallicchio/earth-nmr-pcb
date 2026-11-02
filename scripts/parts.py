@@ -295,8 +295,9 @@ PASSIVES = {
                   price=0.0904, stock=5540, note="C0G 50 V 5 % 0805: the low-pass filter, the bank"),
     "3.3nF": dict(lcsc="C880847", mpn="0805N332J101CT", jlc_type="extended",
                   price=0.0214, stock=9192, note="C0G 100 V 5 % 0805: the low-pass filter, the bank"),
-    "47nF":  dict(lcsc="C20617849", mpn="C1206N473J101T", jlc_type="extended",
-                  price=0.2002, stock=1765, note="C0G 100 V 5 % 1206: the bank", footprint="C_1206"),
+    "47nF":  dict(lcsc="C5451690", mpn="C1206N473J050T", jlc_type="extended",
+                  price=0.1795, stock=1248, note="C0G 50 V 5 % 1206 (Holy Stone): the bank; the 100 V "
+                  "C1206N473J101T (C20617849) first chosen had none left on 2026-11-02", footprint="C_1206"),
     "100nF_C0G": dict(lcsc="C170182", mpn="1206N104J500CT", jlc_type="extended",
                       price=0.1580, stock=153887, note="C0G 50 V 5 % 1206: the bank and the two delays",
                       footprint="C_1206"),

@@ -25826,7 +25826,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C20617849"
+		(property "LCSC" "C5451690"
 			(at 200.66 203.2 0)
 			(hide yes)
 			(show_name no)
@@ -25837,7 +25837,7 @@
 				)
 			)
 		)
-		(property "MPN" "C1206N473J101T"
+		(property "MPN" "C1206N473J050T"
 			(at 200.66 203.2 0)
 			(hide yes)
 			(show_name no)
