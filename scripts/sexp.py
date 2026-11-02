@@ -26,7 +26,7 @@ def uid(seed=None):
     """Deterministic UUID when seeded, so regenerating gives identical files."""
     if seed is None:
         return str(uuid.uuid4())
-    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"laoe-motorpid://{seed}"))
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"earth-nmr://{seed}"))
 
 
 class S:

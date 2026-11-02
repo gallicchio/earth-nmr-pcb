@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "earthnmr")(type "KiCad")(uri "${KIPRJMOD}/lib/earthnmr.kicad_sym")(options "")(descr "TS391 and the split HFD3 relay"))
+)

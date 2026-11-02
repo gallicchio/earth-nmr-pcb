@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "earthnmr")(type "KiCad")(uri "${KIPRJMOD}/lib/earthnmr.pretty")(options "")(descr "Footprints drawn for this project"))
+)

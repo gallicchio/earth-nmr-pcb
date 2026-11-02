@@ -138,7 +138,7 @@ class Sheet:
         for num in self.all_pin_numbers(lib_id):
             s.add(S("pin", q(num)).add(S("uuid", q(uid(f"pin/{ref}/{unit}/{num}")))))
         inst = S("instances").add(
-            S("project", q("motorpid")).add(
+            S("project", q("earthnmr")).add(
                 S("path", q("/" + uid("sheet/root"))).add(
                     S("reference", q(ref)), S("unit", n(unit)))))
         s.add(inst)
