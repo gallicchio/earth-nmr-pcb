@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# KiCad working files
+*-backups/
+*.kicad_prl
+~*.lck
+fp-info-cache
+*-bak
+
+# Other people's copyrighted documents: datasheets fetched by
+# scripts/jlc_datasheet.py, and the book.  Fetch them again; do not commit them.
+/datasheets/
+/datasheets_not_in_git/
+
+# Caches of JLCPCB's and EasyEDA's part data (their data, refetched when stale)
+/scripts/jlc_cache.json
+/scripts/easyeda_cache.json
+
+# Everything ./make.py regenerates that is not an upload or a document.
+# out/earthnmr/ (gerbers, BOM, CPL, prints) stays in git on purpose, so the
+# board can be ordered without installing KiCad.
+/build/
+/out/*.net
+/out/*.rpt
+/out/pcb_geom.json
+/out/earthnmr/*.step
+/out/earthnmr/_*.pdf
+
+# Scratch files for the next prompt, questions and answers
+/next_prompt.md
+/QUESTIONS.md
+/ANSWERS.md
+
+# Design reviewers' working copies of the project (their reports are kept)
+/design_reviews/*/project/

@@ -1,0 +1,40 @@
+This project is open hardware and open source.
+
+  * The hardware design -- everything under hardware/, the gerbers, BOM and
+    placement files under out/, and the drawings and renders under docs/ --
+    is licensed under the CERN Open Hardware Licence Version 2 - Permissive
+    (CERN-OHL-P-2.0).  The full text is in LICENSE-HARDWARE.txt.
+
+  * The scripts that generate and check it (make.py, scripts/, sim/) and the
+    documentation text are licensed under the MIT License below.
+
+The circuit is an Earth's-field proton NMR spectrometer (prepolarisation by a
+switched DC coil current, free precession detected in the same coil), the
+technique of Packard and Varian (1954) as used in proton precession
+magnetometers.  The design and its documents are original to this project.
+Datasheets quoted in the documents belong to their makers and are not part
+of this repository.
+
+---------------------------------------------------------------------------
+
+MIT License
+
+Copyright (c) 2026 Jason Gallicchio
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
