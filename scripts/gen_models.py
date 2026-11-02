@@ -130,6 +130,17 @@ def slide_switch():
     return "SW_MSK12C02.wrl", s
 
 
+def knob_pot():
+    """ALPS RK09K vertical (motor-pid's gen_models.py): 9.5 x 11 mm body between the
+    pins and the posts, a 6 mm shaft 20 mm up.  In the footprint the pins are at x = 0,
+    y = 0, 2.5, 5 and the posts at x = 7; the body is centred on (5.0, 2.5)."""
+    s = HEAD
+    s += box(5.0, -2.5, 4.0, 11.0, 9.5, 8.0, (0.2, 0.2, 0.22))     # y_model = -y_fp
+    s += prism_z(5.0, -2.5, 8.0, 10.5, 3.5, SILVER)                # the bushing
+    s += prism_z(5.0, -2.5, 10.5, 25.0, 3.0, (0.85, 0.85, 0.88))   # the shaft
+    return "Potentiometer_RK09K.wrl", s
+
+
 def fuse_2920():
     """A 2920 chip PTC: 7.5 x 5.1 mm, 1.6 mm tall, pale yellow (KiCad ships no
     model for Fuse_2920_7451Metric)."""
@@ -170,7 +181,7 @@ def testloop():
 def main():
     os.makedirs(OUT, exist_ok=True)
     for maker in (bnc, trimpot, testloop, lambda: kf301(2), lambda: kf301(3), slide_switch, fuse_2920,
-                  film_mes, dip8):
+                  film_mes, dip8, knob_pot):
         name, body = maker()
         with open(os.path.join(OUT, name), "w") as fh:
             fh.write(body)

@@ -111,6 +111,31 @@ The band, -3 dB from 688 Hz to 4.2 kHz, passes the whole world's Larmor range
 (937-2853 Hz) within 0.9 dB.  U7 then gives x21 or x201 (SW2), x2121 or x20301 from
 the tank to OUT.  OUT goes through 1k to its BNC, safe into a sound card's input.
 
+### The headphones
+
+The FID is an audio tone, so the board lets you hear it.  OUT also feeds R58 (62k)
+and the VOLUME knob, RV3 (10k, an ALPS RK09K; its pin 3, the clockwise end, on R58,
+so clockwise is louder): at most x0.139 of OUT reaches the wiper, and OUT carries
+72 kohm more, nothing to U7.  U12, an OPA197 follower, drives both ears with the same
+signal through 100 ohm each (R56 to the tip, R57 to the ring): x0.242 into a 32 ohm
+earpiece, x0.034 of OUT at full volume.  A 0.8 V FID on HIGH is 30 mV in the ear,
+about 81 dB SPL in a 100 dB/mW earpiece (3 mV, 62 dB, on LOW); OUT at a rail, as at
+the relay's hand-over, would be 0.5 V, about 106 dB, so the handbook says to start
+low.  The 100 ohm keep the follower stable into a cable and limit a mono plug, which
+shorts the ring to the sleeve, to 21 mA: 42 mW in an 0805 rated 125 mW, and both
+ears shorted are within the OPA197's 65 mA.  The simulation (the netlist with the
+knob fully clockwise and 32 ohm in each ear) gives x0.0337, the arithmetic's
+number.
+
+J9 is Same Sky's SJ1-3523N (C20182914), a through-hole right-angle stereo jack whose
+datasheet (09/12/2024) numbers its pins 1 sleeve, 2 tip, 3 ring.  KiCad's footprint
+for it names the same three holes S, T and R, and JLCPCB's land pattern, numbered
+1-3, lies on ours hole for hole, pegs included, with that map
+(`scripts/check_rotations.py`): three sources that agree.  Both ears carry the same
+signal, so even a tip and ring swapped would be harmless; the sleeve is what must be
+right, and it is the pin on its own, nearest the opening.  The draft's PJ-320D was dropped
+because its datasheet shows no pin roles.
+
 ### The sequencer
 
 A 555 (U11) runs astable with diode-steered charge and discharge, so POLARIZE TIME
@@ -129,7 +154,7 @@ drives RELAY high at once (D14 charges C56) and holds it 15 ms after POL CMD fal
 
 ±15 V through series Schottkys (reverse protection), Schottky clamps to ground for
 an open rail, bulk and bypass capacitors and a lamp each.  Every IC has its own
-100 nF at each supply pin (C80-C97).
+100 nF at each supply pin (C80-C99).
 
 ## The simulation
 
@@ -137,8 +162,8 @@ an open rail, bulk and bypass capacitors and a lamp each.  Every IC has its own
 board's own connections, not a separate model) with behavioural models of the
 op-amps, comparators, relay and switch, and checks against the arithmetic: the tank's
 peak and Q, the receiver's gain and band, 60/180 Hz rejection, noise and SNR, the CAL
-response, the switch-off (peak voltage, ramp time, energy) and the sequencer's
-delays.  The build fails if they disagree beyond a stated tolerance.  Results are in
+response, the switch-off (peak voltage, ramp time, energy), the sequencer's
+delays and the headphones' level.  The build fails if they disagree beyond a stated tolerance.  Results are in
 `sim/results.json` and `docs/images/sim_receiver.png`, `docs/images/sim_switch_off.png`.
 
 ## The board
@@ -158,7 +183,10 @@ delays.  The build fails if they disagree beyond a stated tolerance.  Results ar
   close a loop round the polarizing switch, Q1 sitting inside it.
 - The polarizing current's tracks are 2 mm (3 A on 1 oz outer copper); its ground pads
   (R4, D5, D6, C5) have two or three 1 mm vias each.
-- Every BNC faces off an edge; the terminal blocks' wire openings face their edges.
+- Every BNC faces off an edge; the terminal blocks' wire openings face their edges;
+  the headphone jack's opening is at the right edge, its nose past it as Same Sky's
+  drawing puts it (KiCad's footprint for it draws an edge notch and marks it out of
+  the BOM and placement file: `gen_pcb.py` removes the first and clears the second).
 - 243 x 150 mm: the signal chain wants to be one row.
 
 ## Decisions taken along the way
@@ -168,7 +196,9 @@ delays.  The build fails if they disagree beyond a stated tolerance.  Results ar
 | circuit | one coil, a DPDT relay, dry switching | the simplest way to keep 3 A and 130 V out of a microvolt receiver |
 | circuit | TVS clamp, linear switch-off | a fast, non-adiabatic switch-off with the energy dumped in a part made for it |
 | circuit | binary C0G bank on a DIP switch | tunes anywhere on Earth in 13 Hz steps, no trimmer capacitor to drift |
-| circuit | the audio jack dropped | its tip/ring/sleeve pinout could not be confirmed from the datasheet; OUT's BNC and a lead do the job |
+| circuit | the PJ-320D audio jack dropped | its tip/ring/sleeve pinout could not be confirmed from the datasheet |
+| circuit (prompt 2) | a headphone output: VOLUME knob, OPA197 follower, 100 ohm each ear, Same Sky SJ1-3523N | the FID is audible; the jack's pinout is in the maker's table, KiCad's footprint and JLCPCB's numbered land pattern, all agreeing |
+| circuit (prompt 2) | both ears the same signal, at x0.034 of OUT into 32 ohm | the FID is mono; 81 dB SPL for a typical FID, a rail at full volume 106 dB, not more |
 | schematic | J3's terminals: shield on top, A in the middle, B at the bottom | the board's floorplan: the coil's leads reach the relay without crossing |
 | schematic | SW3's throws: 1 EXT, 3 INT | lets the sequencer lay out flat, the switch's common between its two sources |
 | board | 0.6 / 0.3 mm vias | JLCPCB's standard for four layers, annular ring 0.15 mm |
@@ -199,7 +229,9 @@ The risks for a board that does not work out of the box, most likely first:
 6. **The slide switches' sense.**  The MSK12C02's knob connects the common to the
    terminal it slides toward (as on the other boards); the silkscreen's LOW/HIGH,
    EXT/TIMER and LISTEN/RUN assume it.
-7. **Thin stock.**  The BNC jacks (215 on JLCPCB's shelf on 2026-11-02, four a board).
+7. **Thin stock.**  The BNC jacks (215 on JLCPCB's shelf on 2026-11-02, four a board) and
+   the headphone jack (353, one a board; SJ1-3524-SMT-TR, C20182907, is the same jack in
+   surface mount, on another footprint).
 8. **JLCPCB's placements.**  Their drawings of the relay (+270, origin the pin field's
    middle), the 555 (+270), the SOT-23s (+180), the SOT-23-5s (+180), the D2PAK (its
    origin 2.56 mm off KiCad's) and the terminal blocks (+180) are turned or shifted
@@ -207,6 +239,9 @@ The risks for a board that does not work out of the box, most likely first:
    their drawing where the upload puts it: every pad within 0.3 mm of ours (D9's SMB
    0.44 mm, its pads drawn larger) and every body inside our courtyard, facing the
    right way.  Look at them in the preview (`PLACEMENT_CHECKS.txt`).
+9. **The headphones' click.**  The arithmetic says OUT can reach a rail at the relay's
+   hand-over; nobody has listened yet.  If it is loud at a comfortable FID volume, the
+   limiter of rev B (two diodes at RV3's wiper) can be added by hand.
 
 ## Ideas for rev B
 
@@ -214,7 +249,8 @@ The risks for a board that does not work out of the box, most likely first:
   spin echoes and T2 rather than T2*.
 - A gradiometer: two coils wound in opposition, one with water and one without, to
   cancel distant interference.
-- The audio jack back, once a jack's pinout is confirmed on the bench.
+- A limiter at the VOLUME knob's wiper (two diodes to ground), to take the relay's
+  click in the headphones down 10 dB without touching the FID.
 - Constant-current polarizing (so the field is the same whatever the battery's
   voltage), and a soft turn-on.
 - A smaller board: the signal chain folded once.

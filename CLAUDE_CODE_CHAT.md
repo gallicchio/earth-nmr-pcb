@@ -1,8 +1,8 @@
 # Claude Code Chat Log — Earth's Field NMR
 
 Every prompt, verbatim, followed by the response as it was given, with the renders as
-they were at the time (kept under `docs/history/`).  Model: Claude Opus 5.5, in a Claude
-Code cloud session.
+they were at the time (kept under `docs/history/`).  Claude, in a Claude Code cloud
+session.
 
 ## Prompt 1
 
@@ -126,3 +126,87 @@ amplifier and a 688 Hz-4.2 kHz band-pass; repeat on a 555's timing.
 - No outside design review yet (CLAUDE_PCB.md: a brief for other LLMs under
   `design_reviews/` when the board is ready); the board is rev A, not ordered.
 - Not built, so nothing here is measured: every number is arithmetic or simulation.
+
+## Prompt 2
+
+> I want an audio jack for a standard 3.5mm headphones. Find one with a known pinout on JLCPCB. Also, fix the small issue in motor-pid if you can confirm your improvement.
+
+## Response 2
+
+*2026-11-01 20:12 PST (04:12 UTC 2026-11-02) to 21:08 PST (05:08 UTC), one sitting.*
+
+### What was added
+
+A **HEADPHONES** block in the bottom right corner, under GAIN: OUT through R58 (62k) onto a
+VOLUME knob (RV3, 10k, clockwise louder), U12 (an OPA197 follower), and 100 ohm from it to the
+tip (R56) and to the ring (R57) of J9, a 3.5 mm stereo jack at the right edge, next to OUT's
+BNC.  Both ears get the same signal.  Full volume puts x0.034 of OUT into a 32 ohm earpiece:
+the 0.8 V FID on HIGH is 30 mV in the ear, about 81 dB SPL in a 100 dB/mW earpiece, a clear
+whistle at 1960 Hz.  The simulation of the netlist (the knob fully clockwise, 32 ohm in each
+ear) gives x0.0337, the arithmetic's number.  A PHONES probe loop (TP22) is on U12's output.
+
+![the board](docs/history/r2-render-top.png)
+
+![the front, copper and silkscreen](docs/history/r2-top.png)
+
+![the schematic](docs/history/r2-schematic.png)
+
+### The jack, and how its pinout is known
+
+**Same Sky (formerly CUI) SJ1-3523N, LCSC C20182914**: through-hole, right angle, three pins, no
+switches; 353 on JLCPCB's shelf, $1.23.  JLCPCB has no datasheet for it, so the maker's
+(`sj1-352xn.pdf`, 09/12/2024) was read: **1 sleeve, 2 tip, 3 ring**, the plug's sections
+numbered to match.  Three sources agree on where those pins are:
+
+| source | what it says |
+|---|---|
+| Same Sky's drawing | the sleeve on the centre line about 3.5 mm in from the board's edge, the tip and the ring 5 mm either side of it and 5 mm further in |
+| KiCad's footprint (`Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal`) | pads S, T and R in exactly those places |
+| JLCPCB's land pattern (EasyEDA, numbered 1-3) | lies on ours at 0.00 mm, pegs and pins, with 1 = S, 2 = T, 3 = R (`check_rotations.py`, which now takes such a map) |
+
+EasyEDA's symbol for it carries pin numbers only (`check_pinouts.py`), so the names rest on the
+maker's table, which the two drawings confirm.  Both ears carry the same signal, so a tip and
+ring swapped would not matter; the sleeve is what must be right, and it is the lone pin.
+
+### Decisions, and why
+
+| decision | why |
+|---|---|
+| SJ1-3523N | of the stocked jacks looked at, the one whose maker's table, KiCad footprint and JLCPCB's numbered land pattern all exist and agree |
+| not SJ1-3533NG (C4992459) | EasyEDA has no land pattern for it and KiCad no model: nothing to check its pins against |
+| not SJ-3524-SMT-TR (C20182907) | the same jack in surface mount; kept as the alternate |
+| the PJ-320D (rev A's draft) stays out | its datasheet gives no pin roles |
+| VOLUME: ALPS RK09K 10k, 20 mm flat shaft (C202373) | motor-pid's knob without its centre detent; its footprint, 3D model and JLCPCB placement already worked out there |
+| 62k ahead of the knob | full volume is x0.139 of OUT: 81 dB SPL for the FID; OUT at a rail (the relay's hand-over) would be 106 dB, so the handbook says start low |
+| an OPA197 follower, 100 ohm per ear | the receiver's op-amp; drives 32 ohm; stable into a cable; a mono plug (ring to sleeve) draws 21 mA, 42 mW in an 0805 |
+| both ears the same | the FID is mono |
+| J9 at the right edge, below OUT | the audio leaves the board beside OUT's BNC; the block fits under GAIN |
+
+### Found along the way
+
+- **KiCad's SJ1-3523N footprint excludes itself from the BOM and the placement file and draws an
+  edge notch on Edge.Cuts**: DRC reported the parity mismatch and an invalid outline.
+  `gen_pcb.py` now clears both exclusions on every fitted part and removes any footprint's
+  Edge.Cuts, and the jack's silkscreen past the board's edge.
+- **JLCPCB's placements**: the jack's drawing is KiCad's turned 180, its origin 2.5 mm from the
+  sleeve toward the tip and ring; the knob's is turned 270 with its origin at the body's middle,
+  as motor-pid's.  Both are in `parts.JLC_ROTATION` and laid back onto our pads at 0.00 mm.
+- **The relay's click at full volume** (OUT can reach a rail at the hand-over): written into the
+  handbook's caution and the design notes; a two-diode limiter at the knob's wiper is a rev B idea.
+- **motor-pid**: the MSK12C02 model scale confirmed (the VRML is drawn in mm, the footprint had
+  scale 1 where every other model has 1/2.54) and fixed there (its Response 16, with a before and
+  after render).  Only the footprint, the board's five model scales and two renders changed; its
+  gerbers and plots, which this container's KiCad 10.0.8 and libraries regenerate with other
+  headers, were left as they were.
+- **Build:** ERC 0, 388 circuit checks, the simulation within tolerance, DRC 0 at every severity
+  with schematic parity, all fab checks, 19 of 19 document claims; a second `./make.py` changes
+  no file.
+
+### What would most likely make this block dead on arrival
+
+| risk | how likely | what shows it, what rescues it |
+|---|---|---|
+| the sleeve not on J9's lone pin | low: the maker's table, KiCad and JLCPCB agree | before plugging in, J9's sleeve to GND reads 0 ohm |
+| loud in the ears at a switch-off | moderate: the arithmetic says OUT can reach a rail for a moment | VOLUME low until the level is known; the limiter of rev B by hand |
+| the jack's stock (353) | low for one board | SJ1-3524-SMT-TR, the surface-mount twin, on a new footprint |
+| JLCPCB fits the jack or the knob turned | very low: both are keyed by their holes and fit JLCPCB's drawing at 0.00 mm | `PLACEMENT_CHECKS.txt` |

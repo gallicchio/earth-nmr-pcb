@@ -116,7 +116,7 @@ def order_form(w, h, min_drill, min_via, tht_refs):
 
 # What to look for in JLCPCB's preview, per orientation-sensitive part.
 PREVIEW_CHECKS = [
-    ("U1-U10", "the SOT-23-5's pin 1 dot", "at the upper right of each package, toward the triangle's point; pins 3 2 1 along the top"),
+    ("U1-U10, U12", "the SOT-23-5's pin 1 dot", "at the upper right of each package, toward the triangle's point; pins 3 2 1 along the top"),
     ("U11", "the SOIC-8's pin 1 dot", "at the upper left"),
     ("Q1", "the D2PAK's tab", "up (toward the relay), the two leads down"),
     ("Q2, Q3, D12", "the SOT-23's lone pin", "up (the collector; D12's common)"),
@@ -128,9 +128,10 @@ PREVIEW_CHECKS = [
     ("SW1", "the DIP's ON side", "facing down, toward pads 1-8 (the silkscreen says ON)"),
     ("SW2, SW3, SW4", "the slide switches' knob", "SW3 and SW2's knob down, SW4's up; their two posts key them"),
     ("RV1, RV2", "the trimmers' screw", "keyed by their holes; fits one way"),
-    ("J1-J5, J7, J8", "the connectors' fronts", "off the board edge: J1 and J4 the top, J2 and J3 the left, J5 the right, J7 and J8 the bottom"),
+    ("RV3", "the VOLUME knob's body", "to the left of its three pins, the shaft up; keyed by its pins and posts"),
+    ("J1-J5, J7-J9", "the connectors' fronts", "off the board edge: J1 and J4 the top, J2 and J3 the left, J5 and J9 the right, J7 and J8 the bottom"),
     ("F1", "the PTC fuse", "not polarised"),
-    ("TP1-TP21, TP100-TP103", "the test loops", "one pad each, either way"),
+    ("TP1-TP22, TP100-TP103", "the test loops", "one pad each, either way"),
 ]
 
 
@@ -352,7 +353,7 @@ def main():
     print(f"  wrote {os.path.relpath(path, ROOT)}")
 
     bad, n = [], 0
-    for rel, pat, want in CLAIMS(D, R, nchecks, parts_cost, w, h):
+    for rel, pat, want in CLAIMS(D, R, nchecks, parts_cost, w, h, loops):
         if not os.path.exists(os.path.join(ROOT, rel)):
             bad.append(f"{rel}: missing")
             continue
@@ -371,9 +372,9 @@ def main():
     return 1 if bad else 0
 
 
-def CLAIMS(D, R, nchecks, parts_cost, w, h):
+def CLAIMS(D, R, nchecks, parts_cost, w, h, n_loops):
     """(file, regex with one group or several, the build's value or tuple of values)."""
-    c, site = D["coil"], D["site"]
+    c, site, ph = D["coil"], D["site"], D["phones"]
     fL = f"{site['f_L']:.0f}"
     out = []
     for rel in ("README.md", "docs/HANDBOOK.md"):
@@ -390,6 +391,12 @@ def CLAIMS(D, R, nchecks, parts_cost, w, h):
         ("docs/HANDBOOK.md", r"GATE (\d+) ms after", f"{D['delay']['t_gate'] * 1e3:.0f}"),
         ("docs/DESIGN_NOTES.md", r"(\d\.\d) A from a (\d+) V supply", (f"{c['I_pol']:.1f}", f"{c['V_pol']:.0f}")),
         ("docs/DESIGN_NOTES.md", r"single-shot SNR of about (\d+) dB", f"{R['snr_db']:.0f}"),
+        ("README.md", r"a probe loop \((\d+) of them", str(n_loops)),
+        ("docs/HANDBOOK.md", r"x(0\.\d+) of OUT into a 32 ohm earpiece", f"{ph['k_max'] * ph['k_ear']:.3f}"),
+        ("docs/HANDBOOK.md", r"about (\d+) mV of FID on HIGH", f"{ph['fid_ear_hi'] * 1e3:.0f}"),
+        ("docs/HANDBOOK.md", r"about (\d+) dB SPL in a 100 dB/mW", f"{ph['spl_hi']:.0f}"),
+        ("docs/HANDBOOK.md", r"that is 0\.5 V in the earpiece, about (\d+) dB SPL", f"{ph['spl_max']:.0f}"),
+        ("docs/DESIGN_NOTES.md", r"gives x(0\.\d+), the arithmetic's", f"{R['phones']['ear_per_out']:.4f}"),
     ]
     return out
 

@@ -228,6 +228,14 @@ class Board:
             if fp.HasField("Description"):
                 fp.SetField("Description", "")
             self.swap_missing_models(fp, info["footprint"])
+            # every fitted part goes in the BOM and the placement file, whatever the library
+            # footprint says (KiCad's CUI jack footprints come marked out of both), and no
+            # footprint draws the board's outline (the same jacks draw an edge notch)
+            if ref[:2] != "MH":
+                fp.SetAttributes(fp.GetAttributes() & ~pcbnew.FP_EXCLUDE_FROM_BOM & ~pcbnew.FP_EXCLUDE_FROM_POS_FILES)
+            for item in list(fp.GraphicalItems()):
+                if item.GetLayer() == pcbnew.Edge_Cuts:
+                    fp.Remove(item)
             self.board.Add(fp)
             fp.SetPosition(pt(x, y))
             if rot:
@@ -242,6 +250,15 @@ class Board:
                 fp.Value().SetVisible(False)
                 fp.Reference().SetVisible(False)
             self.fps[ref] = fp
+        # a footprint's silkscreen past the board's edge (a jack's front, drawn over the barrel) goes
+        for ref, fp in self.fps.items():
+            for item in list(fp.GraphicalItems()):
+                if item.GetLayer() not in (pcbnew.F_SilkS, pcbnew.B_SilkS):
+                    continue
+                bb = item.GetBoundingBox()
+                if (tomm(bb.GetRight()) > L.BOARD_W - 0.3 or tomm(bb.GetLeft()) < 0.3
+                        or tomm(bb.GetBottom()) > L.BOARD_H - 0.3 or tomm(bb.GetTop()) < 0.3):
+                    fp.Remove(item)
         for ref, fp in self.fps.items():
             for pad in fp.Pads():
                 b = pad.GetBoundingBox()
@@ -255,7 +272,8 @@ class Board:
         self.board.GetDesignSettings().SetAuxOrigin(pt(0, L.BOARD_H))
         board_outline(self.board)
 
-    STAND_INS = {"Fuse_2920_7451Metric": "Fuse_2920.wrl"}
+    STAND_INS = {"Fuse_2920_7451Metric": "Fuse_2920.wrl",
+                 "Potentiometer_Alps_RK09K_Single_Vertical": "Potentiometer_RK09K.wrl"}
 
     def swap_missing_models(self, fp, fpid):
         name = fpid.split(":")[1]

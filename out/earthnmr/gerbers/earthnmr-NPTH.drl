@@ -9,11 +9,19 @@ METRIC
 ; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
 T1C0.900
 ; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
-T2C3.200
+T2C1.200
+; #@! TA.AperFunction,NonPlated,NPTH,ComponentDrill
+T3C3.200
 %
 G90
 G05
 T2
+X234.5Y17.0
+X239.5Y22.0
+X239.5Y12.0
+X242.0Y22.0
+X242.0Y12.0
+T3
 X4.0Y146.0
 X4.0Y4.0
 X239.0Y146.0

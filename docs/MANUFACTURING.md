@@ -4,7 +4,7 @@
 
 One board, four layers, 243 x 150 mm, every part on the top side: ground on
 the second layer, +15 V on the third, -15 V on the back with the three hops.  It passes ERC,
-DRC at every severity with schematic parity, the 365 circuit assertions on the netlist,
+DRC at every severity with schematic parity, the 388 circuit assertions on the netlist,
 the simulation's agreement with the design arithmetic and the fab-package checks, and
 `./make.py` rebuilds and rechecks everything from scratch in about a minute and a half.
 
@@ -57,15 +57,15 @@ The same list is in `out/earthnmr/earthnmr-fabrication-notes.txt` to keep open w
 | Edge Rails/Fiducials | Added by JLCPCB | the board carries three fiducials |
 | Confirm Parts Placement | Yes | look at the preview against PLACEMENT_CHECKS.txt before paying |
 | Parts Selection | By JLCPCB | every BOM line has an LCSC code |
-| Through-hole parts | keep them: C50, C51, C52, J1, J2, J3, J4, J5, J7, J8, K1, RV1, RV2 | the form lists them separately; the BNCs, terminals, relay, trimmers and film capacitors are meant to be fitted |
+| Through-hole parts | keep them: C50, C51, C52, J1, J2, J3, J4, J5, J7, J8, J9, K1, RV1, RV2, RV3 | the form lists them separately; the BNCs, terminals, relay, trimmers and film capacitors are meant to be fitted |
 | Bake Components | No | nothing moisture-sensitive |
 
 ## Cost
 
-The board has **360 SMT joints** and **48 through-hole joints** on 74 BOM lines;
-23 distinct order codes are JLCPCB *Extended* parts, each with a one-off
-$3.00 feeder fee.  Parts alone are **$21.25 per board**, of which the
-four BNC jacks are $5.17, the relay $1.39 and the 25 test loops $2.42.
+The board has **376 SMT joints** and **54 through-hole joints** on 78 BOM lines;
+25 distinct order codes are JLCPCB *Extended* parts, each with a one-off
+$3.00 feeder fee.  Parts alone are **$23.95 per board**, of which the
+four BNC jacks are $5.17, the relay $1.39 and the 26 test loops $2.51.
 
 The bare-board and assembly lines below are estimates from JLCPCB's public price list for a
 four-layer 243 x 150 mm board, not a quote: their order page is the authority.
@@ -75,30 +75,30 @@ four-layer 243 x 150 mm board, not a quote: their order page is the authority.
 | line | cost |
 |---|---|
 | bare PCBs (5 made) | about $55.00 |
-| parts ($21.25 x 2) | $42.50 |
-| assembly: setup + stencil + THT setup + 23 extended codes + 720 SMT and 96 THT joints | about $109.54 |
+| parts ($23.95 x 2) | $47.90 |
+| assembly: setup + stencil + THT setup + 25 extended codes + 752 SMT and 108 THT joints | about $115.96 |
 | shipping (DHL) | about $25.00 |
-| **total** | **about $232.04**  ($116.02 each) |
+| **total** | **about $243.86**  ($121.93 each) |
 
 **5 boards, fully assembled, through-hole parts included**
 
 | line | cost |
 |---|---|
 | bare PCBs (5 made) | about $55.00 |
-| parts ($21.25 x 5) | $106.24 |
-| assembly: setup + stencil + THT setup + 23 extended codes + 1800 SMT and 240 THT joints | about $115.70 |
+| parts ($23.95 x 5) | $119.76 |
+| assembly: setup + stencil + THT setup + 25 extended codes + 1880 SMT and 270 THT joints | about $122.74 |
 | shipping (DHL) | about $25.00 |
-| **total** | **about $301.94**  ($60.39 each) |
+| **total** | **about $322.50**  ($64.50 each) |
 
 **10 boards, fully assembled, through-hole parts included**
 
 | line | cost |
 |---|---|
 | bare PCBs (10 made) | about $85.00 |
-| parts ($21.25 x 10) | $212.49 |
-| assembly: setup + stencil + THT setup + 23 extended codes + 3600 SMT and 480 THT joints | about $125.96 |
+| parts ($23.95 x 10) | $239.52 |
+| assembly: setup + stencil + THT setup + 25 extended codes + 3760 SMT and 540 THT joints | about $134.03 |
 | shipping (DHL) | about $25.00 |
-| **total** | **about $448.45**  ($44.85 each) |
+| **total** | **about $483.55**  ($48.36 each) |
 
 The coil, its former, the water bottle and the polarizing supply are not on the order; the
 [handbook](HANDBOOK.md) lists them.
@@ -111,10 +111,12 @@ from KiCad's footprint.  The upload CPL has these angles applied, per LCSC code,
 
 | parts | LCSC | turned by | datum shift | evidence |
 |---|---|---|---|---|
+| RV3 | C202373 | 270 deg | (+3.50, -2.50) mm | predicted: RK09K: as motor-pid's RK09K1130A70 (C351173), the same body; their pins along +x, turned 270 onto KiCad's (easyeda C202373: 0.00 mm), their origin the body's middle, 3.5 mm from the pins toward the posts |
 | K1 | C329305 | 270 deg | (+2.54, -5.08) mm | predicted: HFD3 relay: their drawing turned a quarter from KiCad's G6S-2, their origin the middle of the pin field, (2.54, -5.08) (y up) from KiCad's pin 1 (check_rotations.py: rms 0.00 mm) |
 | U11 | C7593 | 270 deg | none | predicted: NE555DR SOIC-8: JLCPCB's drawing lies along x, pin 1 at the lower left; check_rotations.py fits +270 (rms 0.13 mm) |
+| J9 | C20182914 | 180 deg | (+0.00, +2.50) mm | predicted: SJ1-3523N: easyeda's drawing is KiCad's turned half round (its 1 sleeve, 2 tip, 3 ring = our S, T, R), its origin 2.5 mm from the sleeve's pin toward the tip's and the ring's |
 | Q2, Q3 | C20526 | 180 deg | none | read: MMBT3904 SOT-23: their pad 1 at (+1.0,+0.95), KiCad's at (-0.94,-0.95); read in the op-amp board's rev A preview, 2026-10-29; check_rotations.py fits +180 here too |
-| U1, U2, U3, U4, U5, U6, U7 | C221351 | 180 deg | none | predicted: SOT-23-5: +180 read on 59 SOT-23-5 placements on the GPSDO board |
+| U1, U2, U3, U4, U5, U6, U7, U12 | C221351 | 180 deg | none | predicted: SOT-23-5: +180 read on 59 SOT-23-5 placements on the GPSDO board |
 | D12 | C2500 | 180 deg | none | predicted: BAV99 SOT-23: the same drawing as the MMBT3904 (check_rotations.py: +180, rms 0.28 mm) |
 | J2 | C474881 | 180 deg | none | read: KF301-2P: as the 3P; read in the op-amp board's rev A preview |
 | J1, J3 | C474882 | 180 deg | none | read: KF301-3P: EasyEDA draws the wire-entry arrows on +y, ours face the edge (-y); the pin row is symmetric, so +180 turns only the body; read in the op-amp board's rev A preview |
@@ -122,7 +124,7 @@ from KiCad's footprint.  The upload CPL has these angles applied, per LCSC code,
 | J4, J5, J7, J8 | C41416668 | 90 deg | none | read: BNC-KYWE-295-W4-N: Lorenz board rev A/B preview, built and working |
 | Q1 | C146578 | 0 deg | (-2.56, +0.00) mm | predicted: IRFS4227 D2PAK: their leads at -x as KiCad's TO-263-2, their origin 2.56 mm from KiCad's, toward the leads (check_rotations.py: rms 0.00 mm); not motor-pid's MJB44H11 drawing, which is turned 180 |
 | LED1, LED2, LED3 | C2297 | 0 deg | none | read: KT-0805G on KiCad's LED_0805: GPiBridge rev A preview, cathode at pad 1 |
-| TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TP10, TP11, TP12, TP13, TP14, TP15, TP16, TP17, TP18, TP19, TP20, TP21, TP100, TP101, TP102, TP103 | C5199800 | 0 deg | none | predicted: RH-5019 test loop: one 4.0 x 2.2 pad |
+| TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TP10, TP11, TP12, TP13, TP14, TP15, TP16, TP17, TP18, TP19, TP20, TP21, TP22, TP100, TP101, TP102, TP103 | C5199800 | 0 deg | none | predicted: RH-5019 test loop: one 4.0 x 2.2 pad |
 | LED4 | C84256 | 0 deg | none | read: NCD0805R1 on KiCad's LED_0805: GPiBridge rev A preview, cathode at pad 1 |
 | D1, D2, D3, D4, D5 | C8678 | 0 deg | none | predicted: SS34 SMA: cathode (pad 1) at -x in both drawings |
 
@@ -138,7 +140,7 @@ nothing but those angles.
 
 | part | what to look for | should be |
 |---|---|---|
-| U1-U10 | the SOT-23-5's pin 1 dot | at the upper right of each package, toward the triangle's point; pins 3 2 1 along the top |
+| U1-U10, U12 | the SOT-23-5's pin 1 dot | at the upper right of each package, toward the triangle's point; pins 3 2 1 along the top |
 | U11 | the SOIC-8's pin 1 dot | at the upper left |
 | Q1 | the D2PAK's tab | up (toward the relay), the two leads down |
 | Q2, Q3, D12 | the SOT-23's lone pin | up (the collector; D12's common) |
@@ -150,19 +152,20 @@ nothing but those angles.
 | SW1 | the DIP's ON side | facing down, toward pads 1-8 (the silkscreen says ON) |
 | SW2, SW3, SW4 | the slide switches' knob | SW3 and SW2's knob down, SW4's up; their two posts key them |
 | RV1, RV2 | the trimmers' screw | keyed by their holes; fits one way |
-| J1-J5, J7, J8 | the connectors' fronts | off the board edge: J1 and J4 the top, J2 and J3 the left, J5 the right, J7 and J8 the bottom |
+| RV3 | the VOLUME knob's body | to the left of its three pins, the shaft up; keyed by its pins and posts |
+| J1-J5, J7-J9 | the connectors' fronts | off the board edge: J1 and J4 the top, J2 and J3 the left, J5 and J9 the right, J7 and J8 the bottom |
 | F1 | the PTC fuse | not polarised |
-| TP1-TP21, TP100-TP103 | the test loops | one pad each, either way |
+| TP1-TP22, TP100-TP103 | the test loops | one pad each, either way |
 
 The parts that cannot go in wrong are the relay and the two trimmers: their hole patterns fit
 one way, and `check_outputs.py` re-derives that from the board file on every build.
 
 ## The through-hole parts
 
-13 parts are through-hole: **C50, C51, C52, J1, J2, J3, J4, J5, J7, J8, K1, RV1, RV2**: the four BNC jacks, the three
+15 parts are through-hole: **C50, C51, C52, J1, J2, J3, J4, J5, J7, J8, J9, K1, RV1, RV2, RV3**: the four BNC jacks, the three
 terminal blocks, the relay, the two trimmers and the three film capacitors.  They are in the BOM
 and the CPL and JLCPCB fits them for a per-order fee plus pennies a joint; keep them selected
-when the form lists them.  Soldered by hand they are the 48 largest joints on the board.
+when the form lists them.  Soldered by hand they are the 54 largest joints on the board.
 
 ## Parts, stock and alternates
 
@@ -172,7 +175,7 @@ description against the value and package here and stops if one has changed or r
 | ref | value | LCSC | JLC | unit | stock then | notes |
 |---|---|---|---|---|---|---|
 | C1,C2 | 100uF | C46550402 | extended | $0.0423 | 200,110 | 100 uF 25 V aluminium electrolytic, SMD 6.3 x 5.4 mm: one on each analog rail |
-| C3,C4,C54,C80,C81,C82,C83,C84,C85,C86,C87,C88,C89,C90,C91,C92,C93,C94,C95,C96,C97 | 100nF | C49678 | basic | $0.0205 | 22,485,395 | X7R 50 V 0805: supply bypass only |
+| C3,C4,C54,C80,C81,C82,C83,C84,C85,C86,C87,C88,C89,C90,C91,C92,C93,C94,C95,C96,C97,C98,C99 | 100nF | C49678 | basic | $0.0205 | 22,485,395 | X7R 50 V 0805: supply bypass only |
 | C5 | 470uF | C22469994 | extended | $0.1755 | 51,190 | 470 uF 50 V aluminium electrolytic, SMD 10 x 12.5 mm: the polarizing supply's reservoir at the board, which damps a hot-plugged lead's ringing |
 | C10,C13,C35 | 3.3nF | C880847 | extended | $0.0214 | 9,192 | C0G 100 V 5 % 0805: the low-pass filter, the bank |
 | C11,C16,C18,C20,C34 | 6.8nF | C326913 | extended | $0.0904 | 5,540 | C0G 50 V 5 % 0805: the low-pass filter, the bank |
@@ -191,6 +194,7 @@ description against the value and package here and stops if one has changed or r
 | J2 | POLARIZE SUPPLY | C474881 | extended | $0.1019 | 53,579 | 2-way 5.0 mm screw terminal block, 17 A: the POLARIZING SUPPLY |
 | J3 | COIL | C474882 | extended | $0.1396 | 28,051 | 3-way 5.0 mm screw terminal block, 17 A: POWER (+15 V, GND, -15 V) and COIL (A, B, shield) |
 | J4,J5,J7,J8 | BNC | C41416668 | extended | $1.2929 | 215 | 50 ohm BNC jack, right angle, 4 ground posts on 8x8 mm (the op-amp and PID boards' jack: JLCPCB rotation +90 read off the Lorenz board's preview) |
+| J9 | PHONES | C20182914 | extended | $1.2340 | 353 | CUI (Same Sky) SJ1-3523N 3.5 mm stereo jack, through-hole, right angle, no switches. Same Sky's SJ1-352XN datasheet (09/12/2024) gives the pins: 1 sleeve, 2 tip, 3 ring; KiCad's footprint names its pads S, T, R and puts them where that drawing does (the sleeve on the centre line 3.5 mm in from the edge, tip and ring 8.5 mm in, the tip on the left seen from the plug's side), and JLCPCB's land pattern for C20182914 numbers them 1, 2, 3 in the same places (scripts/check_rotations.py) |
 | K1 | HFD3/12 | C329305 | extended | $1.3894 | 4,716 | Hongfa HFD3/12 DPDT signal relay, 12 V 1028 ohm coil (9 V to pull in, 24 V max), AgNi + Au bifurcated contacts, 3 A 30 VDC, 4 ms: released, the coil is the receiver's; energized, the polarizing current's. Pins as the Omron G6S-2 |
 | LED1,LED2,LED3 | GREEN | C2297 | basic | $0.0164 | 2,420,908 | green 0805 LED: each analog rail, and the polarizing supply |
 | LED4 | RED | C84256 | basic | $0.0135 | 3,082,781 | red 0805 LED across the relay's coil: lit while the board polarizes |
@@ -210,12 +214,14 @@ description against the value and package here and stops if one has changed or r
 | R24 | 20k | C4328 | basic | $0.0042 | 1,735,754 | 0805 1% 125mW thick film |
 | R25 | 24k | C17575 | basic | $0.0044 | 314,882 | 0805 1% 125mW thick film |
 | R26 | 9.1k | C17855 | preferred | $0.0030 | 292,599 | 0805 1% 125mW thick film |
-| R27 | 62k | C17783 | preferred | $0.0019 | 221,572 | 0805 1% 125mW thick film |
+| R27,R58 | 62k | C17783 | preferred | $0.0019 | 221,572 | 0805 1% 125mW thick film |
 | R28,R29 | 8.2k | C17828 | basic | $0.0027 | 453,908 | 0805 1% 125mW thick film |
 | R30 | 200k | C17539 | basic | $0.0056 | 529,881 | 0805 1% 125mW thick film |
 | R49 | 220k | C17556 | basic | $0.0030 | 382,494 | 0805 1% 125mW thick film |
 | R50 | 270k | C17589 | preferred | $0.0059 | 122,300 | 0805 1% 125mW thick film |
+| R56,R57 | 100R | C17408 | basic | $0.0042 | 7,732,481 | 0805 1% 125mW thick film |
 | RV1,RV2 | 2M | C48997907 | extended | $0.2394 | 9,203 | 3362P 2 M single-turn cermet trimmer, top adjust (Bourns' pattern and pinout: the wiper reaches 3 turning clockwise): POLARIZE TIME and LISTEN TIME, each a rheostat between 1 and 2 with 3 tied to the wiper, so clockwise is longer |
+| RV3 | 10k | C202373 | extended | $0.6200 | 5,834 | ALPS RK09K 9 mm vertical potentiometer, 10 k linear, 20 mm flat shaft, no detent: the headphones' VOLUME. motor-pid's TARGET knob without its centre detent; pin 3 is the end the wiper reaches turning clockwise |
 | SW1 | TUNE | C3293158 | extended | $0.4889 | 5,122 | KingTek DSIC08LSGET 8-way DIP switch, SMD, 2.54 mm, raised sliders: each switch adds one binary weight of C0G capacitance to the tank |
 | SW2 | GAIN | C431540 | extended | $0.0544 | 194,273 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
 | SW3 | SEQUENCE | C431540 | extended | $0.0544 | 194,273 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
@@ -241,8 +247,9 @@ description against the value and package here and stops if one has changed or r
 | TP19 | EXT | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
 | TP20 | +15V | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
 | TP21 | -15V | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP22 | PHONES | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
 | TP100,TP101,TP102,TP103 | GND | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| U1,U2,U3,U4,U5,U6,U7 | OPA197 | C221351 | extended | $0.7005 | 85,610 | OPA197IDBVR (TI): 36 V CMOS op-amp, 5.5 nV/rtHz at 1 kHz, fA input current, 10 MHz, rail-to-rail in and out, SOT-23-5. All seven amplifiers, one per triangle, so the silkscreen is the schematic |
+| U1,U2,U3,U4,U5,U6,U7,U12 | OPA197 | C221351 | extended | $0.7005 | 85,610 | OPA197IDBVR (TI): 36 V CMOS op-amp, 5.5 nV/rtHz at 1 kHz, fA input current, 10 MHz, rail-to-rail in and out, SOT-23-5. All seven amplifiers, one per triangle, so the silkscreen is the schematic |
 | U8,U9,U10 | TS391 | C71896 | extended | $0.1382 | 14,931 | TS391ILT (ST): single comparator, 2-36 V, open-collector output, inputs to ground, SOT-23-5 (1 OUT, 2 V-, 3 IN-, 4 IN+, 5 V+). The POLARIZE IN level detector, the gate delay and the relay hold |
 | U11 | NE555 | C7593 | preferred | $0.1083 | 136,602 | NE555DR (TI) bipolar 555 timer, 4.5-16 V, SOIC-8: the INT sequencer, an astable with diode-steered charge and discharge so POLARIZE and LISTEN set independently |
 
@@ -256,9 +263,13 @@ description against the value and package here and stops if one has changed or r
 - **DSIC08LSGET** (C3293158): DSIC08LSGET / C54953 (2315 in stock, the same part)
 - **3362P-1-205** (C48997907): 3362P-1-205LF / C49190490 (18.4k, $0.33)
 - **BNC-KYWE-295-W4-N** (C41416668): HL2-BNC-KYWE / C48606310 (107 in stock)
+- **SJ1-3523N** (C20182914): SJ1-3533NG / C4992459 (400 in stock; the same pins, its datasheet on JLCPCB, but no JLCPCB land pattern and another footprint)
+- **SJ1-3523N** (C20182914): SJ-3524-SMT-TR / C20182907 (803 in stock, surface mount, 1 sleeve 2 tip 3 ring 4 tip switch; another footprint)
+- **RK09K1130AAU** (C202373): RK09K1130AP5 / C470295 (3780 in stock, a 15 mm screwdriver shaft)
+- **RK09K1130AAU** (C202373): RK09K1130A70 / C351173 (6302 in stock, motor-pid's: a centre detent)
 
 The thinnest line is the BNC-KYWE-295-W4-N: 215 in stock and 4 per board, about
-53 boards' worth; next the CC0805JKNPO9BN682 at about 1,108.
+53 boards' worth; next the SJ1-3523N at about 353.
 
 ## After the boards arrive
 

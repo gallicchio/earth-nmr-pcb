@@ -154,7 +154,7 @@ def check(stem, layers, w, h, problems, notes):
 # preview chooses to draw them, they cannot be soldered in turned.  The
 # assembler's notes say so in as many words, and this is what makes that
 # true rather than hopeful.
-KEYED_THT = ["RV1", "RV2", "K1"]
+KEYED_THT = ["RV1", "RV2", "RV3", "K1", "J9"]
 
 
 def check_keying(stem, problems, notes):
@@ -291,6 +291,7 @@ CODE_EXPECT = {
     "DCLAMP": ["SOT-23"], "DSCH": ["SMA"], "TVS_CLAMP": ["SMC"], "TVS_TANK": ["SMB"], "TVS_SUPPLY": ["SMB"],
     "PTC": ["2920"], "RSENSE": ["2512"], "DIP8": ["DIP"], "SW": ["SPDT"], "TRIM": ["2M"],
     "CFILM": ["1uF"], "CBULK": ["100uF"], "CPOL": ["470uF"], "BNC": ["BNC"], "TERM3": ["3P"], "TERM2": ["2P"],
+    "JACK": ["3.5mm", "TRS", "Right-Angle"], "POT_KNOB": ["10k"],
     "TP": ["Test"], "LED": ["0805"], "LED_R": ["0805"],
     "100nF": ["100nF", "0805"], "10nF": ["10nF", "0805"], "6.8nF": ["6.8nF", "0805"], "3.3nF": ["3.3nF", "0805"],
     "47nF": ["47nF", "1206"], "100nF_C0G": ["100nF", "1206"],

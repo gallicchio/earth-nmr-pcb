@@ -34,7 +34,7 @@ Earth's Field NMR rev A (2026-11-02) -- JLCPCB order form, field by field
   Edge Rails/Fiducials         Added by JLCPCB      (the board carries three fiducials)
   Confirm Parts Placement      Yes      (look at the preview against PLACEMENT_CHECKS.txt before paying)
   Parts Selection              By JLCPCB      (every BOM line has an LCSC code)
-  Through-hole parts           keep them: C50, C51, C52, J1, J2, J3, J4, J5, J7, J8, K1, RV1, RV2      (the form lists them separately; the BNCs, terminals, relay, trimmers and film capacitors are meant to be fitted)
+  Through-hole parts           keep them: C50, C51, C52, J1, J2, J3, J4, J5, J7, J8, J9, K1, RV1, RV2, RV3      (the form lists them separately; the BNCs, terminals, relay, trimmers and film capacitors are meant to be fitted)
   Bake Components              No      (nothing moisture-sensitive)
 
 Upload:

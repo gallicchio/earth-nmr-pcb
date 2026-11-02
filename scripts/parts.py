@@ -215,6 +215,31 @@ PARTS = {
         desc="50 ohm BNC jack, right angle, 4 ground posts on 8x8 mm (the op-amp and "
              "PID boards' jack: JLCPCB rotation +90 read off the Lorenz board's preview)",
         alt=["HL2-BNC-KYWE / C48606310 (107 in stock)"]),
+    "JACK": dict(
+        value="PHONES", mpn="SJ1-3523N", lcsc="C20182914", jlc_type="extended",
+        process="THT", stock=353, price=1.2340,
+        footprint="Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal",
+        symbol="Connector_Audio:AudioJack3",
+        desc="CUI (Same Sky) SJ1-3523N 3.5 mm stereo jack, through-hole, right angle, no switches.  Same "
+             "Sky's SJ1-352XN datasheet (09/12/2024) gives the pins: 1 sleeve, 2 tip, 3 ring; KiCad's "
+             "footprint names its pads S, T, R and puts them where that drawing does (the sleeve on the "
+             "centre line 3.5 mm in from the edge, tip and ring 8.5 mm in, the tip on the left seen from "
+             "the plug's side), and JLCPCB's land pattern for C20182914 numbers them 1, 2, 3 in the same "
+             "places (scripts/check_rotations.py)",
+        alt=["SJ1-3533NG / C4992459 (400 in stock; the same pins, its datasheet on JLCPCB, but no JLCPCB "
+             "land pattern and another footprint)",
+             "SJ-3524-SMT-TR / C20182907 (803 in stock, surface mount, 1 sleeve 2 tip 3 ring 4 tip switch; "
+             "another footprint)"]),
+    "POT_KNOB": dict(
+        value="10k", mpn="RK09K1130AAU", lcsc="C202373", jlc_type="extended",
+        process="THT", stock=5834, price=0.6200,
+        footprint="Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical",
+        symbol="Device:R_Potentiometer_US",
+        desc="ALPS RK09K 9 mm vertical potentiometer, 10 k linear, 20 mm flat shaft, no detent: the "
+             "headphones' VOLUME.  motor-pid's TARGET knob without its centre detent; pin 3 is the end the "
+             "wiper reaches turning clockwise",
+        alt=["RK09K1130AP5 / C470295 (3780 in stock, a 15 mm screwdriver shaft)",
+             "RK09K1130A70 / C351173 (6302 in stock, motor-pid's: a centre detent)"]),
     "TERM3": dict(
         value="Screw_Terminal_01x03", mpn="KF301-5.0-3P", lcsc="C474882",
         jlc_type="extended", process="THT", stock=28051, price=0.1396,
@@ -340,4 +365,10 @@ JLC_ROTATION = {
     "C474882": (180, (0, 0), "read", "KF301-3P: EasyEDA draws the wire-entry arrows on +y, ours face the edge (-y); the pin "
                                      "row is symmetric, so +180 turns only the body; read in the op-amp board's rev A preview"),
     "C474881": (180, (0, 0), "read", "KF301-2P: as the 3P; read in the op-amp board's rev A preview"),
+    "C202373": (270, (3.5, -2.5), "predicted", "RK09K: as motor-pid's RK09K1130A70 (C351173), the same body; their pins "
+                                               "along +x, turned 270 onto KiCad's (easyeda C202373: 0.00 mm), their "
+                                               "origin the body's middle, 3.5 mm from the pins toward the posts"),
+    "C20182914": (180, (0, 2.5), "predicted", "SJ1-3523N: easyeda's drawing is KiCad's turned half round (its 1 sleeve, "
+                                              "2 tip, 3 ring = our S, T, R), its origin 2.5 mm from the sleeve's pin "
+                                              "toward the tip's and the ring's"),
 }

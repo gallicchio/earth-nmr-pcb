@@ -127,8 +127,15 @@ def expected(D):
     net("U7-", "U7.4", "R30.1", "SW2.2")
     net("GAIN_LO", "SW2.1", "R31.2")
     net("GAIN_HI", "SW2.3", "R32.2")
-    net("OUT", "U7.1", "R30.2", "R33.1", "TP13.1")
+    net("OUT", "U7.1", "R30.2", "R33.1", "TP13.1", "R58.1")
     net("OUT_J", "R33.2", "J5.1")
+    # HEADPHONES: OUT through R58 onto the VOLUME knob's clockwise end, its wiper into U12,
+    # a follower; each earpiece through its own 100 ohm, tip (left) and ring (right) alike
+    net("VOL_TOP", "R58.2", "RV3.3")
+    net("VOL_WIPER", "RV3.2", "U12.3")
+    net("PHONES", "U12.1", "U12.4", "TP22.1", "R56.1", "R57.1")
+    net("PHONES_T", "R56.2", "J9.T")
+    net("PHONES_R", "R57.2", "J9.R")
     # the timer
     net("DIS", "U11.7", "RV1.2", "RV1.3", "D10.2", "RV2.1")
     net("RA", "R40.2", "RV1.1")
@@ -162,14 +169,14 @@ def expected(D):
     return E
 
 
-RAIL_P = ({f"U{i}.5" for i in range(1, 11)} | {"U11.4", "U11.8", "D1.1", "D3.1", "D8.1", "D12.2", "K1.1",
+RAIL_P = ({f"U{i}.5" for i in range(1, 13) if i != 11} | {"U11.4", "U11.8", "D1.1", "D3.1", "D8.1", "D12.2", "K1.1",
           "Q3.3", "R1.1", "R7.1", "R9.1", "R10.1", "R40.1", "R45.1", "R48.1", "R51.1", "TP20.1", "C1.1", "C3.1"})
-RAIL_M = {f"U{i}.2" for i in range(1, 8)} | {"D2.2", "D4.2", "R2.2", "TP21.1", "C2.2", "C4.2"}
+RAIL_M = {f"U{i}.2" for i in (1, 2, 3, 4, 5, 6, 7, 12)} | {"D2.2", "D4.2", "R2.2", "TP21.1", "C2.2", "C4.2"}
 GND_FIXED = ({"J1.2", "J2.2", "J3.3", "J4.2", "J5.2", "J7.2", "J8.2", "D3.2", "D4.1", "D5.2", "D6.2",
               "D12.1", "LED1.1", "LED2.2", "LED3.1", "Q2.2", "R4.2", "R11.1", "R12.2", "R13.2", "R22.1", "R25.2",
               "R27.2", "R31.1", "R32.1", "R42.2", "R43.2", "R46.2", "R52.2", "R54.2", "SW4.3",
               "U8.2", "U9.2", "U10.2", "U11.1", "C1.2", "C2.1", "C3.2", "C4.1", "C5.2", "C35.2", "C50.2", "C51.2",
-              "C52.2", "C53.1", "C54.2", "C55.2", "C56.2"} | {f"TP{i}.1" for i in range(100, 104)})
+              "C52.2", "C53.1", "C54.2", "C55.2", "C56.2", "RV3.1", "J9.S"} | {f"TP{i}.1" for i in range(100, 104)})
 
 
 def main(path):
@@ -206,7 +213,7 @@ def main(path):
         check(nl.value[r] == "100nF", f"{r} is {nl.value[r]}, not 100nF")
     np_ = sum(1 for r in byp if "+15V" in (nl.net_of.get(f"{r}.1"), nl.net_of.get(f"{r}.2")))
     nm_ = sum(1 for r in byp if "-15V" in (nl.net_of.get(f"{r}.1"), nl.net_of.get(f"{r}.2")))
-    check(np_ == 11 and nm_ == 7, f"bypass: {np_} on +15V (want 11: U1-U10 and the timer), {nm_} on -15V (want 7)")
+    check(np_ == 12 and nm_ == 8, f"bypass: {np_} on +15V (want 12: U1-U10, U12 and the timer), {nm_} on -15V (want 8)")
     # nothing left over: every pin of every part is on a net this check knows
     every = {p for pins in nl.nets.values() for p in pins}
     check(every <= claimed, f"pins on nets nobody designed: {sorted(every - claimed)}")
@@ -254,6 +261,15 @@ def main(path):
     for r in ("C30", "C31", "C32", "C33", "C34", "C35"):
         p = parts.PASSIVES[nl.value[r]]
         check(nl.fields[r].get("LCSC") == p["lcsc"] and "C0G" in p["note"], f"{r}: a filter capacitor must be C0G")
+    # the headphones: the knob's range, the earpieces' series resistors, the jack's pins
+    ph = D["phones"]
+    check(R("R58") == ohms(ph["R_feed"]) and nl.value["RV3"] == ph["RV"], "R58, RV3: the headphones' level")
+    check(R("R56") == R("R57") == ohms(ph["R_out"]), "R56, R57: one per earpiece")
+    check(nl.fields["J9"].get("LCSC") == parts.PARTS["JACK"]["lcsc"] and nl.fields["RV3"].get("LCSC")
+          == parts.PARTS["POT_KNOB"]["lcsc"], "J9 is the SJ1-3523N, RV3 the RK09K")
+    check(nl.net_of["J9.S"] == "GND", "J9: the sleeve on ground")
+    check(nl.net_of["RV3.1"] == "GND" and nl.net_of["RV3.3"] == nl.net_of["R58.2"],
+          "RV3: pin 3, the clockwise end, from R58 (clockwise louder), pin 1 to ground")
     # the timer and the delays
     tm = D["timer"]
     check(R("R40") == R("R41") == ohms(tm["R_min"]), "R40, R41: the timer's minimum resistance")

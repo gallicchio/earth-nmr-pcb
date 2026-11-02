@@ -6,7 +6,7 @@ PLACEMENTS
   with JLCPCB's own per-part rotations and datum offsets applied; use the native
   file anywhere else.  Every part is on the top side.
 
-U1-U10 -- OPA197 (U1-U7) and TS391 (U8-U10) in SOT-23-5, all at the same
+U1-U10, U12 -- OPA197 (U1-U7, U12) and TS391 (U8-U10) in SOT-23-5, all at the same
   orientation: pins 3, 2, 1 along the TOP edge of the package, 4 and 5 along the
   bottom.  Each sits inside a silkscreen triangle pointing right; pin 1 is the
   upper-right pad, toward the triangle's point.
@@ -22,13 +22,17 @@ SW1 -- KingTek DSIC08 eight-way DIP switch; its ON side faces DOWN (toward
   pads 1-8, away from the TANK+ line).  The silkscreen says ON and OFF.
 SW2, SW3, SW4 -- MSK12C02 slide switches; their two posts key them.
 RV1, RV2 -- 3362P trimmers, keyed by their three holes.
+RV3 -- ALPS RK09K 9 mm potentiometer (VOLUME), vertical, the shaft up; keyed by
+  its three pins and its two posts.
 C50-C52 -- 1 uF film capacitors, 5 mm pitch, through-hole, unpolarised.
 
 J1, J3 -- 3-way 5 mm screw terminals; J2 -- 2-way.  The wire openings face
   the board edge: J1's the top edge, J2's and J3's the left edge.
 J4, J5, J7, J8 -- BNC jacks, through-hole.  The barrel points OFF the board
   edge: J4 off the top, J5 off the right, J7 and J8 off the bottom.
+J9 -- Same Sky SJ1-3523N 3.5 mm stereo jack, through-hole: its opening points
+  OFF the right edge, its face at the edge; three pins and two pegs key it.
 
 D1-D14, LED1-LED4, C1, C2, C5 -- polarised; the cathode / negative end is pad 1,
   the end the footprint's silkscreen bar marks.  D9 (SMBJ12CA) is bidirectional.
-TP1-TP21, TP100-TP103 -- RH-5019 test loops (SMD).
+TP1-TP22, TP100-TP103 -- RH-5019 test loops (SMD).

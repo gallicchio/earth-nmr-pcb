@@ -63,7 +63,7 @@ def sym(key):
 TP_NUMBER = {"V POL": 1, "DRAIN": 2, "I POL": 3, "GATE": 4, "TANK+": 5, "TANK-": 6,
              "INA A": 7, "INA B": 8, "PREAMP": 9, "HP1": 10, "HP": 11, "LP": 12, "OUT": 13,
              "POL CMD": 14, "DELAY": 15, "HOLD": 16, "RELAY": 17, "TIMER": 18, "EXT": 19,
-             "+15V": 20, "-15V": 21}
+             "+15V": 20, "-15V": 21, "PHONES": 22}
 
 
 class Draw:
@@ -949,6 +949,53 @@ def build():
                                                             "trigger the scope on it"],
                 facing="right", text_at=(r55b[0] + g(9), r55b[1] - g(4)))
     s.wire(r55b, js_)
+
+    # ================================================== HEADPHONES ============
+    # drawn after the sequencer, so the bypass capacitors drawn before keep their numbers
+    ph = D["phones"]
+    HX0, HY = ox7 + g(2), po7[1] + g(12)
+    s.wire((HX0, po7[1]), (HX0, HY))
+    r58a, r58b = d.res("R58", ph["R_feed"], HX0 + g(3.5), HY, rot=90, text="above")
+    s.wire((HX0, HY), r58a)
+    # RV3, VOLUME: pin 3 (the clockwise end) up to R58, pin 1 to ground, the wiper to U12's +
+    PX = r58b[0] + g(2)
+    s.place(sym("POT_KNOB"), "RV3", ph["RV"], PX, HY + g(3), mirror="x", footprint=fp("POT_KNOB"),
+            fields=part_fields("POT_KNOB"), ref_off=(-2.4, -1.4), val_off=(-2.4, 0.4),
+            ref_justify="right", val_justify="right")
+    v3a, v3w, v3b = s.pin("RV3", 1, "1"), s.pin("RV3", 1, "2"), s.pin("RV3", 1, "3")
+    assert v3b[1] < v3a[1] and v3w[0] > PX, ("RV3 must have pin 3 on top, the wiper on the right", v3a, v3w, v3b)
+    s.wire(r58b, (PX, r58b[1]), v3b)
+    s.wire(v3a, (v3a[0], v3a[1] + g(1)))
+    d.gnd(v3a[0], v3a[1] + g(1))
+    d.text(["VOLUME", "clockwise louder"], PX - g(7.5), HY + g(5.5), size=1.0)
+    UPX = v3w[0] + g(6)
+    pp12, pm12, po12 = d.opamp("U12", UPX, v3w[1] + g(1))
+    assert abs(pp12[1] - v3w[1]) < 0.01, (pp12, v3w)
+    s.wire(v3w, pp12)
+    ox12 = d.follower_fb(pm12, po12, UPX)
+    s.wire((ox12, po12[1]), (ox12 + g(1), po12[1]))
+    d.testpoint(ox12 + g(1), po12[1], "PHONES", rot=0)
+    # each earpiece through its own 100 ohm: tip (left) and ring (right) alike
+    JX, JY = ox12 + g(16), po12[1] + g(2)
+    s.place(sym("JACK"), "J9", "PHONES", JX, JY, rot=180, footprint=fp("JACK"), fields=part_fields("JACK"),
+            ref_off=(2.4, -6.4), val_off=(2.4, -4.6), ref_justify="left", val_justify="left", hide_value=True)
+    jt, jr, js = s.pin("J9", 1, "T"), s.pin("J9", 1, "R"), s.pin("J9", 1, "S")
+    assert jt[1] < jr[1] < js[1] and jt[0] == jr[0] == js[0], ("J9: T, R, S down its left side", jt, jr, js)
+    RXA = ox12 + g(4)
+    r56a, r56b = d.res("R56", ph["R_out"], RXA + g(2), jt[1], rot=90, text="above")
+    r57a, r57b = d.res("R57", ph["R_out"], RXA + g(2), jr[1], rot=90, text="below")
+    assert po12[1] < jt[1] < jr[1], "the split's column runs down from U12's output past the tip to the ring"
+    s.wire((ox12 + g(1), po12[1]), (RXA - g(1), po12[1]), (RXA - g(1), jr[1]), r57a)
+    s.wire((RXA - g(1), jt[1]), r56a)
+    s.wire(r56b, jt)
+    s.wire(r57b, jr)
+    s.wire(js, (js[0] - g(1), js[1]), (js[0] - g(1), js[1] + g(1)))
+    d.gnd(js[0] - g(1), js[1] + g(1))
+    d.title("HEADPHONES", HX0 + g(2), HY - g(7),
+            [f"a mono copy of OUT for a stereo headset: {ph['fid_ear_hi'] * 1e3:.0f} mV of FID at a "
+             f"{ph['Z']:.0f} ohm earpiece on HIGH, the knob full up",
+             f"(about {ph['spl_hi']:.0f} dB SPL); R56, R57 hold a mono plug's shorted ring to "
+             f"{ph['i_short'] * 1e3:.0f} mA.  J9: Same Sky SJ1-3523N, 1 sleeve, 2 tip, 3 ring"], size=1.8)
 
     # ================================================== POWER =================
     PX, PY = g(268), g(24)

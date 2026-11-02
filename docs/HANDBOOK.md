@@ -18,6 +18,8 @@ how close they are.
 - **An oscilloscope** on OUT, triggered from SYNC OUT.  A computer's sound card
   (through OUT's 1k and a BNC-to-3.5 mm lead) records the signal for a Fourier transform.
 - A signal generator for CAL IN, for tuning.
+- **Headphones** (optional), any 3.5 mm stereo set, into PHONES (J9), to hear the
+  protons: section 5.5.
 
 ## 2. The coil
 
@@ -87,7 +89,7 @@ nothing is hurt).
 | POL CMD | the sequencer's command | 0 V (MODE at LISTEN) |
 | RELAY, GATE | the relay driver's and the switch's drive | 0 V |
 | TANK+, TANK- | the tank, through the relay's rest contacts | 0 V |
-| INA A, INA B, PREAMP, HP1, HP, LP, OUT | the receiver | 0 V within a few mV, and noise |
+| INA A, INA B, PREAMP, HP1, HP, LP, OUT, PHONES | the receiver | 0 V within a few mV, and noise |
 
 ### 5.2 The sequencer
 
@@ -136,6 +138,18 @@ fading over a second or two, about 0.8 V at the start for a litre of water polar
 at 1.5 A.  If it is not there: check the coil's direction (east-west), the tuning
 (CAL IN), and look for steel and mains nearby.
 
+### 5.5 Listening
+
+PHONES (J9) carries OUT to both ears, through the VOLUME knob (RV3, clockwise louder)
+and U12, a follower, with 100 ohm in series with each ear.  Fully clockwise it puts
+x0.034 of OUT into a 32 ohm earpiece: about 30 mV of FID on HIGH, a clear whistle at
+the Larmor frequency (about 81 dB SPL in a 100 dB/mW earpiece), fading over a second
+or two; 3 mV on LOW.  **Start with VOLUME low and the headphones off your ears:**
+OUT can swing to a rail for a moment at the relay's hand-over, and at full volume
+that is 0.5 V in the earpiece, about 106 dB SPL.  The PHONES loop (U12's output)
+shows what the ears get.  A mono plug, which shorts the ring to the sleeve, is safe:
+21 mA at most, through R57.
+
 **Caution:** DRAIN, the coil and its cable reach about 130 V at every switch-off.  The
 coil dissipates 20 W while it polarizes at 1.5 A; at a 50 % duty cycle it gets warm.
 Keep the polarizing supply under 30 V and 3 A.
@@ -154,6 +168,7 @@ Keep the polarizing supply under 30 V and 3 A.
 | HP1, HP | after the first and second high-pass stages |
 | LP | after the low-pass |
 | OUT | U7, before the 1k to the OUT jack |
+| PHONES | U12, the headphones' follower, before the 100 ohm to each ear |
 | POL CMD, DELAY, HOLD, RELAY, TIMER, EXT | the sequencer (section 5.2) |
 | +15V, -15V | the rails |
 | GND (four) | ground, for the scope's clip |
@@ -180,5 +195,7 @@ Keep the polarizing supply under 30 V and 3 A.
   30 V (D6 clamps above 33 V).
 - The polarizing switch-off is the clamp's: about 130 V at 3 A, 162 V at most, against
   Q1's 200 V.
+- PHONES drives any headphones (a short draws 21 mA at most); at full volume a 32 ohm
+  earpiece gets x0.034 of OUT, a 300 ohm one x0.10.
 - The receiver saturates on HIGH for an FID above about 13 V at OUT, which a larger
   sample or a bigger coil could reach: use LOW.

@@ -106,7 +106,7 @@ def receive_deck(nl, D, gain, source="emf"):
             a = {"n_P15V": "n_p15", "n_M15V": "n_m15"}.get(nl.pin(ref, 1), nl.pin(ref, 1))
             b = {"n_P15V": "n_p15", "n_M15V": "n_m15"}.get(nl.pin(ref, 2), nl.pin(ref, 2))
             L.append(f"C{ref} {a} {b} {value_si(val):g}")
-        elif ref in [f"U{i}" for i in range(1, 8)]:
+        elif ref in [f"U{i}" for i in (1, 2, 3, 4, 5, 6, 7, 12)]:
             # the op-amp's noise as a resistor in series with its + input
             L.append(f"Rn{ref} {nl.pin(ref, 3)} {ref}_p {R_NOISE:.1f}")
             L.append(f"X{ref} {nl.pin(ref, 1)} {ref}_p {nl.pin(ref, 4)} n_p15 n_m15 OPA")
@@ -135,6 +135,12 @@ def receive_deck(nl, D, gain, source="emf"):
     L.append(f"Rgen cal_s {j4} 50")
     # OUT into a 1 Mohm scope
     L.append(f"Rscope {nl.pin('J5', 1)} 0 1e6")
+    # HEADPHONES: the VOLUME knob fully clockwise (the wiper on pin 3), a 32 ohm earpiece on tip and on ring
+    ph = D["phones"]
+    L.append(f"RRV3a {nl.pin('RV3', 3)} {nl.pin('RV3', 2)} 0.1")
+    L.append(f"RRV3b {nl.pin('RV3', 2)} {nl.pin('RV3', 1)} {value_si(ph['RV']):g}")
+    L.append(f"Rear_t {nl.pin('J9', 'T')} 0 {ph['Z']:g}")
+    L.append(f"Rear_r {nl.pin('J9', 'R')} 0 {ph['Z']:g}")
     return leak(L)
 
 
@@ -174,9 +180,10 @@ def ac(nl, D, gain, source="emf", sweep="dec 400 20 100k"):
     out = nl.pin("U7", 1)
     tank_p, tank_m = nl.pin("K1", 3), nl.pin("K1", 10)
     rows = run(receive_deck(nl, D, gain, source),
-               f"ac {sweep}\nwrdata @OUT@ mag(v({out})) mag(v({tank_p})-v({tank_m})) mag(v({nl.pin('U3', 1)}))")
+               f"ac {sweep}\nwrdata @OUT@ mag(v({out})) mag(v({tank_p})-v({tank_m})) mag(v({nl.pin('U3', 1)})) "
+               f"mag(v({nl.pin('J9', 'T')}))")
     # wrdata writes (f, value) pairs per vector
-    return [(r[0], r[1], r[3], r[5]) for r in rows]
+    return [(r[0], r[1], r[3], r[5], r[7]) for r in rows]
 
 
 def noise(nl, D, gain):
@@ -283,6 +290,7 @@ def main(plots=False):
                                chain_gain=g_out / g_tank)
         if gain == "hi":
             R["ac_curve"] = [(round(r[0], 2), r[1], r[2]) for r in rows[::4]]
+            R["phones"] = dict(ear_per_out=interp(rows, fL, 4) / g_out)
     cal = ac(nl, D, "lo", source="cal")
     R["cal_lo_per_volt"] = interp(cal, fL)
     nz = noise(nl, D, "hi")
@@ -292,8 +300,9 @@ def main(plots=False):
     tot = sum(((b[0] - a[0]) * (a[1] ** 2 + b[1] ** 2) / 2) for a, b in zip(band, band[1:]))
     R["noise"]["out_rms_band"] = math.sqrt(tot)
     R["noise"]["coil_thermal"] = math.sqrt(4 * K_B * T * D["coil"]["R"])
-    # the FID at OUT on HIGH
+    # the FID at OUT on HIGH, and at an earpiece with the knob full up
     R["fid_out_hi"] = D["coil"]["emf"] * R["ac_hi"]["out_per_emf"]
+    R["phones"]["fid_ear_hi"] = R["fid_out_hi"] * R["phones"]["ear_per_out"]
     R["snr_db"] = 20 * math.log10(R["fid_out_hi"] / (math.sqrt(2) * R["noise"]["out_at_fL"]
                                                     * math.sqrt(D["noise"]["nbw"])))
     # the switch-off
@@ -347,6 +356,9 @@ def check(D, R):
         probs.append(f"gate delay {sq['gate_delay'] * 1e3:.1f} ms vs {D['delay']['t_gate'] * 1e3:.1f}")
     if abs(sq["relay_hold"] / D["delay"]["t_hold"] - 1) > 0.15:
         probs.append(f"relay hold {sq['relay_hold'] * 1e3:.1f} ms vs {D['delay']['t_hold'] * 1e3:.1f}")
+    k = D["phones"]["k_max"] * D["phones"]["k_ear"]
+    if abs(R["phones"]["ear_per_out"] / k - 1) > 0.02:
+        probs.append(f"an earpiece gets x{R['phones']['ear_per_out']:.4f} of OUT, the design x{k:.4f}")
     so = R["switch_off"]
     if so["v_drain_peak"] > 190:
         probs.append(f"the drain reaches {so['v_drain_peak']:.0f} V: too near the IRFS4227's 200 V")
@@ -367,6 +379,8 @@ def report(D, R):
           f"{n['out_rms_band'] * 1e3:.1f} mV rms 0.5-5 kHz")
     print(f"  FID at OUT (HIGH): {R['fid_out_hi']:.2f} V peak, single-shot SNR {R['snr_db']:.0f} dB in the tank's bandwidth")
     print(f"  CAL IN: 1 V at the generator gives {R['cal_lo_per_volt']:.2f} V at OUT on LOW")
+    print(f"  HEADPHONES (VOLUME full up, 32 ohm): x{R['phones']['ear_per_out']:.4f} of OUT, "
+          f"the FID {R['phones']['fid_ear_hi'] * 1e3:.0f} mV peak at an earpiece on HIGH")
     print(f"  switch-off at {so['i_on']:.2f} A ({so['v_supply']:.1f} V supply): drain peaks at {so['v_drain_peak']:.0f} V, "
           f"the current falls in {so['ramp_full'] * 1e3:.2f} ms, {so['e_tvs'] * 1e3:.0f} mJ into D7 "
           f"(the coil held {so['e_coil'] * 1e3:.0f} mJ)")

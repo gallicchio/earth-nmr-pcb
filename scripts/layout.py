@@ -66,7 +66,7 @@ HIDE_REF, HIDE_VALUE = set(), set()
 TP_LABEL = {}
 SOLID_PADS = []
 NO_MARK = set()
-OPAMPS = ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9", "U10"]
+OPAMPS = ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9", "U10", "U12"]
 TRANSISTORS = {"Q2": ("NPN", "left"), "Q3": ("NPN", "left")}
 UP, DOWN, LEFT, RIGHT = (0, -1), (0, 1), (-1, 0), (1, 0)
 
@@ -606,6 +606,45 @@ VIA_AT[("C94", "1")] = UP
 VIA_AT[("C94", "2")] = UP
 hide("C94")
 
+# ================================================================ HEADPHONES ==
+# OUT down from TP13's hook, through R58 onto the VOLUME knob's clockwise end; the
+# wiper into U12, a follower; R56 to the tip and R57 to the ring of J9, at the right edge
+PH_Y = 124.0                                   # the tap's run along under the GAIN box
+RV3X, RV3Y = 200.0, 140.0                      # the knob, by its pin 1: pins 3, 2, 1 down its right side
+P("RV3", RV3X, RV3Y, 180)                      # the body (and the shaft) to the left of its pins
+FIELD_AT["RV3"] = ((-13.6, -9.6, "left"), (-13.6, -8.4, "left"))
+W(W_SIG, (OX7 + 2.6, U7Y), (OX7 + 2.6, PH_Y), (RV3X, PH_Y), ("R58", "1"))
+P("R58", RV3X, PH_Y + 3.5, 270)                # 62k: pad 1 up on OUT, pad 2 down to the knob
+FIELD_AT["R58"] = ((1.7, -0.7, "left"), (1.7, 0.7, "left"))
+W(W_SIG, ("R58", "2"), ("RV3", "3"))
+MARKS.append(("gnd", "RV3", "1", 0, 1, 0.7))
+U12X, U12Y = RV3X + 10.0, RV3Y - 2.5 + OA_IN  # its + input level with the wiper
+opamp("U12", U12X, U12Y)
+bypass("C98", "C99", U12X, U12Y)
+XL12 = U12X - OA_W / 2
+OX12 = U12X + OA_W / 2 + 1.5
+W(W_SIG, ("RV3", "2"), ("U12", "3"))
+W(W_SIG, ("U12", "4"), (XL12 - 0.8, U12Y + OA_IN), (XL12 - 0.8, U12Y + 7.0), (OX12, U12Y + 7.0), (OX12, U12Y))
+W(W_SIG, ("U12", "1"), (OX12, U12Y))
+P("TP22", OX12 + 2.6, U12Y - 3.6, 0)
+TP_LABEL["TP22"] = (0.0, -2.0, "center")
+W(W_SIG, (OX12, U12Y), (OX12 + 2.6, U12Y), ("TP22", "1"))
+J9X = BOARD_W - 3.5                            # the sleeve 3.5 mm in from the edge (CUI's drawing)
+J9Y = 133.0
+P("J9", J9X, J9Y, 90)                          # the plug in from the right edge: T 5 mm in and up, R 5 mm in and down
+hide("J9")
+SPLIT_X = OX12 + 6.0
+W(W_SIG, (OX12 + 2.6, U12Y), (SPLIT_X, U12Y), (SPLIT_X, J9Y - 5.0), ("R56", "1"))
+W(W_SIG, (SPLIT_X, J9Y + 5.0), ("R57", "1"))
+P("R56", SPLIT_X + 4.5, J9Y - 5.0, 0)          # 100 ohm to the tip (left)
+P("R57", SPLIT_X + 4.5, J9Y + 5.0, 0)          # 100 ohm to the ring (right)
+MARKS.append(("gnd", "J9", "S", -1, 0))        # the sleeve on the ground plane
+T(J9X - 9.3, J9Y - 6.1, "T", 0.8, "center")    # the jack's contacts, named as on a plug, clear of its body
+T(J9X - 9.3, J9Y + 6.1, "R", 0.8, "center")
+T(J9X - 2.3, J9Y + 7.4, "J9", 0.8, "center")
+W(W_SIG, ("R56", "2"), ("J9", "T"))
+W(W_SIG, ("R57", "2"), ("J9", "R"))
+
 # ===================================================================== POWER ==
 J1X = BOARD_W - 42.0
 P("J1", J1X, 4.3, 0)                           # +15 V, ground, -15 V from the top edge
@@ -649,7 +688,7 @@ for r in ("R2", "LED2"):
     FIELD_AT[r] = ((1.7, -0.7, "left"), (1.7, 0.7, "left"))
 
 # ================================================ probe grounds, holes, marks
-GROUND_LOOPS = [("TP100", 112.0, 90.0), ("TP101", 175.0, 80.0), ("TP102", 222.0, 80.0), ("TP103", 200.0, 126.0)]
+GROUND_LOOPS = [("TP100", 112.0, 90.0), ("TP101", 175.0, 80.0), ("TP102", 222.0, 80.0), ("TP103", 233.0, 116.0)]
 for (ref, x, y) in GROUND_LOOPS:
     P(ref, x, y, 0)
 P("MH1", 4.0, 4.0)
@@ -747,8 +786,14 @@ T(RVX + 4.2, DIS_Y + 6.1 + 0.4, "LISTEN", 0.8)
 T(RVX + 4.2, DIS_Y + 6.1 + 1.6, "TIME", 0.8)
 lines(117.0, 134.0, ["U11 NE555: 1 GND, 2 TRIG, 3 OUT, 4 RESET,", "5 CONT, 6 THRESH, 7 DISCH, 8 +15 V"], size=0.8)
 lines(2.0, 120.0 - 4.0, [], title=None)
-T(186.5, 140.5, "U1-U7 OPA197, U8-U10 TS391; C80-C97", 0.8)
-T(186.5, 141.95, "100 nF at each IC's supply pins", 0.8)
+T(120.0, 145.0, "U1-U7, U12 OPA197; U8-U10 TS391; C80-C99", 0.8)
+T(120.0, 146.45, "100 nF at each IC's supply pins", 0.8)
+ph = D["phones"]
+lines(OX7 + 4.0, PH_Y - 0.6, [f"full volume: x{ph['k_max'] * ph['k_ear']:.3f} of OUT into {ph['Z']:.0f} ohm",
+                               "T tip, left ear; R ring, right; S sleeve"])
+lines(186.5, 123.6, [], title="HEADPHONES", tsize=1.0)
+T(RV3X - 13.0, RV3Y + 4.4, "VOLUME", 1.0)       # under the knob's body, not on it
+T(RV3X - 13.0, RV3Y + 6.0, "clockwise louder", 0.8)
 
 BOXES += [
     (1.5, 1.5, 40.6, 33.0),                                   # POLARIZING SUPPLY
@@ -760,12 +805,13 @@ BOXES += [
     (186.0, 86.0, 228.0, 121.5),                              # GAIN
     (228.5, 86.0, 241.5, 110.0),                              # OUT
     (159.0, 1.5, 241.5, 36.0),                                # POWER
+    (185.0, 122.2, 241.5, 148.5),                             # HEADPHONES
     ([(1.5, 88.0), (113.0, 88.0), (113.0, 96.5), (184.0, 96.5), (184.0, 148.5), (1.5, 148.5)],),   # SEQUENCER
 ]
 
-FIDUCIALS = [(10.0, BOARD_H - 14.0), (154.0, 14.0), (BOARD_W - 10.0, BOARD_H - 14.0)]
-LAYER_MARK_AT = (BOARD_W - 40.0, BOARD_H - 6.0)
-QR_AT, QR_MODULE = (BOARD_W - 28.0, 132.0), 0.6
+FIDUCIALS = [(10.0, BOARD_H - 14.0), (154.0, 14.0), (BOARD_W - 17.0, BOARD_H - 3.5)]
+LAYER_MARK_AT = (166.0, BOARD_H - 5.0)
+QR_AT, QR_MODULE = (200.0, 80.0), 0.6
 BACK_TITLE_AT = (BOARD_W / 2, 14.0)
 BACK_X, BACK_Y, BACK_PITCH, BACK_SIZE = 228.0, 26.0, 1.75, 1.0
 GAMMA = 42.577                                  # Hz per uT, the proton's gyromagnetic ratio over 2 pi
@@ -781,6 +827,7 @@ BACK_TEXT = [
     f"{D['world']['f_L'][0]:.0f}-{D['world']['f_L'][1]:.0f} Hz: SW1 reaches it everywhere with the coil above.",
     "4  MODE RUN, SEQUENCE TIMER: RV1 sets how long it polarizes, RV2 how long it listens; or drive POLARIZE IN.",
     "5  Watch OUT on a scope, triggered on SYNC OUT falling; CAL IN puts a known signal into the tank.",
+    "6  Or listen: headphones in PHONES, VOLUME clockwise louder.  Start it low: OUT can hit the rails at a switch-off.",
     "CAUTION: the coil and Q1's drain reach about 130 V for half a millisecond at every switch-off.",
     "Copper: 1 (top) every drawn wire; 2 ground; 3 +15 V; 4 -15 V and the three hops.",
 ]

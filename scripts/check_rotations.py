@@ -35,6 +35,10 @@ RENUMBERED = {"C2297", "C41416668", "C474882", "C474881"}
 # from the pads' centre, must lean the same way on the board
 FACING = {"C41416668": "the barrel", "C474882": "the wire openings (the body is 3.7 mm deep on their side, 4.0 behind)",
           "C474881": "the wire openings (as the 3P)"}
+# where our footprint names the pads and JLCPCB's drawing numbers them: ours -> theirs, from the maker's datasheet
+NAMES = {
+    "C20182914": {"S": "1", "T": "2", "R": "3"},   # SJ1-3523N: Same Sky's drawing of 09/12/2024, 1 sleeve, 2 tip, 3 ring
+}
 TOL = 0.3          # mm, a pad centre of theirs from ours in the upload
 # parts whose datum is set by JLCPCB's 3D body (what their preview draws and their machine places), not by their land
 # pattern's pads: (why, the tolerance for the signal pads in the upload)
@@ -48,6 +52,7 @@ MECH = {
     "C233689": "the tab (our 2, their 4): their pad 1.3 mm further from the leads than KiCad's TO-263, overlapping it",
     "C154570": "the tab (our 2, their 4): as the NPN's",
     "C351173": "the posts: their drawing 10 mm apart, ALPS's slots 8.8 mm (review round 1)",
+    "C202373": "the posts: as the C351173's, the same RK09K body",
     "C431540": "the shell tabs: their drawing 0.3 mm off Shouhan's land pattern, which ours follows",
     "C146578": "the tab: their pad sits elsewhere under the body than KiCad's TO-263-2's; the leads place the part",
 }
@@ -148,6 +153,7 @@ def main():
         if not code or code in seen:
             continue
         seen[code] = (ref, fpid)
+        pads = [(NAMES.get(code, {}).get(n, n), x, y) for n, x, y in pads]
         ours, ours1 = centroids(pads)
         if len(ours) < 2 or (len(ours) == 2 and fpid.startswith(UNPOLAR)):
             print("  skip    %-10s %-6s %-46s not polarised" % (code, ref, fpid[:46]))
@@ -302,7 +308,7 @@ def upload(fps, codes):
             q = turn((x, y), R)
             return (X + q[0] - ox, oy - (Y + q[1]))
         tp = [(p["number"], theirs_at(p["x"], p["y"])) for p in lp["pads"]]
-        op = [(n, ours_at(x, y)) for n, x, y in pads]
+        op = [(NAMES.get(code, {}).get(n, n), ours_at(x, y)) for n, x, y in pads]
         d = dm = 0.0
         for n, o in op:
             if not n:

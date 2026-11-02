@@ -9,7 +9,7 @@ JLC_ROTATION and rebuild.
 
 Every orientation-sensitive part, and what it should look like:
 
-  U1-U10: the SOT-23-5's pin 1 dot; should be: at the upper right of each package, toward the triangle's point; pins 3 2 1 along the top
+  U1-U10, U12: the SOT-23-5's pin 1 dot; should be: at the upper right of each package, toward the triangle's point; pins 3 2 1 along the top
       upload turns: C221351 +180 deg (predicted), C71896 +180 deg (predicted)
   U11: the SOIC-8's pin 1 dot; should be: at the upper left
       upload turns: C7593 +270 deg (predicted)
@@ -28,10 +28,12 @@ Every orientation-sensitive part, and what it should look like:
   SW1: the DIP's ON side; should be: facing down, toward pads 1-8 (the silkscreen says ON)
   SW2, SW3, SW4: the slide switches' knob; should be: SW3 and SW2's knob down, SW4's up; their two posts key them
   RV1, RV2: the trimmers' screw; should be: keyed by their holes; fits one way
-  J1-J5, J7, J8: the connectors' fronts; should be: off the board edge: J1 and J4 the top, J2 and J3 the left, J5 the right, J7 and J8 the bottom
-      upload turns: C41416668 +90 deg (read), C474881 +180 deg (read), C474882 +180 deg (read)
+  RV3: the VOLUME knob's body; should be: to the left of its three pins, the shaft up; keyed by its pins and posts
+      upload turns: C202373 +270 deg (predicted)
+  J1-J5, J7-J9: the connectors' fronts; should be: off the board edge: J1 and J4 the top, J2 and J3 the left, J5 and J9 the right, J7 and J8 the bottom
+      upload turns: C20182914 +180 deg (predicted), C41416668 +90 deg (read), C474881 +180 deg (read), C474882 +180 deg (read)
   F1: the PTC fuse; should be: not polarised
-  TP1-TP21, TP100-TP103: the test loops; should be: one pad each, either way
+  TP1-TP22, TP100-TP103: the test loops; should be: one pad each, either way
       upload turns: C5199800 +0 deg (predicted)
 
 Symmetric parts (every resistor and ceramic capacitor) cannot go in wrong.

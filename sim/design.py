@@ -192,6 +192,15 @@ def h_lp(f, f0, Q):
 # ------------------------------------------------------------- the gain ------
 GAIN = dict(R_f="200k", R_lo="10k", R_hi="1k")      # the last stage: 1 + Rf/Rg
 OUT_R = "1k"                                          # in series with OUT and SYNC OUT
+# HEADPHONES: OUT through R_feed onto the VOLUME knob, a follower (U12), and R_out to
+# each earpiece of a stereo set (the signal is mono: tip and ring alike).  R_feed sets
+# the loudest the knob can go; R_out keeps a mono plug (its sleeve shorting the ring)
+# and a saturated OUT inside the follower's current and an 0805's power.
+PHONES = dict(R_feed="62k", RV="10k", R_out="100R")
+Z_PHONE = 32.0                                        # ohm, a typical earpiece
+SENS_DB_MW = 100.0                                    # dB SPL per mW, a typical earpiece
+V_OUT_MAX = 14.8                                      # OUT saturated: the OPA197 swings to its rails
+R_0805_W = 0.125
 
 # ------------------------------------------------------- the sequencer -------
 VCC = 15.0 - 0.33          # the bench's 15 V less the SS34 at about 50 mA
@@ -296,6 +305,23 @@ def main():
     d["out"] = dict(R=OUT_R)
     # the FID at the output, at HIGH gain, with the recommended coil
     d["fid_out_hi"] = d["coil"]["v_tank"] * d["gain"]["total_hi"] * chain(F_L)
+    # the headphones: the knob fully clockwise
+    k_max = ohms(PHONES["RV"]) / (ohms(PHONES["R_feed"]) + ohms(PHONES["RV"]))
+    k_ear = Z_PHONE / (Z_PHONE + ohms(PHONES["R_out"]))
+
+    def spl(v_peak):
+        return SENS_DB_MW + 10 * math.log10((v_peak / math.sqrt(2)) ** 2 / Z_PHONE / 1e-3)
+
+    fid_ear_hi = d["fid_out_hi"] * k_max * k_ear
+    fid_ear_lo = fid_ear_hi * d["gain"]["lo"] / d["gain"]["hi"]
+    i_short = V_OUT_MAX * k_max / ohms(PHONES["R_out"])
+    d["phones"] = dict(PHONES, Z=Z_PHONE, sens_db_mw=SENS_DB_MW, k_max=k_max, k_ear=k_ear,
+                       fid_ear_hi=fid_ear_hi, fid_ear_lo=fid_ear_lo, spl_hi=spl(fid_ear_hi), spl_lo=spl(fid_ear_lo),
+                       spl_max=spl(V_OUT_MAX * k_max * k_ear),
+                       i_short=i_short, p_short=i_short ** 2 * ohms(PHONES["R_out"]), p_rating=R_0805_W,
+                       load_out=ohms(PHONES["R_feed"]) + ohms(PHONES["RV"]))
+    assert d["phones"]["p_short"] < R_0805_W / 2, "R_out would run past half its rating into a short"
+    assert 2 * i_short < 0.065, "both earpieces shorted would pull more than the OPA197 gives"
     # the sequencer
     kc, kd = timer_k()
     Ct = farads(TIMER["C"]) * TIMER["n_C"]
@@ -324,7 +350,7 @@ def main():
     d["pol_supply"] = dict(V=POL_SUPPLY, I_max=I_POL_MAX)
     d["passives"] = sorted({INA["R_series"], INA["R_bias"], INA["R_f"], INA["R_g"], INA["R_diff"],
                             hp1["R1"], hp1["R2"], hp2["R1"], hp2["R2"], lp["R1"],
-                            GAIN["R_f"], GAIN["R_lo"], GAIN["R_hi"], OUT_R,
+                            GAIN["R_f"], GAIN["R_lo"], GAIN["R_hi"], OUT_R, PHONES["R_feed"], PHONES["R_out"],
                             TIMER["R_min"], DELAY["R_gate"], DELAY["R_hold"], DELAY["R_th_top"],
                             *EXT.values(), GATE["R_pu"], GATE["R_g"], GATE["R_gs"]})
     json.dump(d, open(OUT, "w"), indent=1, sort_keys=True)
@@ -369,6 +395,10 @@ def report(d):
     print(f"  switch-off: drain clamped at {so['v_clamp_3A']:.0f} V at 3 A ({so['v_ds_rating']:.0f} V part); "
           f"the reference coil ramps down in {so['t_ramp_ref'] * 1e3:.2f} ms; L x I up to "
           f"{so['LI_max']:.2f} H.A ramps inside the relay's hold")
+    ph = d["phones"]
+    print(f"  headphones: the knob full up, the FID {ph['fid_ear_hi'] * 1e3:.0f} mV at a {ph['Z']:.0f} ohm earpiece on "
+          f"HIGH (~{ph['spl_hi']:.0f} dB SPL), {ph['fid_ear_lo'] * 1e3:.1f} mV on LOW, OUT at a rail ~{ph['spl_max']:.0f} dB; a shorted ring "
+          f"{ph['i_short'] * 1e3:.0f} mA, {ph['p_short'] * 1e3:.0f} mW in R_out")
 
 
 if __name__ == "__main__":
