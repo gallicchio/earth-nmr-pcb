@@ -5887,6 +5887,17 @@
 		)
 		(uuid "05b5940f-93b0-5530-811e-4f4703001aca")
 	)
+	(text "film; t = 0.75 R C each way"
+		(exclude_from_sim no)
+		(at 25.4 415.82 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "06843bb5-afcb-5f13-8a3a-c810e29aa9e6")
+	)
 	(text "3.3n"
 		(exclude_from_sim no)
 		(at 153.34 204.4 0)
@@ -5974,6 +5985,17 @@
 			(justify left)
 		)
 		(uuid "17b567f3-7eb1-5cd3-b406-fd6004edec36")
+	)
+	(text "3: LISTEN ONLY (no polarizing)"
+		(exclude_from_sim no)
+		(at 170.18 399.17 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "19f0fd82-7faf-5fcd-a724-b1674dd66663")
 	)
 	(text "1:"
 		(exclude_from_sim no)
@@ -6073,17 +6095,6 @@
 			(justify left)
 		)
 		(uuid "30576ed6-507c-5276-8879-cc76ce122e4e")
-	)
-	(text "1: RUN"
-		(exclude_from_sim no)
-		(at 165.1 393.26 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "32a305bd-62f7-5104-aa18-968659589427")
 	)
 	(text "constant current sets the coil's current;"
 		(exclude_from_sim no)
@@ -6283,17 +6294,6 @@
 		)
 		(uuid "56057464-3b9a-56bd-a82c-60d0a05ee88b")
 	)
-	(text "3: LISTEN ONLY (no polarizing)"
-		(exclude_from_sim no)
-		(at 165.1 395.36 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "5c1ede54-8f54-5e88-b63d-81b530a6712a")
-	)
 	(text "RV1  POLARIZE TIME"
 		(exclude_from_sim no)
 		(at 25.4 360.68 0)
@@ -6481,17 +6481,6 @@
 		)
 		(uuid "7c44e515-e2b3-5652-8357-c1e1cdee912c")
 	)
-	(text "SW4  MODE"
-		(exclude_from_sim no)
-		(at 165.1 391.16 0)
-		(effects
-			(font
-				(size 1.15 1.15)
-			)
-			(justify left)
-		)
-		(uuid "7f33d850-a909-5e68-80f3-e3e4c8fb4322")
-	)
 	(text "POWER"
 		(exclude_from_sim no)
 		(at 650.24 38.1 0)
@@ -6535,6 +6524,17 @@
 			(justify left)
 		)
 		(uuid "83bbf1d3-f000-5297-9c53-5316d2fd7cdb")
+	)
+	(text "C50-C52: 3 x 1 uF polypropylene"
+		(exclude_from_sim no)
+		(at 25.4 414.02 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "8449d329-3b2e-5c6e-b4f3-25eb28b6f8ad")
 	)
 	(text "5:"
 		(exclude_from_sim no)
@@ -6591,17 +6591,6 @@
 		)
 		(uuid "90575e0b-3611-5e08-93be-e61f7c852b24")
 	)
-	(text "t = 0.75 R C each way"
-		(exclude_from_sim no)
-		(at 111.76 413.28 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "915a3280-e0d6-5963-95be-c6304436adc8")
-	)
 	(text "SW3  SEQUENCE"
 		(exclude_from_sim no)
 		(at 127 358.14 0)
@@ -6612,6 +6601,17 @@
 			(justify left)
 		)
 		(uuid "93e880d6-aa80-51c8-9f21-1b6de7690e23")
+	)
+	(text "high (> 1.3 V) = polarize: TTL, 3.3 V, 5 V,"
+		(exclude_from_sim no)
+		(at 20.32 431.86 0)
+		(effects
+			(font
+				(size 1.05 1.05)
+			)
+			(justify left)
+		)
+		(uuid "94787bb8-e8b0-5bd0-b81c-2ddc387a8dc6")
 	)
 	(text "U10 RELAY: on at once (D14),"
 		(exclude_from_sim no)
@@ -6624,7 +6624,7 @@
 		)
 		(uuid "9563b870-f83b-5c5a-a16f-ead126a78992")
 	)
-	(text "D7 SMCJ100A holds the drain near 125 V"
+	(text "D7 SMCJ100A holds the drain near 130 V"
 		(exclude_from_sim no)
 		(at 123.19 209.55 0)
 		(effects
@@ -6700,6 +6700,28 @@
 			(justify left)
 		)
 		(uuid "a129eaff-fb17-5a0f-af55-4d4b25daf111")
+	)
+	(text "SW4  MODE"
+		(exclude_from_sim no)
+		(at 170.18 394.97 0)
+		(effects
+			(font
+				(size 1.15 1.15)
+			)
+			(justify left)
+		)
+		(uuid "a1c2d7e7-b914-58ca-ab45-a3c5e8724765")
+	)
+	(text "1: RUN"
+		(exclude_from_sim no)
+		(at 170.18 397.07 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "a1fcedc2-30f7-55d7-beb3-b3d4e477e2ee")
 	)
 	(text "open = listen"
 		(exclude_from_sim no)
@@ -6777,17 +6799,6 @@
 			(justify left)
 		)
 		(uuid "a918f9e8-4662-5006-b2fe-afa4627dd8fb")
-	)
-	(text "high (> 1.4 V) = polarize: TTL, 3.3 V, 5 V,"
-		(exclude_from_sim no)
-		(at 20.32 431.86 0)
-		(effects
-			(font
-				(size 1.05 1.05)
-			)
-			(justify left)
-		)
-		(uuid "a9d35161-ac7b-5178-842e-4623c9f40931")
 	)
 	(text "(between the two - inputs)"
 		(exclude_from_sim no)
@@ -7217,17 +7228,6 @@
 			(justify left)
 		)
 		(uuid "fef45e92-1ead-5b20-89b9-14eca3fc17b6")
-	)
-	(text "C50-C52: 3 x 1 uF polypropylene film;"
-		(exclude_from_sim no)
-		(at 111.76 411.48 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "ffdd270a-ea69-55db-8d26-5f8ae15cad77")
 	)
 	(junction
 		(at 82.55 368.3)
@@ -18573,7 +18573,7 @@
 			)
 		)
 		(property "Value" "TIMER"
-			(at 80.54 386.08 90)
+			(at 83.14 386.08 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

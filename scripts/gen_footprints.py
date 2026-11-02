@@ -186,7 +186,7 @@ def msk12c02():
     rect_lines(f, -1.45, 1.35, 1.45, 2.8, "F.Fab", FAB_W, f"{name}/fab/knob")      # its travel
     rect_lines(f, -4.45, -2.85, 4.45, 3.05, "F.CrtYd", CRT_W, f"{name}/crt")
     text_fab(f, "2=C", 0, 0.6, f"{name}/fabtxt", size=0.6)
-    model(f, "${KIPRJMOD}/lib/earthnmr.3dshapes/SW_MSK12C02.wrl")
+    model(f, "${KIPRJMOD}/lib/earthnmr.3dshapes/SW_MSK12C02.wrl", scale=MM_SCALE)
     return name, f
 
 

@@ -415,7 +415,7 @@ def build():
                      footprint=fp("RSENSE"), label="0.1R")
     s.wire(r4b, (qs[0], r4b[1] + g(1)))
     d.gnd(qs[0], r4b[1] + g(1))
-    d.text(["D7 SMCJ100A holds the drain near 125 V",
+    d.text([f"D7 SMCJ100A holds the drain near {D['switch_off']['v_clamp_3A']:.0f} V",
             "while the coil's current falls to zero in a",
             f"straight line ({D['switch_off']['t_ramp_ref'] * 1e3:.1f} ms for the reference coil):",
             "faster than the protons can follow"], DCX + g(6.5), QY - g(1.5), size=1.0)
@@ -723,7 +723,7 @@ def build():
     s.wire(t_thr, (t_thr[0] - g(1), t_thr[1]), (t_thr[0] - g(1), t_trig[1]))
     CN_Y = g(161)
     s.wire(k10, (XA_, CN_Y))
-    d.testpoint(XA_, g(152), "TIMER", rot=270, dx=1.8, dy=0.0)
+    d.testpoint(XA_, g(152), "TIMER", rot=270, dx=4.4, dy=0.0)
     d.text(["RV1  POLARIZE TIME", f"{tm['t_pol'][0]:.1f}-{tm['t_pol'][1]:.1f} s, clockwise longer"],
            g(10), rv1y - g(1), size=1.0)
     # column B: X -> RV2 -> R41 -> D11 (cathode up) -> the capacitor node
@@ -752,11 +752,11 @@ def build():
         s.wire((xx, CN_Y + g(4)), (xx, CN_Y + g(5)))
         d.gnd(xx, CN_Y + g(5))
     s.wire((XA_, CN_Y), (XA_ + g(4) + g(3) * (tm["n_C"] - 1), CN_Y))
-    d.text([f"C50-C52: 3 x 1 uF polypropylene film;", f"t = {tm['kc']:.2f} R C each way"], XA_ + g(13), CN_Y + g(1), size=1.0)
+    d.text(["C50-C52: 3 x 1 uF polypropylene", f"film; t = {tm['kc']:.2f} R C each way"], g(10), CN_Y + g(2), size=1.0)
 
     # --- POLARIZE IN: a level detector, TTL to 30 V
     EY = g(178)
-    je = d.bnc("J7", g(14), EY, "POLARIZE IN", ["high (> 1.4 V) = polarize: TTL, 3.3 V, 5 V,",
+    je = d.bnc("J7", g(14), EY, "POLARIZE IN", [f"high (> {ex['v_th']:.1f} V) = polarize: TTL, 3.3 V, 5 V,",
                                                 "a function generator; +/-30 V max;", "open = listen"],
                facing="left", text_at=(g(8), EY - g(9)))
     r43a, r43b = d.res("R43", ex["R_pd"], je[0] + g(1), je[1] + g(3), side="left")
@@ -780,7 +780,7 @@ def build():
     d.rail("+15V", hi[0], hi[1] - g(1))
     s.wire(lo, (lo[0], lo[1] + g(1)))
     d.gnd(lo[0], lo[1] + g(1))
-    # the threshold, 1.4 V from +15 V, and the hysteresis
+    # the threshold, 1.3 V from +15 V, and the hysteresis
     # R45 from +15 V to the - input's node, R46 from it to ground, in a column
     # left of the comparator under its + input
     THX8 = me[0] - g(2)
@@ -816,7 +816,7 @@ def build():
     SW4X, SW4Y = SW3X + g(13), SW3Y
     b1, b2, b3 = d.switch("SW4", "MODE", SW4X, SW4Y, "y",
                           ["1: RUN", "3: LISTEN ONLY (no polarizing)"],
-                          text_at=(SW4X - g(4), SW4Y + g(4)))
+                          text_at=(SW4X - g(2), SW4Y + g(5.5)))
     s.wire(a2, (b1[0] - g(3), a2[1]), (b1[0] - g(3), b1[1]), b1)
     s.wire(b3, (b3[0] - g(1), b3[1]), (b3[0] - g(1), b3[1] + g(2)))
     d.gnd(b3[0] - g(1), b3[1] + g(2))
@@ -878,9 +878,9 @@ def build():
     og, vg = delay(("R49", "D13", "C55", "U9", "DELAY"), THX + g(8), "gate")
     oh, vh = delay(("R50", "D14", "C56", "U10", "HOLD"), HOLD_X, "hold")
     s.wire(VTH, vh)
-    d.text(["U9 GATE: on 18 ms after POL CMD rises (R49, C55),", "off at once when it falls (D13)"],
+    d.text([f"U9 GATE: on {dl['t_gate'] * 1e3:.0f} ms after POL CMD rises (R49, C55),", "off at once when it falls (D13)"],
            THX + g(8), VTH_Y + g(1.5), size=1.0)
-    d.text(["U10 RELAY: on at once (D14),", "off 15 ms after POL CMD falls (R50, C56)"],
+    d.text(["U10 RELAY: on at once (D14),", f"off {dl['t_hold'] * 1e3:.0f} ms after POL CMD falls (R50, C56)"],
            HOLD_X, VTH_Y + g(1.5), size=1.0)
     # the gate drive: 4.7k up from U9's open collector, then up and left to Q1
     ogx = og[0] + g(2)

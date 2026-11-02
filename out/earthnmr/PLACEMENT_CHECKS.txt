@@ -1,0 +1,39 @@
+PLACEMENT CHECKS for Earth's Field NMR rev A: JLCPCB's 'Confirm Parts Placement' preview
+==============================================================================
+
+The upload CPL turns some parts by the angle JLCPCB's own drawing needs.  'read' angles were
+seen in a real preview of the same part (on another of Jason's boards); 'predicted' ones come
+from fitting JLCPCB's land pattern on ours.  If a part is turned in the preview, do NOT nudge
+it in their viewer (the fix is lost on the next upload): change its entry in scripts/parts.py
+JLC_ROTATION and rebuild.
+
+Every orientation-sensitive part, and what it should look like:
+
+  U1-U10: the SOT-23-5's pin 1 dot; should be: at the upper right of each package, toward the triangle's point; pins 3 2 1 along the top
+      upload turns: C221351 +180 deg (predicted), C71896 +180 deg (predicted)
+  U11: the SOIC-8's pin 1 dot; should be: at the upper left
+      upload turns: C7593 +270 deg (predicted)
+  Q1: the D2PAK's tab; should be: up (toward the relay), the two leads down
+      upload turns: C146578 +0 deg (predicted)
+  Q2, Q3, D12: the SOT-23's lone pin; should be: up (the collector; D12's common)
+      upload turns: C20526 +180 deg (read), C2500 +180 deg (predicted)
+  D1-D8, D10, D11, D13, D14: each diode's cathode bar; should be: on the footprint's pad 1, the end the silkscreen bar marks
+      upload turns: C8678 +0 deg (predicted)
+  D9: the SMBJ12CA; should be: bidirectional: either way round
+  LED1-LED4: each LED's cathode mark; should be: on pad 1, the end the silkscreen marks
+      upload turns: C2297 +0 deg (read), C84256 +0 deg (read)
+  C1, C2, C5: the electrolytics' negative (striped) side; should be: on pad 2, away from the + mark
+  K1: the relay's pin 1; should be: the square pad, at the upper right of the two rows
+      upload turns: C329305 +270 deg (predicted)
+  SW1: the DIP's ON side; should be: facing down, toward pads 1-8 (the silkscreen says ON)
+  SW2, SW3, SW4: the slide switches' knob; should be: SW3 and SW2's knob down, SW4's up; their two posts key them
+  RV1, RV2: the trimmers' screw; should be: keyed by their holes; fits one way
+  J1-J5, J7, J8: the connectors' fronts; should be: off the board edge: J1 and J4 the top, J2 and J3 the left, J5 the right, J7 and J8 the bottom
+      upload turns: C41416668 +90 deg (read), C474881 +180 deg (read), C474882 +180 deg (read)
+  F1: the PTC fuse; should be: not polarised
+  TP1-TP21, TP100-TP103: the test loops; should be: one pad each, either way
+      upload turns: C5199800 +0 deg (predicted)
+
+Symmetric parts (every resistor and ceramic capacitor) cannot go in wrong.
+The back of the board carries no parts: check it anyway, it should be empty.
+

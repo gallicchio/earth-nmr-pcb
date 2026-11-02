@@ -126,7 +126,7 @@ PARTS = {
         desc="SMCJ100A unidirectional TVS, 1.5 kW (10/1000 us), 100 V standoff, "
              "111-123 V breakdown, 162 V at 9.3 A, SMC (1 = cathode): from the MOSFET's "
              "drain to its source.  It holds the coil's flyback at about 125 V, so the "
-             "current falls to zero in a straight line in a millisecond or two: a sudden "
+             "current falls to zero in a straight line in about half a millisecond: a sudden "
              "switch-off, which leaves the magnetization behind to precess"),
     "TVS_TANK": dict(
         value="SMBJ12CA", mpn="SMBJ12CA", lcsc="C353397", jlc_type="extended",
@@ -191,7 +191,7 @@ PARTS = {
         footprint="earthnmr:C_Film_P5.00mm_L7.2mm_W6.0mm",
         symbol="Device:C",
         desc="1 uF 5 % 100 V metallized polypropylene film, leads on 5 mm: the 555's "
-             "timing capacitor (two in parallel).  Film, not X7R: its value does not move "
+             "timing capacitor (three in parallel).  Film, not X7R: its value does not move "
              "with the voltage the timer swings it through"),
     "CBULK": dict(
         value="100uF", mpn="JVJ25V100M6x5", lcsc="C46550402", jlc_type="extended",
@@ -325,4 +325,19 @@ JLC_ROTATION = {
     "C84256": (0, (0, 0), "read", "NCD0805R1 on KiCad's LED_0805: GPiBridge rev A preview, cathode at pad 1"),
     "C8678": (0, (0, 0), "predicted", "SS34 SMA: cathode (pad 1) at -x in both drawings"),
     "C5199800": (0, (0, 0), "predicted", "RH-5019 test loop: one 4.0 x 2.2 pad"),
+    "C20526": (180, (0, 0), "read", "MMBT3904 SOT-23: their pad 1 at (+1.0,+0.95), KiCad's at (-0.94,-0.95); read in the "
+                                    "op-amp board's rev A preview, 2026-10-29; check_rotations.py fits +180 here too"),
+    "C2500": (180, (0, 0), "predicted", "BAV99 SOT-23: the same drawing as the MMBT3904 (check_rotations.py: +180, "
+                                        "rms 0.28 mm)"),
+    "C7593": (270, (0, 0), "predicted", "NE555DR SOIC-8: JLCPCB's drawing lies along x, pin 1 at the lower left; "
+                                        "check_rotations.py fits +270 (rms 0.13 mm)"),
+    "C329305": (270, (2.54, -5.08), "predicted", "HFD3 relay: their drawing turned a quarter from KiCad's G6S-2, their "
+                                                "origin the middle of the pin field, (2.54, -5.08) (y up) from KiCad's pin 1 "
+                                                "(check_rotations.py: rms 0.00 mm)"),
+    "C146578": (0, (-2.563, 0), "predicted", "IRFS4227 D2PAK: their leads at -x as KiCad's TO-263-2, their origin "
+                                              "2.56 mm from KiCad's, toward the leads (check_rotations.py: rms 0.00 mm); "
+                                              "not motor-pid's MJB44H11 drawing, which is turned 180"),
+    "C474882": (180, (0, 0), "read", "KF301-3P: EasyEDA draws the wire-entry arrows on +y, ours face the edge (-y); the pin "
+                                     "row is symmetric, so +180 turns only the body; read in the op-amp board's rev A preview"),
+    "C474881": (180, (0, 0), "read", "KF301-2P: as the 3P; read in the op-amp board's rev A preview"),
 }

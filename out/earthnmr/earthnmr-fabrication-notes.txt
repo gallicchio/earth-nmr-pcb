@@ -1,0 +1,46 @@
+Earth's Field NMR rev A (2026-11-02) -- JLCPCB order form, field by field
+==============================================================================
+
+[PCB]
+  Base Material                FR-4      (the default)
+  Layers                       4      (what the gerber set contains)
+  Dimensions                   243 x 150 mm      (read from the board outline)
+  PCB Qty                      5      (the minimum)
+  Product Type                 Industrial/Consumer electronics      (the default)
+[PCB Specifications]
+  Different Design             1      (one board in the outline)
+  Delivery Format              Single PCB      (no panel)
+  PCB Thickness                1.6 mm      (the BNC posts and the terminal blocks expect it)
+  PCB Color                    Green      (any; the white silkscreen is the schematic and reads best on green or black)
+  Silkscreen                   White      (the default for green)
+  Material Type                FR4-Standard TG 135-140      (the default)
+  Impedance Control            No      (nothing on this board is fast)
+  Layer Sequence               F.Cu, In1.Cu, In2.Cu, B.Cu as named      (the gerbers name each layer)
+  Stackup                      JLC04161H-7628      (the stack-up the board file declares (1 oz outer, 0.5 oz inner))
+  Surface Finish               LeadFree HASL      (students handle this board: lead-free.  ENIG is fine too)
+[High-spec Options]
+  Outer Copper Weight          1 oz      (the default; the polarizing current's 2 mm tracks carry 3 A with 1 oz)
+  Inner Copper Weight          0.5 oz      (the default)
+  Via Covering                 Tented      (or Plugged if the form upgrades it)
+  Min via hole size/diameter   0.3 mm / (0.4 / 0.45 mm)      (the smallest via on the board is 0.30 mm drill, 0.60 mm pad)
+  Board Outline Tolerance      +/-0.2 mm (Regular)      (nothing mates with the edge)
+  Confirm Production file      No      (the gerbers are checked here)
+  Mark on PCB                  Remove Mark      (the whole front is a drawing; nowhere for an order number)
+  Electrical Test              Flying Probe Fully Test      (the default)
+[PCB Assembly]
+  PCBA Type                    Standard      (four layers, a D2PAK and a relay; Economic if the form allows it for this board)
+  Assembly Side                Top      (every part is on the front)
+  PCBA Qty                     2, or as many as the class needs      (the per-order fees are the same for 2 or 20)
+  Edge Rails/Fiducials         Added by JLCPCB      (the board carries three fiducials)
+  Confirm Parts Placement      Yes      (look at the preview against PLACEMENT_CHECKS.txt before paying)
+  Parts Selection              By JLCPCB      (every BOM line has an LCSC code)
+  Through-hole parts           keep them: C50, C51, C52, J1, J2, J3, J4, J5, J7, J8, K1, RV1, RV2      (the form lists them separately; the BNCs, terminals, relay, trimmers and film capacitors are meant to be fitted)
+  Bake Components              No      (nothing moisture-sensitive)
+
+Upload:
+  gerbers     out/earthnmr/earthnmr-gerbers.zip
+  BOM         out/earthnmr/earthnmr_bom_jlcpcb_upload.csv
+  CPL         out/earthnmr/earthnmr_cpl_jlcpcb_upload.csv   (JLCPCB only; others take _kicad_native)
+  remark      paste out/earthnmr/earthnmr-assembly-notes.txt
+
+Then read PLACEMENT_CHECKS.txt against the preview, front and (empty) back.
