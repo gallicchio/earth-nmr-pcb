@@ -27,7 +27,7 @@ HW = os.path.join(HERE, "..", "hardware")
 
 TRACK_MIN = 0.20
 CLEARANCE = 0.20
-VIA_DIA, VIA_DRILL = 0.8, 0.3
+VIA_DIA, VIA_DRILL = 0.6, 0.3
 
 NET_CLASSES = [
     {"name": "Default", "clearance": CLEARANCE, "track_width": 0.25,

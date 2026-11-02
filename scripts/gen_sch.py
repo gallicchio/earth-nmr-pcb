@@ -261,10 +261,10 @@ class Draw:
         self.s.wire(po, (ox, po[1]))
         return ox
 
-    def switch(self, ref, title, x, y, mirror, lines, text_at):
+    def switch(self, ref, title, x, y, mirror, lines, text_at, rot=0):
         """An SPDT slide switch with what each position does printed beside it."""
         s = self.s
-        s.place(sym("SW"), ref, title, x, y, mirror=mirror, footprint=fp("SW"),
+        s.place(sym("SW"), ref, title, x, y, rot=rot, mirror=mirror, footprint=fp("SW"),
                 fields=part_fields("SW"), hide_ref=True, hide_value=True)
         tx, ty = text_at
         s.text(f"{ref}  {title}", tx, ty, size=1.15)
@@ -808,11 +808,11 @@ def build():
 
     # --- SEQUENCE (INT / EXT) and MODE (RUN / LISTEN ONLY)
     SW3X, SW3Y = g(56), g(150)
-    a1, a2, a3 = d.switch("SW3", "SEQUENCE", SW3X, SW3Y, "y",
-                          ["1: INT, the timer (RV1, RV2)", "3: EXT, the POLARIZE IN jack"],
-                          text_at=(SW3X - g(6), SW3Y - g(9)))
-    s.wire(t_out, (g(50), t_out[1]), (g(50), a1[1]), a1)
-    s.wire((OEX + g(4), oe[1]), (g(51), oe[1]), (g(51), a3[1]), a3)
+    a1, a2, a3 = d.switch("SW3", "SEQUENCE", SW3X, SW3Y, None,
+                          ["1: EXT, the POLARIZE IN jack", "3: INT, the timer (RV1, RV2)"],
+                          text_at=(SW3X - g(6), SW3Y - g(9)), rot=180)
+    s.wire(t_out, (g(50), t_out[1]), (g(50), a3[1]), a3)
+    s.wire((OEX + g(4), oe[1]), (g(51), oe[1]), (g(51), a1[1]), a1)
     SW4X, SW4Y = SW3X + g(13), SW3Y
     b1, b2, b3 = d.switch("SW4", "MODE", SW4X, SW4Y, "y",
                           ["1: RUN", "3: LISTEN ONLY (no polarizing)"],

@@ -6228,6 +6228,17 @@
 		)
 		(uuid "4bfa49ec-e08a-5839-ad94-36a3becb6764")
 	)
+	(text "1: EXT, the POLARIZE IN jack"
+		(exclude_from_sim no)
+		(at 127 360.24 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "4dd1d59c-148a-5d02-8697-63ee9e558951")
+	)
 	(text "x21 or x201 = 1 + 200k / Rg"
 		(exclude_from_sim no)
 		(at 585.47 129.34 0)
@@ -6547,17 +6558,6 @@
 		)
 		(uuid "88d9b679-ba06-5499-84d8-2c4109c1dfe1")
 	)
-	(text "1: INT, the timer (RV1, RV2)"
-		(exclude_from_sim no)
-		(at 127 360.24 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "89aa9c90-8ce1-5a07-9243-0b5b88ed50ba")
-	)
 	(text "the FID, about 1 V on HIGH;"
 		(exclude_from_sim no)
 		(at 643.89 168.97 0)
@@ -6623,17 +6623,6 @@
 			(justify left)
 		)
 		(uuid "9563b870-f83b-5c5a-a16f-ead126a78992")
-	)
-	(text "3: EXT, the POLARIZE IN jack"
-		(exclude_from_sim no)
-		(at 127 362.34 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "96112c41-dc9e-534c-a5e9-2ced384d299f")
 	)
 	(text "D7 SMCJ100A holds the drain near 125 V"
 		(exclude_from_sim no)
@@ -6865,6 +6854,17 @@
 			(justify left)
 		)
 		(uuid "b7980a0c-0494-57e0-b08d-cb950aa4f723")
+	)
+	(text "3: INT, the timer (RV1, RV2)"
+		(exclude_from_sim no)
+		(at 127 362.34 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "b80a7478-9830-575f-87fa-a8d3dd0847a2")
 	)
 	(text "EARTH'S FIELD NMR -- a proton precession spectrometer"
 		(exclude_from_sim no)
@@ -13613,8 +13613,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_SPDT")
-		(at 142.24 381 0)
-		(mirror y)
+		(at 142.24 381 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)

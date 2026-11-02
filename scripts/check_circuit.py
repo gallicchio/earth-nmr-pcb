@@ -136,12 +136,12 @@ def expected(D):
     net("RB", "RV2.2", "RV2.3", "R41.1")
     net("RB_D", "R41.2", "D11.1")
     net("CTRL", "U11.5", "C53.2")
-    net("INT", "U11.3", "SW3.1")
+    net("INT", "U11.3", "SW3.3")
     # POLARIZE IN
     net("EXT_J", "J7.1", "R43.1", "R44.1")
     net("U8+", "R44.2", "D12.3", "R47.1", "U8.4")
     net("U8-", "U8.3", "R45.2", "R46.1")
-    net("EXT", "U8.1", "R47.2", "R48.2", "SW3.3", "TP19.1")
+    net("EXT", "U8.1", "R47.2", "R48.2", "SW3.1", "TP19.1")
     net("SEQ", "SW3.2", "SW4.1")
     net("POL_CMD", "SW4.2", "R42.1", "TP14.1", "R49.1", "D13.1", "D14.2", "R50.1", "R53.1")
     # the delays
