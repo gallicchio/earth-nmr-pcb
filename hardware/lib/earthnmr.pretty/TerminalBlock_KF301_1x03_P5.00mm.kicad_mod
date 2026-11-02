@@ -1,0 +1,317 @@
+(footprint "TerminalBlock_KF301_1x03_P5.00mm"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "3-way 5.0mm screw terminal block, KEFA KF301-5.0-3P (LCSC C474882); wires enter from -y")
+	(tags "screw terminal block KF301 5.0mm")
+	(property "Reference" "REF**"
+		(at 0 5.6 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "f8dab64f-a3f9-563a-9930-6ce516245320")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "TerminalBlock_KF301_1x03_P5.00mm"
+		(at 0 -5.6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "96b57703-7d54-5a7d-8a38-b945c343d82f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 -5.6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fb8f888a-f7ec-5b5c-a988-dcc268baba2f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "3-way 5.0mm screw terminal block, KEFA KF301-5.0-3P (LCSC C474882); wires enter from -y"
+		(at 0 -5.6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "78559ac2-9094-573b-8196-feeb6bae2893")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -7.8 -3.8)
+		(end 7.8 -3.8)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "0454d4ce-a843-5146-9307-3b5357fe5350")
+	)
+	(fp_line
+		(start -7.8 4.1)
+		(end -7.8 -3.8)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "8b741cb4-95f2-563b-8cda-b36b6d4caf94")
+	)
+	(fp_line
+		(start -6.5 -3.8)
+		(end -6.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "34f2b28a-6722-51df-bfa8-1c4993324746")
+	)
+	(fp_line
+		(start -6.5 -2.5)
+		(end -3.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "8ae6ec4b-44bb-5042-ab21-0bfc9ea26fe0")
+	)
+	(fp_line
+		(start -3.5 -3.8)
+		(end -3.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2ddd8466-d766-5377-88a5-8275152ed10e")
+	)
+	(fp_line
+		(start -1.5 -3.8)
+		(end -1.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c01d1061-0ee2-5b6b-89fd-aab1dd669000")
+	)
+	(fp_line
+		(start -1.5 -2.5)
+		(end 1.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ba134982-9008-559f-a9df-e2af42cddfa6")
+	)
+	(fp_line
+		(start 1.5 -3.8)
+		(end 1.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "6720acd7-ffa4-5d3f-8707-04dba316477f")
+	)
+	(fp_line
+		(start 3.5 -3.8)
+		(end 3.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "40155333-8b2d-5496-a866-66c28fe69044")
+	)
+	(fp_line
+		(start 3.5 -2.5)
+		(end 6.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e339f879-bdc1-54b4-8709-26c5c189b339")
+	)
+	(fp_line
+		(start 6.5 -3.8)
+		(end 6.5 -2.5)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "23cd32ba-ff1e-54f3-9aad-44a3359e78fc")
+	)
+	(fp_line
+		(start 7.8 -3.8)
+		(end 7.8 4.1)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "5b5a18c3-6a37-5b11-9ff8-caf5cd687775")
+	)
+	(fp_line
+		(start 7.8 4.1)
+		(end -7.8 4.1)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "03323098-0e38-5c11-925f-416c41ea8366")
+	)
+	(fp_line
+		(start -8.05 -4.05)
+		(end 8.05 -4.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "c4ebbcd0-a222-58f5-bc82-dfe8bd6322ee")
+	)
+	(fp_line
+		(start -8.05 4.35)
+		(end -8.05 -4.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "9586097b-42f9-597b-bfed-0355f4951592")
+	)
+	(fp_line
+		(start 8.05 -4.05)
+		(end 8.05 4.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "db3fa772-2a9e-51d4-9534-c209ba247e04")
+	)
+	(fp_line
+		(start 8.05 4.35)
+		(end -8.05 4.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "9ffce1c1-30ed-5a41-9b10-768b89fcccea")
+	)
+	(fp_line
+		(start -7.7 -3.7)
+		(end 7.7 -3.7)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "eb009b32-3022-50a0-aa25-1f80d86c4254")
+	)
+	(fp_line
+		(start -7.7 4)
+		(end -7.7 -3.7)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "c0fd7af8-6b5f-5450-a8bb-9b3ce8e52fbe")
+	)
+	(fp_line
+		(start 7.7 -3.7)
+		(end 7.7 4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "c1079497-bc6c-506b-abe6-238b7ab1badb")
+	)
+	(fp_line
+		(start 7.7 4)
+		(end -7.7 4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "799a4de6-5f87-52a4-9143-4550b274cf4b")
+	)
+	(fp_text user "wires"
+		(at 0 -2.7 0)
+		(layer "F.Fab")
+		(uuid "654b05e6-8020-52c0-b15a-6ed67a1668ab")
+		(effects
+			(font
+				(size 0.7 0.7)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "1" thru_hole rect
+		(at -5 0)
+		(size 2.2 2.2)
+		(drill 1.4)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "1fa8f632-2027-5d46-9636-7edfda1f62d0")
+	)
+	(pad "2" thru_hole circle
+		(at 0 0)
+		(size 2.2 2.2)
+		(drill 1.4)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "f315466a-04a0-54bd-95f4-87d0790dff7e")
+	)
+	(pad "3" thru_hole circle
+		(at 5 0)
+		(size 2.2 2.2)
+		(drill 1.4)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "462dc0b2-dcee-55de-bed0-7014e68ae314")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/lib/earthnmr.3dshapes/TerminalBlock_KF301_1x03.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 0.393701 0.393701 0.393701)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

@@ -188,7 +188,7 @@ PARTS = {
     "CFILM": dict(
         value="1uF", mpn="MES105J2A-7-50R0", lcsc="C333829", jlc_type="extended",
         process="THT", stock=51902, price=0.1387,
-        footprint="earthnmr:C_Film_P5.00mm_L7.2mm_W5.0mm",
+        footprint="earthnmr:C_Film_P5.00mm_L7.2mm_W6.0mm",
         symbol="Device:C",
         desc="1 uF 5 % 100 V metallized polypropylene film, leads on 5 mm: the 555's "
              "timing capacitor (two in parallel).  Film, not X7R: its value does not move "
@@ -228,13 +228,6 @@ PARTS = {
         footprint="earthnmr:TerminalBlock_KF301_1x02_P5.00mm",
         symbol="Connector:Screw_Terminal_01x02",
         desc="2-way 5.0 mm screw terminal block, 17 A: the POLARIZING SUPPLY"),
-    "AUDIO": dict(
-        value="AudioJack3", mpn="PJ-320D", lcsc="C431535", jlc_type="extended",
-        process="SMT", stock=72732, price=0.0535,
-        footprint="earthnmr:Jack_3.5mm_PJ-320D_Horizontal",
-        symbol="Connector_Audio:AudioJack3",
-        desc="3.5 mm TRS jack, SMD (PJ-320D): AUDIO OUT, the same signal on tip and ring, "
-             "for a laptop's line input or headphones"),
     # ---- probe loops --------------------------------------------------------------
     "TP": dict(
         value="", mpn="RH-5019", lcsc="C5199800", jlc_type="extended",

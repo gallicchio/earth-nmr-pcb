@@ -192,7 +192,6 @@ def h_lp(f, f0, Q):
 # ------------------------------------------------------------- the gain ------
 GAIN = dict(R_f="200k", R_lo="10k", R_hi="1k")      # the last stage: 1 + Rf/Rg
 OUT_R = "1k"                                          # in series with OUT and SYNC OUT
-AUDIO = dict(R_top="1k", R_bot="100R")                # AUDIO OUT: a divider off the last stage
 
 # ------------------------------------------------------- the sequencer -------
 VCC = 15.0 - 0.33          # the bench's 15 V less the SS34 at about 50 mA
@@ -294,7 +293,7 @@ def main():
     peak = max(chain(f) for f in fs)
     band = [f for f in fs if chain(f) >= peak / math.sqrt(2)]
     d["filter_band"] = dict(f_lo=band[0], f_hi=band[-1], peak_db=20 * math.log10(peak))
-    d["out"] = dict(R=OUT_R, audio=AUDIO, audio_div=ohms(AUDIO["R_bot"]) / (ohms(AUDIO["R_top"]) + ohms(AUDIO["R_bot"])))
+    d["out"] = dict(R=OUT_R)
     # the FID at the output, at HIGH gain, with the recommended coil
     d["fid_out_hi"] = d["coil"]["v_tank"] * d["gain"]["total_hi"] * chain(F_L)
     # the sequencer
@@ -325,7 +324,7 @@ def main():
     d["pol_supply"] = dict(V=POL_SUPPLY, I_max=I_POL_MAX)
     d["passives"] = sorted({INA["R_series"], INA["R_bias"], INA["R_f"], INA["R_g"], INA["R_diff"],
                             hp1["R1"], hp1["R2"], hp2["R1"], hp2["R2"], lp["R1"],
-                            GAIN["R_f"], GAIN["R_lo"], GAIN["R_hi"], OUT_R, AUDIO["R_top"], AUDIO["R_bot"],
+                            GAIN["R_f"], GAIN["R_lo"], GAIN["R_hi"], OUT_R,
                             TIMER["R_min"], DELAY["R_gate"], DELAY["R_hold"], DELAY["R_th_top"],
                             *EXT.values(), GATE["R_pu"], GATE["R_g"], GATE["R_gs"]})
     json.dump(d, open(OUT, "w"), indent=1, sort_keys=True)

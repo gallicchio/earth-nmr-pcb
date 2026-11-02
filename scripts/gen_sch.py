@@ -6,7 +6,7 @@ the relay's pole A; the COIL's two leads come in at the left to the relay's
 commons; released, the relay hands the coil to the TANK (the tuning bank, the
 clamp, the calibration input); the PREAMPLIFIER (a three-op-amp
 instrumentation amplifier), the 4th-order HIGH-PASS, the LOW-PASS and the GAIN
-stage follow along the middle row to OUT and AUDIO at the right.  The
+stage follow along the middle row to OUT at the right.  The
 POLARIZING SWITCH (the MOSFET, its clamp and its sense resistor) hangs under
 the relay's pole B.  Along the bottom, the SEQUENCER: the timer, the
 POLARIZE IN level detector, the SEQUENCE and MODE switches, the gate delay and
@@ -668,35 +668,14 @@ def build():
     s.wire((ox7, po7[1]), (ox7 + g(1), po7[1]))
     d.testpoint(ox7 + g(1), po7[1], "OUT", rot=0)
     d.title("GAIN", GX - g(5), g(50), [f"x{gn['lo']:.0f} or x{gn['hi']:.0f} = 1 + {gn['R_f']} / Rg"])
-    # OUT and AUDIO
+    # OUT
     r33a, r33b = d.res("R33", D["out"]["R"], ox7 + g(4), po7[1], rot=90, text="above")
     s.wire((ox7 + g(1), po7[1]), r33a)
     j5 = d.bnc("J5", r33b[0] + g(5), po7[1], "OUT", ["the FID, about 1 V on HIGH;",
-                                                      "1k in series: for a scope or",
-                                                      "an ADC, not a load"],
+                                                      "1k in series: for a scope, an ADC",
+                                                      "or a sound card's line input"],
                facing="right", text_at=(r33b[0] + g(8), po7[1] - g(6.5)))
     s.wire(r33b, j5)
-    au = D["out"]["audio"]
-    AY = po7[1] + g(9)
-    r34a, r34b = d.res("R34", au["R_top"], ox7 + g(4), AY, rot=90, text="above")
-    s.wire((ox7 + g(1), po7[1]), (ox7 + g(1), AY), r34a)
-    r35a, r35b = d.res("R35", au["R_bot"], r34b[0] + g(1), AY + g(2.5), side="left")
-    s.wire(r34b, (r34b[0] + g(1), AY), r35a)
-    d.gnd(*r35b)
-    s.place(sym("AUDIO"), "J6", "AUDIO", r34b[0] + g(7), AY, mirror="y", footprint=fp("AUDIO"),
-            fields=part_fields("AUDIO"), ref_off=(2.0, 5.0), val_off=(2.0, 6.8), hide_value=True,
-            ref_justify="left", val_justify="left")
-    jt, jr, js = s.pin("J6", 1, "T"), s.pin("J6", 1, "R"), s.pin("J6", 1, "S")
-    TX = jt[0] - g(2)
-    s.wire((r34b[0] + g(1), AY), (TX, AY))
-    s.wire((TX, AY), (TX, jt[1]), jt) if abs(AY - jt[1]) > 0.01 else s.wire((TX, AY), jt)
-    s.wire((TX, AY), (TX, jr[1]), jr) if abs(AY - jr[1]) > 0.01 else s.wire((TX, AY), jr)
-    s.wire(js, (js[0] - g(1), js[1]), (js[0] - g(1), js[1] - g(1.5)))
-    d.gnd(js[0] - g(1), js[1] - g(1.5), up=True)
-    d.title("AUDIO", r34b[0] + g(11), AY - g(2),
-            [f"OUT / {1 / D['out']['audio_div']:.0f}, on tip and ring:", "a line input or headphones", "(hear the protons)"],
-            size=2.0)
-
     # ================================================== the SEQUENCER ==========
     tm, dl, ex = D["timer"], D["delay"], D["ext"]
     d.title("SEQUENCER", g(8), g(124),

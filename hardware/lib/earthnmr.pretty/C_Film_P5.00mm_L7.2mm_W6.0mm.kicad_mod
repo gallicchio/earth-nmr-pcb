@@ -1,0 +1,208 @@
+(footprint "C_Film_P5.00mm_L7.2mm_W6.0mm"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Metallized polypropylene film capacitor, 7.2 x 6.0 mm, leads on 5.0 mm (Hongzhi MES105J2A-7-50R0, LCSC C333829)")
+	(tags "capacitor film polypropylene 5mm")
+	(property "Reference" "REF**"
+		(at 0 4.3 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "bc6630b9-5de9-590e-bb54-c93f3075eba5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "C_Film_P5.00mm_L7.2mm_W6.0mm"
+		(at 0 -4.3 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "8f72b502-f856-518b-b354-4132fbdddcc7")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 -4.3 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cd43e57e-c7c5-51b5-9b6e-6544bd859d54")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Metallized polypropylene film capacitor, 7.2 x 6.0 mm, leads on 5.0 mm (Hongzhi MES105J2A-7-50R0, LCSC C333829)"
+		(at 0 -4.3 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1c20b33e-de4c-5e7b-a547-92d008b0faed")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -3.75 -3.15)
+		(end 3.75 -3.15)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "28ecb4ee-ba4c-5f0c-a7d5-63e2154598a7")
+	)
+	(fp_line
+		(start -3.75 3.15)
+		(end -3.75 -3.15)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e2155034-5551-5e97-ac75-f29bc4cc81a2")
+	)
+	(fp_line
+		(start 3.75 -3.15)
+		(end 3.75 3.15)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c053c473-6a72-554e-a3bb-c845507ec620")
+	)
+	(fp_line
+		(start 3.75 3.15)
+		(end -3.75 3.15)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2b238d03-8470-584f-8f34-88dca47a2df4")
+	)
+	(fp_line
+		(start -3.95 -3.35)
+		(end 3.95 -3.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "72b50161-b05d-56e2-9496-6cb8d0186302")
+	)
+	(fp_line
+		(start -3.95 3.35)
+		(end -3.95 -3.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "55bfdbd6-e292-5340-b29c-5384546843ed")
+	)
+	(fp_line
+		(start 3.95 -3.35)
+		(end 3.95 3.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0c359acc-5a2f-51e2-a425-21d326c75341")
+	)
+	(fp_line
+		(start 3.95 3.35)
+		(end -3.95 3.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "9f774756-73ec-5682-8775-b5cd3cb6d532")
+	)
+	(fp_line
+		(start -3.6 -3)
+		(end 3.6 -3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "7242f42f-3d0f-5034-bb9c-d54fdc4567cc")
+	)
+	(fp_line
+		(start -3.6 3)
+		(end -3.6 -3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "d2364bc0-1f33-5ca6-9556-5fa8dc8e7eef")
+	)
+	(fp_line
+		(start 3.6 -3)
+		(end 3.6 3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "b0873b2d-4313-544b-b123-f8f986bf3907")
+	)
+	(fp_line
+		(start 3.6 3)
+		(end -3.6 3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "5a4507e8-5f45-567f-a51e-d1b0d63a478b")
+	)
+	(pad "1" thru_hole circle
+		(at -2.5 0)
+		(size 1.8 1.8)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "48525c23-a433-52f7-a601-4320217e775c")
+	)
+	(pad "2" thru_hole circle
+		(at 2.5 0)
+		(size 1.8 1.8)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "79840c2f-999b-51e0-8dc7-569bea5f1393")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/lib/earthnmr.3dshapes/C_Film_L7.2_W6.0.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 0.393701 0.393701 0.393701)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
