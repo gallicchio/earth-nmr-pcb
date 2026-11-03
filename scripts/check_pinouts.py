@@ -30,6 +30,7 @@ SYN = [("VCC", "VDD", "V+", "VS+", "+VS", "VPOS", "VP", "VCC+"),
        ("GND", "VSS", "V-", "VS-", "-VS", "VEE", "VNEG", "VCC-"),
        ("+IN", "IN+", "INP", "+", "NONINV", "IN_P", "VIN+", "INPUT+"), ("-IN", "IN-", "INN", "-", "INV", "IN_N", "VIN-", "INPUT-"),
        ("OUT", "OUTPUT", "VOUT"), ("K", "CATHODE", "C-", "KATHODE"), ("A", "ANODE", "A+"),
+       ("COM", "COMMON", "AK", "KA", "K1/A2", "A2/K1"),
        ("B", "BASE"), ("C", "COLLECTOR"), ("E", "EMITTER")]
 
 

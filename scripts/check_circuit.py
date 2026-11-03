@@ -146,7 +146,8 @@ def expected(D):
     net("INT", "U11.3", "SW3.3")
     # POLARIZE IN
     net("EXT_J", "J7.1", "R43.1", "R44.1")
-    net("U8+", "R44.2", "D12.3", "R47.1", "U8.4")
+    net("EXT_CLAMP", "R44.2", "D12.3", "R47.1", "R59.1")      # the clamped node: D12 and the hysteresis
+    net("U8+", "R59.2", "U8.4")                                # the comparator's own pin, behind R59
     net("U8-", "U8.3", "R45.2", "R46.1")
     net("EXT", "U8.1", "R47.2", "R48.2", "SW3.1", "TP19.1")
     net("SEQ", "SW3.2", "SW4.1")
@@ -285,6 +286,10 @@ def main(path):
     ex = D["ext"]
     check(R("R45") == ohms(ex["R_top"]) and R("R46") == ohms(ex["R_bot"]) and R("R47") == ohms(ex["R_hyst"]),
           "U8's threshold and hysteresis")
+    check(R("R44") == ohms(ex["R_series"]) and R("R59") == ohms(ex["R_in"]) and R("R43") == ohms(ex["R_pd"]),
+          "POLARIZE IN: R44 ahead of the clamp, R59 behind it, R43 the pull-down")
+    check(nl.net_of["D12.1"] == "GND" and nl.net_of["D12.2"] == "+15V",
+          "D12: anode 1 on ground, cathode 2 on +15 V (the BAT54S's series pair clamps the node between them)")
     check(R("R7") == ohms(D["gate"]["R_pu"]) and R("R5") == ohms(D["gate"]["R_g"]) and R("R6") == ohms(D["gate"]["R_gs"]),
           "the gate's pull-up, series and pull-down")
     # polarities
@@ -298,7 +303,7 @@ def main(path):
     # the parts are the parts table's
     for ref, key in (("U1", "OPAMP"), ("U8", "COMP"), ("U9", "COMP"), ("U10", "COMP"), ("U11", "TIMER"),
                      ("Q1", "MOSFET"), ("K1", "RELAY"), ("D7", "TVS_CLAMP"), ("D9", "TVS_TANK"),
-                     ("D6", "TVS_SUPPLY"), ("F1", "PTC"), ("R4", "RSENSE"), ("SW1", "DIP8")):
+                     ("D6", "TVS_SUPPLY"), ("F1", "PTC"), ("R4", "RSENSE"), ("SW1", "DIP8"), ("D12", "DCLAMP")):
         check(nl.fields[ref].get("LCSC") == parts.PARTS[key]["lcsc"], f"{ref} is not {parts.PARTS[key]['mpn']}")
     print(f"  {n[0]} circuit checks, {len(fails)} failed")
     for f in fails:

@@ -49,7 +49,8 @@ every switch-off.
 arithmetic (`sim/design.py`, which writes `sim/design.json`: every value on the
 sheet and the board comes from it), the simulation, the board, the risks for the
 first board and the ideas for rev B.  [CLAUDE_CODE_CHAT.md](CLAUDE_CODE_CHAT.md)
-is the conversation it came from.
+is the conversation it came from.  `design_reviews/` holds the brief for
+reviewers and the rounds run so far (the author's own, 2026-11-03).
 
 ## Ordering it
 
@@ -66,7 +67,7 @@ part is stocked by JLCPCB.
 
 runs, from `scripts/parts.py` and `sim/design.py` outward: the design arithmetic,
 the symbols, footprints and 3D stand-ins, the schematic (`scripts/gen_sch.py`) and
-its ERC, 388 circuit assertions on the exported netlist (`scripts/check_circuit.py`),
+its ERC, 393 circuit assertions on the exported netlist (`scripts/check_circuit.py`),
 the ngspice simulation of that netlist (`sim/nmr_sim.py`: the tank, the receiver's
 gain, band and noise, the switch-off, the sequencer and the headphones' level, each checked
 against the arithmetic), the board (`scripts/layout.py`, laid out and wired by

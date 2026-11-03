@@ -210,3 +210,107 @@ ring swapped would not matter; the sleeve is what must be right, and it is the l
 | loud in the ears at a switch-off | moderate: the arithmetic says OUT can reach a rail for a moment | VOLUME low until the level is known; the limiter of rev B by hand |
 | the jack's stock (353) | low for one board | SJ1-3524-SMT-TR, the surface-mount twin, on a new footprint |
 | JLCPCB fits the jack or the knob turned | very low: both are keyed by their holes and fit JLCPCB's drawing at 0.00 mm | `PLACEMENT_CHECKS.txt` |
+
+## Prompt 3
+
+> Is everything about the nmr circuit committed to main?
+
+## Response 3
+
+*2026-11-02 21:05 PST (05:05 UTC 2026-11-03).*  Everything was committed and pushed, on
+`claude/fervent-pasteur-eje29d`, the repository's only branch (and so its default); the
+gitignored files (datasheets, the API caches, `build/`, the netlist, STEP and ERC/DRC text
+reports) are the only things not in git, by design.  Offered to push the branch as `main`.
+
+## Prompt 4
+
+> Yes, create main and push this branch as main.
+
+## Response 4
+
+*2026-11-02 21:08 PST (05:08 UTC 2026-11-03).*  `main` created from d4e3f9e and pushed;
+GitHub's default branch stays `claude/fervent-pasteur-eje29d` until Jason switches it in the
+repository's settings.  Work continues on `main` from here.
+
+## Prompt 5
+
+> Keep working on the main branch. Do a top to bottom design review of this board, from the intention, architecture, schematic, and PCB. Focus on anything that could prevent it from working out of the box. Actually look at every schematic label and PCB silk screen to make sure it's clear and meets the standards of CLAUDE_PCB.md.
+
+## Response 5
+
+*2026-11-02 21:10 PST (05:10 UTC 2026-11-03) to 2026-11-03 01:10 PST (09:10 UTC), one
+sitting.  Model from here: Claude Fable 5.1.*
+
+### The review
+
+`design_reviews/2026-11-03_Claude-Fable-5.1/REPORT.md`: the author's own round-1 review,
+written before any other, in the brief's format (verdict, findings table, then the details),
+with the 250 dpi crops of every block of the sheet and the 400 dpi tiles of both sides of the
+board it was read from.  CLAUDE_PCB.md was read in full first and the board held to it
+section by section.
+
+**Verdict: order after the named fixes**, and all of them are applied below.  Nothing found
+touches the physics or the architecture: the polarizing field, the non-adiabatic switch-off
+(the Earth's-field region is crossed in 2 µs against 80 µs for a radian of precession), the
+hand-over (both coil leads at 13 V with no current onto a tank at 0 V: a common-mode step the
+INA rejects and a differential one that saturates the chain for about 35 ms, which the
+handbook already allows for), the sequencer's order at power-up, with MODE or SEQUENCE
+thrown mid-cycle and with POLARIZE IN pulsed faster than its delays, the comparators' common
+mode, every supply and rating at its worst input.
+
+### Found
+
+| # | what | evidence | fix |
+|---|---|---|---|
+| 1 | **POLARIZE IN could misbehave with a bipolar generator**: the BAV99 clamped U8's input at -0.7 V, past the TS391's -0.3 V absolute maximum, below which the datasheet promises no correct output | ST TS391 datasheet, abs. max. "Input voltage -0.3 to 36 V", note 3 | D12 is a BAT54S (Schottky pair, the same SOT-23 pinout: 1 = A1, 2 = K2, 3 = K1/A2, Nexperia's sheet), clamping at -0.35 V, and R59 (10k) between the clamped node and the comparator's pin holds the pin's own junction to microamps.  Threshold and hysteresis unchanged; on the board the hysteresis taps the clamped node before R59 (the first try tapped the new segment: DRC called the short, one build later) |
+| 2 | Six texts drawn across wires or symbols on the sheet (D6's value over D5, LED3's note under the V POL column, D7's note under D9's column, R43's value on J7's ground, and two the new check found: the K1 note under the V POL column, "ground loops" on the GATE wire, "I POL" under the GATE column) | the crops | moved; `check_schematic.py` now tests every text box against every wire segment (Liang-Barsky), which is how the last three were found |
+| 3 | Label collisions: "J4"/"J7" on the mirrored jacks' pin number (KiCad flips a mirrored field's justification), "U121"/"U101" (a 3-character reference running into the output pin's "1"), DELAY and HOLD against "220k"/"270k", "+15V" against "K1 coil", the two lamps' grounds drawn over each other | the crops | offsets |
+| 4 | The title block's first comment ran out of the block | `sch_bottom.png` | two comments |
+| 5 | Connector limits missing from the silkscreen: POLARIZE IN's ±30 V, CAL IN's 5 Vpp, the coil's 130 V on the front | CLAUDE_PCB §6 | added at the connectors |
+| 6 | RV1 and RV2 did not say which way is longer; J1's outer screws carried no rail name; the headphone jack had "J9" and nothing else | CLAUDE_PCB §6 | "clockwise longer" at each trimmer, "+15" and "-15" beside J1's screws, "PHONES" at the jack |
+| 7-8 | "+/-30 V" (the font has ±); SYNC OUT's "0 / 14 V" is 0 / 13 V open | | fixed |
+| 9 | "1 V into CAL IN gives 4 V": the simulation's 1 V is a 50 ohm generator's setting, 0.5 V at the jack's 51 ohm; a generator that displays its level into 50 ohm gives 8 V | `sim/nmr_sim.py` | the handbook, the notes and the build's report say "0.5 V at the jack" |
+| 10 | "6-30 V, up to 3 A": the reference coil draws 3.4 A from 30 V, past F1's hold and the relay's 3 A | 30 / 8.86 | 26 V is the ceiling with it, computed in `design.py`, on the sheet, the handbook and the notes, claim-checked |
+| 11 | SW1's ON side rests on a reading of KingTek's drawing | KiCad's own KingTek DSHP08 footprint puts "on" at its pin-1 row, as ours does | none; in PLACEMENT_CHECKS and the DOA list already |
+
+### Checked and found right
+
+- **K1's pinout and coil polarity, from Hongfa's wiring diagram** (bottom view, "no
+  energized condition", p. 33, rendered at 500 dpi): coil 1 (+) and 12 (-); 4 rests on 3
+  and moves to 5; 9 rests on 10 and moves to 8.  The datasheet's Notice calls the relay
+  polarized, so the coil's sense matters, and it is as wired (1 on +15 V, 12 to Q2).  The
+  first round's likeliest DOA fault retires to "KiCad's numbering of the G6S-2 pattern",
+  which JLCPCB's land pattern confirms by pin number at 0.00 mm.
+- TS391, BAT54S (against its datasheet and JLCPCB's symbol, which names the common pin
+  "AK"; `check_pinouts.py` learned the synonym), the 555's steering diodes, D13/D14, the
+  switches' senses, the OPA197's input protection (D9 clamps inside the rails; the 1k
+  limits only a fault past them), the resistor powers at ±30 V in, the TVS energies, the
+  relay driver, the gate drive through the comparator's open collector.
+
+### Also done
+
+- JLCPCB rotation for the BAT54S (C47546): fits +180 like the other SOT-23s
+  (`check_rotations.py`), in the table as predicted.
+- Every part's stock figure refreshed from JLCPCB's API (STOCK_DATE 2026-11-03): the BNC
+  jacks are back to 491, the 3.3 nF C0G down to 2944 (three a board), the headphone jack 337.
+- The board date is 2026-11-03; the review brief says 393 assertions and mentions the
+  headphones; `design_reviews/README.md` indexes the round.
+- **Build:** ERC 0, 393 circuit checks, the simulation within tolerance, DRC 0 at every
+  severity with parity, all fab checks, 22 of 22 document claims; a second `./make.py`
+  changes no file.
+
+![the board](docs/history/r3-render-top.png)
+
+![the front, copper and silkscreen](docs/history/r3-top.png)
+
+![the schematic](docs/history/r3-schematic.png)
+
+### What would most likely make the first board dead on arrival, now
+
+| risk | how likely | what shows it, what rescues it |
+|---|---|---|
+| the hand-over transient longer than the 35 ms estimated (a coil with far more stray capacitance) | moderate | the first 50-100 ms after SYNC OUT falls are junk and the FID is still there after; OUT on LOW first |
+| SW1's ON side printed the wrong way round | low | read the body's own mark; the capacitance is the same either way |
+| the polarizing current's return through the plane upsetting the receiver | low: it flows only while the receiver is disconnected | the 19 ms before the hand-over |
+| a JLCPCB placement turned | low: every part fits JLCPCB's drawing; three are predicted, not read (the jack, the knob, the relay's datum) | `PLACEMENT_CHECKS.txt` against the preview |
+| thin stock | low | the BNC (491), the headphone jack (337), the 3.3 nF C0G (2944) |

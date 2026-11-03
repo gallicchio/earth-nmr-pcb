@@ -1,4 +1,4 @@
-Earth's Field NMR rev A (2026-11-02) -- JLCPCB order form, field by field
+Earth's Field NMR rev A (2026-11-03) -- JLCPCB order form, field by field
 ==============================================================================
 
 [PCB]

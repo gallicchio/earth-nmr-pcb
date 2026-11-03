@@ -4,7 +4,7 @@
 
 One board, four layers, 243 x 150 mm, every part on the top side: ground on
 the second layer, +15 V on the third, -15 V on the back with the three hops.  It passes ERC,
-DRC at every severity with schematic parity, the 388 circuit assertions on the netlist,
+DRC at every severity with schematic parity, the 393 circuit assertions on the netlist,
 the simulation's agreement with the design arithmetic and the fab-package checks, and
 `./make.py` rebuilds and rechecks everything from scratch in about a minute and a half.
 
@@ -62,9 +62,9 @@ The same list is in `out/earthnmr/earthnmr-fabrication-notes.txt` to keep open w
 
 ## Cost
 
-The board has **376 SMT joints** and **54 through-hole joints** on 78 BOM lines;
+The board has **378 SMT joints** and **54 through-hole joints** on 78 BOM lines;
 25 distinct order codes are JLCPCB *Extended* parts, each with a one-off
-$3.00 feeder fee.  Parts alone are **$23.95 per board**, of which the
+$3.00 feeder fee.  Parts alone are **$23.97 per board**, of which the
 four BNC jacks are $5.17, the relay $1.39 and the 26 test loops $2.51.
 
 The bare-board and assembly lines below are estimates from JLCPCB's public price list for a
@@ -75,30 +75,30 @@ four-layer 243 x 150 mm board, not a quote: their order page is the authority.
 | line | cost |
 |---|---|
 | bare PCBs (5 made) | about $55.00 |
-| parts ($23.95 x 2) | $47.90 |
-| assembly: setup + stencil + THT setup + 25 extended codes + 752 SMT and 108 THT joints | about $115.96 |
+| parts ($23.97 x 2) | $47.95 |
+| assembly: setup + stencil + THT setup + 25 extended codes + 756 SMT and 108 THT joints | about $115.97 |
 | shipping (DHL) | about $25.00 |
-| **total** | **about $243.86**  ($121.93 each) |
+| **total** | **about $243.91**  ($121.96 each) |
 
 **5 boards, fully assembled, through-hole parts included**
 
 | line | cost |
 |---|---|
 | bare PCBs (5 made) | about $55.00 |
-| parts ($23.95 x 5) | $119.76 |
-| assembly: setup + stencil + THT setup + 25 extended codes + 1880 SMT and 270 THT joints | about $122.74 |
+| parts ($23.97 x 5) | $119.86 |
+| assembly: setup + stencil + THT setup + 25 extended codes + 1890 SMT and 270 THT joints | about $122.75 |
 | shipping (DHL) | about $25.00 |
-| **total** | **about $322.50**  ($64.50 each) |
+| **total** | **about $322.62**  ($64.52 each) |
 
 **10 boards, fully assembled, through-hole parts included**
 
 | line | cost |
 |---|---|
 | bare PCBs (10 made) | about $85.00 |
-| parts ($23.95 x 10) | $239.52 |
-| assembly: setup + stencil + THT setup + 25 extended codes + 3760 SMT and 540 THT joints | about $134.03 |
+| parts ($23.97 x 10) | $239.73 |
+| assembly: setup + stencil + THT setup + 25 extended codes + 3780 SMT and 540 THT joints | about $134.07 |
 | shipping (DHL) | about $25.00 |
-| **total** | **about $483.55**  ($48.36 each) |
+| **total** | **about $483.80**  ($48.38 each) |
 
 The coil, its former, the water bottle and the polarizing supply are not on the order; the
 [handbook](HANDBOOK.md) lists them.
@@ -117,9 +117,9 @@ from KiCad's footprint.  The upload CPL has these angles applied, per LCSC code,
 | J9 | C20182914 | 180 deg | (+0.00, +2.50) mm | predicted: SJ1-3523N: easyeda's drawing is KiCad's turned half round (its 1 sleeve, 2 tip, 3 ring = our S, T, R), its origin 2.5 mm from the sleeve's pin toward the tip's and the ring's |
 | Q2, Q3 | C20526 | 180 deg | none | read: MMBT3904 SOT-23: their pad 1 at (+1.0,+0.95), KiCad's at (-0.94,-0.95); read in the op-amp board's rev A preview, 2026-10-29; check_rotations.py fits +180 here too |
 | U1, U2, U3, U4, U5, U6, U7, U12 | C221351 | 180 deg | none | predicted: SOT-23-5: +180 read on 59 SOT-23-5 placements on the GPSDO board |
-| D12 | C2500 | 180 deg | none | predicted: BAV99 SOT-23: the same drawing as the MMBT3904 (check_rotations.py: +180, rms 0.28 mm) |
 | J2 | C474881 | 180 deg | none | read: KF301-2P: as the 3P; read in the op-amp board's rev A preview |
 | J1, J3 | C474882 | 180 deg | none | read: KF301-3P: EasyEDA draws the wire-entry arrows on +y, ours face the edge (-y); the pin row is symmetric, so +180 turns only the body; read in the op-amp board's rev A preview |
+| D12 | C47546 | 180 deg | none | predicted: BAT54S SOT-23: the same drawing as the MMBT3904's (check_rotations.py: +180); the BAV99 (C2500) before it fitted +180 too |
 | U8, U9, U10 | C71896 | 180 deg | none | predicted: SOT-23-5: +180 read on 59 SOT-23-5 placements on the GPSDO board |
 | J4, J5, J7, J8 | C41416668 | 90 deg | none | read: BNC-KYWE-295-W4-N: Lorenz board rev A/B preview, built and working |
 | Q1 | C146578 | 0 deg | (-2.56, +0.00) mm | predicted: IRFS4227 D2PAK: their leads at -x as KiCad's TO-263-2, their origin 2.56 mm from KiCad's, toward the leads (check_rotations.py: rms 0.00 mm); not motor-pid's MJB44H11 drawing, which is turned 180 |
@@ -169,89 +169,89 @@ when the form lists them.  Soldered by hand they are the 54 largest joints on th
 
 ## Parts, stock and alternates
 
-Stock as JLCPCB's parts API reported it on 2026-11-02; the build re-reads every code's
+Stock as JLCPCB's parts API reported it on 2026-11-03; the build re-reads every code's
 description against the value and package here and stops if one has changed or run out.
 
 | ref | value | LCSC | JLC | unit | stock then | notes |
 |---|---|---|---|---|---|---|
-| C1,C2 | 100uF | C46550402 | extended | $0.0423 | 200,110 | 100 uF 25 V aluminium electrolytic, SMD 6.3 x 5.4 mm: one on each analog rail |
-| C3,C4,C54,C80,C81,C82,C83,C84,C85,C86,C87,C88,C89,C90,C91,C92,C93,C94,C95,C96,C97,C98,C99 | 100nF | C49678 | basic | $0.0205 | 22,485,395 | X7R 50 V 0805: supply bypass only |
-| C5 | 470uF | C22469994 | extended | $0.1755 | 51,190 | 470 uF 50 V aluminium electrolytic, SMD 10 x 12.5 mm: the polarizing supply's reservoir at the board, which damps a hot-plugged lead's ringing |
-| C10,C13,C35 | 3.3nF | C880847 | extended | $0.0214 | 9,192 | C0G 100 V 5 % 0805: the low-pass filter, the bank |
+| C1,C2 | 100uF | C46550402 | extended | $0.0423 | 170,980 | 100 uF 25 V aluminium electrolytic, SMD 6.3 x 5.4 mm: one on each analog rail |
+| C3,C4,C54,C80,C81,C82,C83,C84,C85,C86,C87,C88,C89,C90,C91,C92,C93,C94,C95,C96,C97,C98,C99 | 100nF | C49678 | basic | $0.0205 | 28,101,363 | X7R 50 V 0805: supply bypass only |
+| C5 | 470uF | C22469994 | extended | $0.1755 | 51,150 | 470 uF 50 V aluminium electrolytic, SMD 10 x 12.5 mm: the polarizing supply's reservoir at the board, which damps a hot-plugged lead's ringing |
+| C10,C13,C35 | 3.3nF | C880847 | extended | $0.0214 | 2,944 | C0G 100 V 5 % 0805: the low-pass filter, the bank |
 | C11,C16,C18,C20,C34 | 6.8nF | C326913 | extended | $0.0904 | 5,540 | C0G 50 V 5 % 0805: the low-pass filter, the bank |
-| C12,C14,C15,C23,C28,C29,C30,C31,C32,C33,C53 | 10nF | C237168 | extended | $0.0302 | 24,010 | C0G 50 V 5 % 0805: the high-pass filters, the bank, the 555's CTRL |
-| C17 | 47nF | C5451690 | extended | $0.1795 | 1,248 | C0G 50 V 5 % 1206 (Holy Stone): the bank; the 100 V C1206N473J101T (C20617849) first chosen had none left on 2026-11-02 |
-| C19,C21,C22,C24,C25,C26,C27,C55,C56 | 100nF | C170182 | extended | $0.1580 | 153,887 | C0G 50 V 5 % 1206: the bank and the two delays |
-| C50,C51,C52 | 1uF | C333829 | extended | $0.1387 | 51,902 | 1 uF 5 % 100 V metallized polypropylene film, leads on 5 mm: the 555's timing capacitor (three in parallel). Film, not X7R: its value does not move with the voltage the timer swings it through |
-| D1,D2,D3,D4,D5 | SS34 | C8678 | basic | $0.0352 | 3,348,396 | SS34 3 A 40 V Schottky, SMA (1 = cathode): in series with each analog supply (a reversed supply does nothing), the rail clamps, and the polarizing supply's reverse-polarity crowbar (a reversed supply trips F1) |
-| D6 | SMBJ33A | C353366 | extended | $0.0404 | 62,111 | SMBJ33A unidirectional TVS, 600 W, 33 V standoff, 53 V at 11 A, SMB (1 = cathode): across the polarizing supply, for the spike a hot-plugged bench lead rings to |
+| C12,C14,C15,C23,C28,C29,C30,C31,C32,C33,C53 | 10nF | C237168 | extended | $0.0302 | 22,946 | C0G 50 V 5 % 0805: the high-pass filters, the bank, the 555's CTRL |
+| C17 | 47nF | C5451690 | extended | $0.1795 | 1,189 | C0G 50 V 5 % 1206 (Holy Stone): the bank; the 100 V C1206N473J101T (C20617849) first chosen had none left on 2026-11-02 |
+| C19,C21,C22,C24,C25,C26,C27,C55,C56 | 100nF | C170182 | extended | $0.1580 | 152,475 | C0G 50 V 5 % 1206: the bank and the two delays |
+| C50,C51,C52 | 1uF | C333829 | extended | $0.1387 | 41,777 | 1 uF 5 % 100 V metallized polypropylene film, leads on 5 mm: the 555's timing capacitor (three in parallel). Film, not X7R: its value does not move with the voltage the timer swings it through |
+| D1,D2,D3,D4,D5 | SS34 | C8678 | basic | $0.0352 | 3,189,018 | SS34 3 A 40 V Schottky, SMA (1 = cathode): in series with each analog supply (a reversed supply does nothing), the rail clamps, and the polarizing supply's reverse-polarity crowbar (a reversed supply trips F1) |
+| D6 | SMBJ33A | C353366 | extended | $0.0404 | 45,962 | SMBJ33A unidirectional TVS, 600 W, 33 V standoff, 53 V at 11 A, SMB (1 = cathode): across the polarizing supply, for the spike a hot-plugged bench lead rings to |
 | D7 | SMCJ100A | C42371542 | preferred | $0.0916 | 19,026 | SMCJ100A unidirectional TVS, 1.5 kW (10/1000 us), 100 V standoff, 111-123 V breakdown, 162 V at 9.3 A, SMC (1 = cathode): from the MOSFET's drain to its source. It holds the coil's flyback at about 125 V, so the current falls to zero in a straight line in about half a millisecond: a sudden switch-off, which leaves the magnetization behind to precess |
-| D8,D10,D11,D13,D14 | 1N4148W | C81598 | basic | $0.0124 | 3,765,724 | 1N4148W, SOD-123 (1 = cathode): the timer's steering diodes, the delays' bypass diodes, the relay coil's freewheel diode |
-| D9 | SMBJ12CA | C353397 | extended | $0.0409 | 209,161 | SMBJ12CA bidirectional TVS, 600 W, 12 V standoff, 19.9 V at 30 A, 390 pF, SMB: across the tank. Idle (the tank carries microvolts) unless the relay ever lets go with coil current still flowing: then it takes the coil's energy instead of the capacitors and the preamplifier |
-| D12 | BAV99 | C2500 | basic | $0.0111 | 1,335,787 | BAV99 two diodes in series, SOT-23 (1 = A1, 2 = K2, 3 = K1/A2): clamps POLARIZE IN's comparator input to ground and +15 V |
-| F1 | 3A | C22435908 | extended | $0.1851 | 15,157 | LUTE resettable fuse 2920L300/36GR: 3 A hold, 5 A trip, 36 V, 12-48 mohm, 2920: in the polarizing supply's + lead, ahead of everything |
-| J1 | POWER | C474882 | extended | $0.1396 | 28,051 | 3-way 5.0 mm screw terminal block, 17 A: POWER (+15 V, GND, -15 V) and COIL (A, B, shield) |
-| J2 | POLARIZE SUPPLY | C474881 | extended | $0.1019 | 53,579 | 2-way 5.0 mm screw terminal block, 17 A: the POLARIZING SUPPLY |
-| J3 | COIL | C474882 | extended | $0.1396 | 28,051 | 3-way 5.0 mm screw terminal block, 17 A: POWER (+15 V, GND, -15 V) and COIL (A, B, shield) |
-| J4,J5,J7,J8 | BNC | C41416668 | extended | $1.2929 | 215 | 50 ohm BNC jack, right angle, 4 ground posts on 8x8 mm (the op-amp and PID boards' jack: JLCPCB rotation +90 read off the Lorenz board's preview) |
-| J9 | PHONES | C20182914 | extended | $1.2340 | 353 | CUI (Same Sky) SJ1-3523N 3.5 mm stereo jack, through-hole, right angle, no switches. Same Sky's SJ1-352XN datasheet (09/12/2024) gives the pins: 1 sleeve, 2 tip, 3 ring; KiCad's footprint names its pads S, T, R and puts them where that drawing does (the sleeve on the centre line 3.5 mm in from the edge, tip and ring 8.5 mm in, the tip on the left seen from the plug's side), and JLCPCB's land pattern for C20182914 numbers them 1, 2, 3 in the same places (scripts/check_rotations.py) |
+| D8,D10,D11,D13,D14 | 1N4148W | C81598 | basic | $0.0124 | 3,848,610 | 1N4148W, SOD-123 (1 = cathode): the timer's steering diodes, the delays' bypass diodes, the relay coil's freewheel diode |
+| D9 | SMBJ12CA | C353397 | extended | $0.0409 | 209,291 | SMBJ12CA bidirectional TVS, 600 W, 12 V standoff, 19.9 V at 30 A, 390 pF, SMB: across the tank. Idle (the tank carries microvolts) unless the relay ever lets go with coil current still flowing: then it takes the coil's energy instead of the capacitors and the preamplifier |
+| D12 | BAT54S | C47546 | basic | $0.0283 | 213,847 | BAT54S two Schottky diodes in series, SOT-23 (1 = A1, 2 = K2, 3 = K1/A2, the BAV99's pinning): clamps POLARIZE IN's node to about -0.35 V and +15.3 V, inside the TS391's -0.3 V input limit once R59 is between it and the pin (a BAV99's 0.7 V was not; review 2026-11-03) |
+| F1 | 3A | C22435908 | extended | $0.1851 | 14,776 | LUTE resettable fuse 2920L300/36GR: 3 A hold, 5 A trip, 36 V, 12-48 mohm, 2920: in the polarizing supply's + lead, ahead of everything |
+| J1 | POWER | C474882 | extended | $0.1396 | 23,269 | 3-way 5.0 mm screw terminal block, 17 A: POWER (+15 V, GND, -15 V) and COIL (A, B, shield) |
+| J2 | POLARIZE SUPPLY | C474881 | extended | $0.1019 | 49,805 | 2-way 5.0 mm screw terminal block, 17 A: the POLARIZING SUPPLY |
+| J3 | COIL | C474882 | extended | $0.1396 | 23,269 | 3-way 5.0 mm screw terminal block, 17 A: POWER (+15 V, GND, -15 V) and COIL (A, B, shield) |
+| J4,J5,J7,J8 | BNC | C41416668 | extended | $1.2929 | 491 | 50 ohm BNC jack, right angle, 4 ground posts on 8x8 mm (the op-amp and PID boards' jack: JLCPCB rotation +90 read off the Lorenz board's preview) |
+| J9 | PHONES | C20182914 | extended | $1.2340 | 337 | CUI (Same Sky) SJ1-3523N 3.5 mm stereo jack, through-hole, right angle, no switches. Same Sky's SJ1-352XN datasheet (09/12/2024) gives the pins: 1 sleeve, 2 tip, 3 ring; KiCad's footprint names its pads S, T, R and puts them where that drawing does (the sleeve on the centre line 3.5 mm in from the edge, tip and ring 8.5 mm in, the tip on the left seen from the plug's side), and JLCPCB's land pattern for C20182914 numbers them 1, 2, 3 in the same places (scripts/check_rotations.py) |
 | K1 | HFD3/12 | C329305 | extended | $1.3894 | 4,716 | Hongfa HFD3/12 DPDT signal relay, 12 V 1028 ohm coil (9 V to pull in, 24 V max), AgNi + Au bifurcated contacts, 3 A 30 VDC, 4 ms: released, the coil is the receiver's; energized, the polarizing current's. Pins as the Omron G6S-2 |
-| LED1,LED2,LED3 | GREEN | C2297 | basic | $0.0164 | 2,420,908 | green 0805 LED: each analog rail, and the polarizing supply |
-| LED4 | RED | C84256 | basic | $0.0135 | 3,082,781 | red 0805 LED across the relay's coil: lit while the board polarizes |
-| Q1 | IRFS4227 | C146578 | extended | $0.8286 | 6,562 | IRFS4227TRLPBF (Infineon): N-channel MOSFET, 200 V, 62 A, 26 mohm at VGS = 10 V, Qg 98 nC, D2PAK (1 = G, 2 = D on the tab, 3 = S): switches the coil's polarizing current, up to 3 A |
-| Q2,Q3 | MMBT3904 | C20526 | basic | $0.0117 | 2,658,848 | MMBT3904 NPN, SOT-23 (1 B, 2 E, 3 C): the relay's coil driver and the SYNC OUT follower |
-| R1,R2,R8,R9,R17,R18,R20,R21,R22,R23,R31,R44,R46,R48,R51,R52,R53,R54 | 10k | C17414 | basic | $0.0034 | 52,272,724 | 0805 1% 125mW thick film |
-| R3 | 15k | C17475 | basic | $0.0059 | 679,379 | 0805 1% 125mW thick film |
-| R4 | 0.1R | C160587 | extended | $0.0571 | 114,970 | 0.1 ohm 1 % 2 W 50 ppm/K current-sense resistor, 2512: the polarizing current's return, so I POL reads 0.1 V per ampere (0.9 W at 3 A) |
-| R5 | 47R | C17714 | basic | $0.0029 | 746,039 | 0805 1% 125mW thick film |
-| R6,R40,R41,R42,R43,R45 | 100k | C149504 | basic | $0.0060 | 3,058,790 | 0805 1% 125mW thick film |
-| R7 | 4.7k | C17673 | basic | $0.0039 | 4,295,547 | 0805 1% 125mW thick film |
-| R10 | 3.3k | C26010 | basic | $0.0043 | 1,596,593 | 0805 1% 125mW thick film |
-| R11,R12,R14,R47 | 1M | C17514 | basic | $0.0044 | 1,917,417 | 0805 1% 125mW thick film |
-| R13 | 51R | C17738 | basic | $0.0030 | 677,677 | 0805 1% 125mW thick film |
-| R15,R16,R32,R33,R55 | 1k | C17513 | basic | $0.0035 | 42,005,472 | 0805 1% 125mW thick film |
-| R19 | 200R | C17540 | basic | $0.0068 | 996,348 | 0805 1% 125mW thick film |
-| R24 | 20k | C4328 | basic | $0.0042 | 1,735,754 | 0805 1% 125mW thick film |
-| R25 | 24k | C17575 | basic | $0.0044 | 314,882 | 0805 1% 125mW thick film |
-| R26 | 9.1k | C17855 | preferred | $0.0030 | 292,599 | 0805 1% 125mW thick film |
-| R27,R58 | 62k | C17783 | preferred | $0.0019 | 221,572 | 0805 1% 125mW thick film |
-| R28,R29 | 8.2k | C17828 | basic | $0.0027 | 453,908 | 0805 1% 125mW thick film |
-| R30 | 200k | C17539 | basic | $0.0056 | 529,881 | 0805 1% 125mW thick film |
-| R49 | 220k | C17556 | basic | $0.0030 | 382,494 | 0805 1% 125mW thick film |
-| R50 | 270k | C17589 | preferred | $0.0059 | 122,300 | 0805 1% 125mW thick film |
-| R56,R57 | 100R | C17408 | basic | $0.0042 | 7,732,481 | 0805 1% 125mW thick film |
-| RV1,RV2 | 2M | C48997907 | extended | $0.2394 | 9,203 | 3362P 2 M single-turn cermet trimmer, top adjust (Bourns' pattern and pinout: the wiper reaches 3 turning clockwise): POLARIZE TIME and LISTEN TIME, each a rheostat between 1 and 2 with 3 tied to the wiper, so clockwise is longer |
-| RV3 | 10k | C202373 | extended | $0.6200 | 5,834 | ALPS RK09K 9 mm vertical potentiometer, 10 k linear, 20 mm flat shaft, no detent: the headphones' VOLUME. motor-pid's TARGET knob without its centre detent; pin 3 is the end the wiper reaches turning clockwise |
-| SW1 | TUNE | C3293158 | extended | $0.4889 | 5,122 | KingTek DSIC08LSGET 8-way DIP switch, SMD, 2.54 mm, raised sliders: each switch adds one binary weight of C0G capacitance to the tank |
-| SW2 | GAIN | C431540 | extended | $0.0544 | 194,273 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
-| SW3 | SEQUENCE | C431540 | extended | $0.0544 | 194,273 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
-| SW4 | MODE | C431540 | extended | $0.0544 | 194,273 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
-| TP1 | V POL | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP2 | DRAIN | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP3 | I POL | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP4 | GATE | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP5 | TANK+ | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP6 | TANK- | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP7 | INA A | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP8 | INA B | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP9 | PREAMP | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP10 | HP1 | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP11 | HP | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP12 | LP | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP13 | OUT | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP14 | POL CMD | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP15 | DELAY | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP16 | HOLD | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP17 | RELAY | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP18 | TIMER | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP19 | EXT | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP20 | +15V | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP21 | -15V | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP22 | PHONES | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| TP100,TP101,TP102,TP103 | GND | C5199800 | extended | $0.0966 | 101,462 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
-| U1,U2,U3,U4,U5,U6,U7,U12 | OPA197 | C221351 | extended | $0.7005 | 85,610 | OPA197IDBVR (TI): 36 V CMOS op-amp, 5.5 nV/rtHz at 1 kHz, fA input current, 10 MHz, rail-to-rail in and out, SOT-23-5. All seven amplifiers, one per triangle, so the silkscreen is the schematic |
-| U8,U9,U10 | TS391 | C71896 | extended | $0.1382 | 14,931 | TS391ILT (ST): single comparator, 2-36 V, open-collector output, inputs to ground, SOT-23-5 (1 OUT, 2 V-, 3 IN-, 4 IN+, 5 V+). The POLARIZE IN level detector, the gate delay and the relay hold |
-| U11 | NE555 | C7593 | preferred | $0.1083 | 136,602 | NE555DR (TI) bipolar 555 timer, 4.5-16 V, SOIC-8: the INT sequencer, an astable with diode-steered charge and discharge so POLARIZE and LISTEN set independently |
+| LED1,LED2,LED3 | GREEN | C2297 | basic | $0.0164 | 2,168,263 | green 0805 LED: each analog rail, and the polarizing supply |
+| LED4 | RED | C84256 | basic | $0.0135 | 2,382,163 | red 0805 LED across the relay's coil: lit while the board polarizes |
+| Q1 | IRFS4227 | C146578 | extended | $0.8286 | 6,536 | IRFS4227TRLPBF (Infineon): N-channel MOSFET, 200 V, 62 A, 26 mohm at VGS = 10 V, Qg 98 nC, D2PAK (1 = G, 2 = D on the tab, 3 = S): switches the coil's polarizing current, up to 3 A |
+| Q2,Q3 | MMBT3904 | C20526 | basic | $0.0117 | 2,847,223 | MMBT3904 NPN, SOT-23 (1 B, 2 E, 3 C): the relay's coil driver and the SYNC OUT follower |
+| R1,R2,R8,R9,R17,R18,R20,R21,R22,R23,R31,R44,R46,R48,R51,R52,R53,R54,R59 | 10k | C17414 | basic | $0.0034 | 51,540,835 | 0805 1% 125mW thick film |
+| R3 | 15k | C17475 | basic | $0.0059 | 650,678 | 0805 1% 125mW thick film |
+| R4 | 0.1R | C160587 | extended | $0.0571 | 113,594 | 0.1 ohm 1 % 2 W 50 ppm/K current-sense resistor, 2512: the polarizing current's return, so I POL reads 0.1 V per ampere (0.9 W at 3 A) |
+| R5 | 47R | C17714 | basic | $0.0029 | 707,403 | 0805 1% 125mW thick film |
+| R6,R40,R41,R42,R43,R45 | 100k | C149504 | basic | $0.0060 | 2,874,722 | 0805 1% 125mW thick film |
+| R7 | 4.7k | C17673 | basic | $0.0039 | 4,061,480 | 0805 1% 125mW thick film |
+| R10 | 3.3k | C26010 | basic | $0.0043 | 1,556,844 | 0805 1% 125mW thick film |
+| R11,R12,R14,R47 | 1M | C17514 | basic | $0.0044 | 1,871,742 | 0805 1% 125mW thick film |
+| R13 | 51R | C17738 | basic | $0.0030 | 672,320 | 0805 1% 125mW thick film |
+| R15,R16,R32,R33,R55 | 1k | C17513 | basic | $0.0035 | 41,695,943 | 0805 1% 125mW thick film |
+| R19 | 200R | C17540 | basic | $0.0068 | 920,847 | 0805 1% 125mW thick film |
+| R24 | 20k | C4328 | basic | $0.0042 | 1,688,056 | 0805 1% 125mW thick film |
+| R25 | 24k | C17575 | basic | $0.0044 | 309,967 | 0805 1% 125mW thick film |
+| R26 | 9.1k | C17855 | preferred | $0.0030 | 288,099 | 0805 1% 125mW thick film |
+| R27,R58 | 62k | C17783 | preferred | $0.0019 | 217,230 | 0805 1% 125mW thick film |
+| R28,R29 | 8.2k | C17828 | basic | $0.0027 | 452,125 | 0805 1% 125mW thick film |
+| R30 | 200k | C17539 | basic | $0.0056 | 501,159 | 0805 1% 125mW thick film |
+| R49 | 220k | C17556 | basic | $0.0030 | 376,198 | 0805 1% 125mW thick film |
+| R50 | 270k | C17589 | preferred | $0.0059 | 112,780 | 0805 1% 125mW thick film |
+| R56,R57 | 100R | C17408 | basic | $0.0042 | 7,565,170 | 0805 1% 125mW thick film |
+| RV1,RV2 | 2M | C48997907 | extended | $0.2394 | 8,703 | 3362P 2 M single-turn cermet trimmer, top adjust (Bourns' pattern and pinout: the wiper reaches 3 turning clockwise): POLARIZE TIME and LISTEN TIME, each a rheostat between 1 and 2 with 3 tied to the wiper, so clockwise is longer |
+| RV3 | 10k | C202373 | extended | $0.6200 | 5,743 | ALPS RK09K 9 mm vertical potentiometer, 10 k linear, 20 mm flat shaft, no detent: the headphones' VOLUME. motor-pid's TARGET knob without its centre detent; pin 3 is the end the wiper reaches turning clockwise |
+| SW1 | TUNE | C3293158 | extended | $0.4889 | 5,117 | KingTek DSIC08LSGET 8-way DIP switch, SMD, 2.54 mm, raised sliders: each switch adds one binary weight of C0G capacitance to the tank |
+| SW2 | GAIN | C431540 | extended | $0.0544 | 186,955 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
+| SW3 | SEQUENCE | C431540 | extended | $0.0544 | 186,955 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
+| SW4 | MODE | C431540 | extended | $0.0544 | 186,955 | SPDT slide switch, SMD, 2 = common; the knob slides toward the pin it connects. SEQUENCE, MODE and GAIN |
+| TP1 | V POL | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP2 | DRAIN | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP3 | I POL | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP4 | GATE | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP5 | TANK+ | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP6 | TANK- | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP7 | INA A | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP8 | INA B | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP9 | PREAMP | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP10 | HP1 | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP11 | HP | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP12 | LP | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP13 | OUT | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP14 | POL CMD | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP15 | DELAY | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP16 | HOLD | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP17 | RELAY | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP18 | TIMER | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP19 | EXT | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP20 | +15V | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP21 | -15V | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP22 | PHONES | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| TP100,TP101,TP102,TP103 | GND | C5199800 | extended | $0.0966 | 232,266 | SMT test loop, 3.8 x 2.0 mm wire loop on one pad (Keystone 5019 style): a scope probe's hook or a mini-grabber clips onto it |
+| U1,U2,U3,U4,U5,U6,U7,U12 | OPA197 | C221351 | extended | $0.7005 | 85,291 | OPA197IDBVR (TI): 36 V CMOS op-amp, 5.5 nV/rtHz at 1 kHz, fA input current, 10 MHz, rail-to-rail in and out, SOT-23-5. All seven amplifiers, one per triangle, so the silkscreen is the schematic |
+| U8,U9,U10 | TS391 | C71896 | extended | $0.1382 | 14,867 | TS391ILT (ST): single comparator, 2-36 V, open-collector output, inputs to ground, SOT-23-5 (1 OUT, 2 V-, 3 IN-, 4 IN+, 5 V+). The POLARIZE IN level detector, the gate delay and the relay hold |
+| U11 | NE555 | C7593 | preferred | $0.1083 | 129,624 | NE555DR (TI) bipolar 555 timer, 4.5-16 V, SOIC-8: the INT sequencer, an astable with diode-steered charge and discharge so POLARIZE and LISTEN set independently |
 
 ### If something is out of stock
 
@@ -260,6 +260,7 @@ description against the value and package here and stops if one has changed or r
 - **NE555DR** (C7593): NE555DTR (XBLW) / C18723595 (191k)
 - **IRFS4227TRLPBF** (C146578): IRF640NSTRLPBF / C23708 (51.9k, 200 V 150 mohm: 1.4 W at 3 A, warmer)
 - **HFD3/12** (C329305): G6S-2 DC12 (Omron) / C1525289 (12.6k, 2 A: limits the coil current to 2 A)
+- **BAT54S,215** (C47546): BAV99 / C2500 (silicon, 0.7 V: clamps 0.4 V past the comparator's limit)
 - **DSIC08LSGET** (C3293158): DSIC08LSGET / C54953 (2315 in stock, the same part)
 - **3362P-1-205** (C48997907): 3362P-1-205LF / C49190490 (18.4k, $0.33)
 - **BNC-KYWE-295-W4-N** (C41416668): HL2-BNC-KYWE / C48606310 (107 in stock)
@@ -268,8 +269,8 @@ description against the value and package here and stops if one has changed or r
 - **RK09K1130AAU** (C202373): RK09K1130AP5 / C470295 (3780 in stock, a 15 mm screwdriver shaft)
 - **RK09K1130AAU** (C202373): RK09K1130A70 / C351173 (6302 in stock, motor-pid's: a centre detent)
 
-The thinnest line is the BNC-KYWE-295-W4-N: 215 in stock and 4 per board, about
-53 boards' worth; next the SJ1-3523N at about 353.
+The thinnest line is the BNC-KYWE-295-W4-N: 491 in stock and 4 per board, about
+122 boards' worth; next the SJ1-3523N at about 337.
 
 ## After the boards arrive
 

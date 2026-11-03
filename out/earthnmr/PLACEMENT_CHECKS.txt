@@ -16,7 +16,7 @@ Every orientation-sensitive part, and what it should look like:
   Q1: the D2PAK's tab; should be: up (toward the relay), the two leads down
       upload turns: C146578 +0 deg (predicted)
   Q2, Q3, D12: the SOT-23's lone pin; should be: up (the collector; D12's common)
-      upload turns: C20526 +180 deg (read), C2500 +180 deg (predicted)
+      upload turns: C20526 +180 deg (read), C47546 +180 deg (predicted)
   D1-D8, D10, D11, D13, D14: each diode's cathode bar; should be: on the footprint's pad 1, the end the silkscreen bar marks
       upload turns: C8678 +0 deg (predicted)
   D9: the SMBJ12CA; should be: bidirectional: either way round

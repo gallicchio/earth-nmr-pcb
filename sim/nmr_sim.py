@@ -378,7 +378,7 @@ def report(D, R):
           f"(the coil's own resistance: {n['coil_thermal'] * 1e9:.2f}); at OUT {n['out_at_fL'] * 1e6:.1f} uV/rtHz, "
           f"{n['out_rms_band'] * 1e3:.1f} mV rms 0.5-5 kHz")
     print(f"  FID at OUT (HIGH): {R['fid_out_hi']:.2f} V peak, single-shot SNR {R['snr_db']:.0f} dB in the tank's bandwidth")
-    print(f"  CAL IN: 1 V at the generator gives {R['cal_lo_per_volt']:.2f} V at OUT on LOW")
+    print(f"  CAL IN: a 50 ohm generator set to 1 V (0.5 V at the jack's 51 ohm) gives {R['cal_lo_per_volt']:.2f} V at OUT on LOW")
     print(f"  HEADPHONES (VOLUME full up, 32 ohm): x{R['phones']['ear_per_out']:.4f} of OUT, "
           f"the FID {R['phones']['fid_ear_hi'] * 1e3:.0f} mV peak at an earpiece on HIGH")
     print(f"  switch-off at {so['i_on']:.2f} A ({so['v_supply']:.1f} V supply): drain peaks at {so['v_drain_peak']:.0f} V, "

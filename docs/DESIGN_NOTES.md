@@ -36,6 +36,7 @@ The polarizing current comes from its own supply (6-30 V, up to 3 A), not from t
 battery is the quietest source there is, and keeping the two apart keeps the
 polarizing current's return away from the receiver.  It returns through the ground
 plane from R4 to J2, along the board's left edge, away from the preamplifier.
+With the reference coil's 8.9 ohm, 3 A is reached at 26 V: the supply's ceiling with it.
 F1 (3 A hold, resettable) is first; D5 (SS34) across the supply after it blows it
 if the supply is reversed; D6 (SMBJ33A) takes a hot-plugged lead's ringing; C5
 (470 µF) holds the supply up at the board.
@@ -89,7 +90,8 @@ the coil's energy instead of the capacitors and the preamplifier's inputs.
 
 R14 (1M) injects a known current into the tank, 1 µA per volt from a generator
 terminated in R13 (51 ohm).  It is how the tank is tuned without protons: sweep a
-sine and find the peak at OUT (1 V gives about 4 V at OUT on LOW at the peak).
+sine and find the peak at OUT (a 50 ohm generator set to 1 V, 0.5 V at the jack's 51 ohm,
+gives about 4 V at OUT on LOW at the peak).
 
 ### The preamplifier
 
@@ -142,7 +144,9 @@ A 555 (U11) runs astable with diode-steered charge and discharge, so POLARIZE TI
 (RV1, through D10) and LISTEN TIME (RV2, through D11) are independent, each 0.2 to
 4.7 s with 3 µF of polypropylene film (C50-C52: film because the timer swings them
 through 5 V and X7R would move).  SEQUENCE (SW3) picks the timer or POLARIZE IN
-(U8, a comparator at 1.33 V with 0.15 V of hysteresis, clamped by D12); MODE (SW4)
+(U8, a comparator at 1.33 V with 0.15 V of hysteresis.  D12, a BAT54S Schottky pair,
+clamps its node between -0.35 V and +15.3 V, and R59 keeps the TS391's own pin inside
+its -0.3 V limit at microamps whatever a generator does: review 2026-11-03); MODE (SW4)
 runs it or holds POL CMD low (listen only, for tuning).
 
 From POL CMD two comparators against half the rail make the order of things: U10
@@ -203,16 +207,22 @@ delays and the headphones' level.  The build fails if they disagree beyond a sta
 | schematic | SW3's throws: 1 EXT, 3 INT | lets the sequencer lay out flat, the switch's common between its two sources |
 | board | 0.6 / 0.3 mm vias | JLCPCB's standard for four layers, annular ring 0.15 mm |
 | parts | the 47 nF C0G of column 5: Holy Stone C1206N473J050T (C5451690) | the 100 V part first chosen (C20617849) had sold out on 2026-11-02 |
+| review (2026-11-03) | D12 a BAT54S, R59 (10k) between the clamp and U8's pin | the TS391's input is rated to -0.3 V; a BAV99 clamped at -0.7 V, so a bipolar generator broke the rating every half cycle |
+| review (2026-11-03) | the sheet checker tests text against wires | six notes and values drawn across wires or symbols had passed a text-only test |
 
 ## Not yet proven: check on the first board
 
 The risks for a board that does not work out of the box, most likely first:
 
-1. **The relay's pinout.**  HFD3 as the Omron G6S-2 (1 coil +, 12 coil -; pole A 4
-   COM, 3 NC, 5 NO; pole B 9 COM, 10 NC, 8 NO), read from Hongfa's drawing.  JLCPCB's
-   own land pattern for it lies on ours hole for hole (`scripts/check_rotations.py`),
-   but its symbol carries numbers only, so the roles rest on the drawing.  With the
-   relay at rest, TANK+ to TANK- should measure the coil's 8.9 ohm through J3.
+1. **The relay's pinout.**  Read off Hongfa's own wiring diagram (bottom view, no
+   energized condition, datasheet p. 33) on 2026-11-03: coil 1 (+) and 12 (-); pole A's
+   common 4 rests on 3 and moves to 5; pole B's 9 rests on 10 and moves to 8.  That is
+   the symbol and the circuit (3 and 10 the tank, 5 V POL, 8 the drain, 1 on +15 V).
+   The datasheet calls the relay polarized, so the coil's sense matters, and it is
+   right.  JLCPCB's land pattern lies on ours by pin number at 0.00 mm
+   (`scripts/check_rotations.py`).  What remains is the footprint's numbering, KiCad's
+   reading of the G6S-2 pattern, which that fit confirms.  With the relay at rest,
+   TANK+ to TANK- should measure the coil's 8.9 ohm through J3.
 2. **TS391's pinout.**  The symbol (`scripts/gen_symbols.py`) is drawn for 1 OUT, 2 V-,
    3 IN-, 4 IN+, 5 V+ from ST's datasheet, and JLCPCB's symbol for C71896 says the same
    pin for pin (`scripts/check_pinouts.py`).  Were the inputs swapped the sequencer

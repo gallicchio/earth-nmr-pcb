@@ -533,8 +533,11 @@ VIA_AT[("R43", "2")] = LEFT
 FIELD_AT["R43"] = ((0.0, -2.95, "center"), (0.0, -1.75, "center"))
 P("R44", 78.0, U8Y + OA_IN, 0)
 W(W_SIG, ("J7", "1"), (J7X, U8Y + OA_IN), ("R44", "1"))
-W(W_SIG, ("R44", "2"), ("U8", "4"))
-P("D12", 84.5, U8Y + OA_IN + 2.4, 90)          # the BAV99: common up on the + input
+P("R59", 89.0, U8Y + OA_IN, 0)                 # 10k between the clamped node and the comparator's pin
+W(W_SIG, ("R44", "2"), ("R59", "1"))
+W(W_SIG, ("R59", "2"), ("U8", "4"))
+P("D12", 84.5, U8Y + OA_IN + 2.4, 90)          # the BAT54S: common up on the clamped node
+FIELD_AT["D12"] = ((-1.9, -0.6, "right"), (-1.9, 0.6, "right"))
 W(W_SIG, (84.5, U8Y + OA_IN), ("D12", "3"))
 VIA_AT[("D12", "1")] = DOWN
 VIA_AT[("D12", "2")] = DOWN
@@ -547,7 +550,7 @@ W(W_SIG, ("R45", "2"), (XL8 - 9.0, NODE8_Y))
 W(W_SIG, ("R46", "1"), (XL8 - 5.0, NODE8_Y))
 OX8 = U8X + OA_W / 2 + 1.5
 P("R47", U8X - 1.0, U8Y + 9.0, 0)              # the hysteresis, from the output back to +
-W(W_SIG, (XL8 - 1.5, U8Y + OA_IN), (XL8 - 1.5, U8Y + 9.0), ("R47", "1"))
+W(W_SIG, (87.0, U8Y + OA_IN), (87.0, U8Y + 9.0), ("R47", "1"))   # the hysteresis taps the clamped node, before R59
 W(W_SIG, ("U8", "1"), (OX8, U8Y), (OX8, U8Y + 9.0), ("R47", "2"))
 EXT_X = X3 - 2.25 - 3.0
 W(W_SIG, (OX8, U8Y), (EXT_X, U8Y), (EXT_X, SW3_PINS), ("SW3", "1"))
@@ -641,7 +644,7 @@ P("R57", SPLIT_X + 4.5, J9Y + 5.0, 0)          # 100 ohm to the ring (right)
 MARKS.append(("gnd", "J9", "S", -1, 0))        # the sleeve on the ground plane
 T(J9X - 9.3, J9Y - 6.1, "T", 0.8, "center")    # the jack's contacts, named as on a plug, clear of its body
 T(J9X - 9.3, J9Y + 6.1, "R", 0.8, "center")
-T(J9X - 2.3, J9Y + 7.4, "J9", 0.8, "center")
+T(J9X - 4.0, J9Y + 7.4, "PHONES", 1.0, "center")   # the jack's name beside it; J9 is in the BOM
 W(W_SIG, ("R56", "2"), ("J9", "T"))
 W(W_SIG, ("R57", "2"), ("J9", "R"))
 
@@ -649,6 +652,8 @@ W(W_SIG, ("R57", "2"), ("J9", "R"))
 J1X = BOARD_W - 42.0
 P("J1", J1X, 4.3, 0)                           # +15 V, ground, -15 V from the top edge
 MARKS.append(("gnd", "J1", "2", 0, 1))
+T(J1X - 9.0, 6.0, "+15", 0.8, "right")         # each outer screw's rail beside it; the middle one's ground mark
+T(J1X + 9.0, 6.0, "-15", 0.8, "left")
 P("D1", J1X - 5.0, 12.5, 90)                   # anode up to J1.1, cathode down to +15 V
 W(0.6, ("J1", "1"), ("D1", "2"))
 P("D2", J1X + 5.0, 12.5, 270)                  # cathode up to J1.3, anode down to -15 V
@@ -733,6 +738,7 @@ lines(2.0, 27.2, [f"{D['pol_supply']['V'][0]:.0f}-{D['pol_supply']['V'][1]:.0f} 
                   "F1 resets; D5 blows it", "if the supply is reversed"], title="POLARIZING SUPPLY", tsize=1.0)
 T(10.6, 18.9, "+", 1.0, "center")
 T(1.5, 35.4, "COIL", 1.2, "left", thick=0.22)
+T(2.0, 37.7, f"{D['switch_off']['v_clamp_3A']:.0f} V at switch-off: do not touch", 0.8)
 T(9.0, 35.4, f"{c['N']} turns {c['wire'].split(' (')[0]}, {c['L'] * 1e3:.1f} mH, {c['R']:.1f} ohm", 0.8)
 T(8.0, 45.2, "A", 0.9, "center")
 T(8.0, 50.3, "B", 0.9, "center")
@@ -754,7 +760,8 @@ for k, sw in enumerate(bank["switches"]):
     T(cx + 0.35, LY0 - 2.2, str(sw["sw"]), 0.8, "center")
     v = sw["C"] * 1e9
     T(cx, TN_Y + 2.0, f"{v:.1f}n" if v < 10 else f"{v:.0f}n", 0.8, "center")
-lines(70.0, 3.0, ["a test signal through R14 into the tank:", "1 uA per volt; R13 is a 51 ohm load"], title="CAL IN")
+lines(70.0, 3.0, ["a test signal through R14 into the tank:", "1 uA per volt; R13 is a 51 ohm load; 5 Vpp max"],
+      title="CAL IN")
 lines(141.0, 30.0, [f"U1-U3, x{D['ina']['gain']:.0f} (Rg is R19)"], title="PREAMPLIFIER", tsize=1.0)
 lines(166.0, 49.2, [], title=f"HIGH-PASS, -3 dB at {D['filter_band']['f_lo']:.0f} Hz: U4, U5", tsize=1.0)
 lines(215.0, 49.2, [], title=f"LOW-PASS, {D['filter_band']['f_hi'] / 1e3:.1f} kHz: U6", tsize=1.0)
@@ -771,7 +778,8 @@ lines(88.5, 102.0, [f"POL CMD up: RELAY at once, GATE",
                     f"{D['delay']['t_gate'] * 1e3:.0f} ms later (R49, C55); down: GATE",
                     f"off at once, RELAY {D['delay']['t_hold'] * 1e3:.0f} ms later (R50, C56)"], title="DELAY, HOLD", tsize=0.9)
 lines(46.0, 140.0, ["POL CMD, high", "while polarizing"], title="SYNC OUT", tsize=0.9)
-lines(72.2, 144.2, [f"high (> {D['ext']['v_th']:.1f} V): polarize"], title="POLARIZE IN", tsize=0.9)
+lines(72.2, 144.2, [f"high (> {D['ext']['v_th']:.1f} V): polarize; open: listen; ±{D['ext']['v_max']:.0f} V max"],
+      title="POLARIZE IN", tsize=0.9)
 T(X3 - 1.5, P4 - 8.6, "MODE", 0.8, "center")
 T(X3 - 5.0, P4 - 7.2, "LISTEN", 0.8, "center")
 T(X3 + 1.8, P4 - 7.2, "RUN", 0.8, "center")
@@ -782,6 +790,10 @@ lines(141.0, 94.5, [f"U11, a 555: POLARIZE TIME (RV1) and",
                     f"LISTEN TIME (RV2), each {D['timer']['t_pol'][0]:.1f} to {D['timer']['t_pol'][1]:.1f} s"], title="TIMER", tsize=0.9)
 T(RV1X + 4.2, DIS_Y - 3.5 + 0.4, "POLARIZE", 0.8)
 T(RV1X + 4.2, DIS_Y - 3.5 + 1.6, "TIME", 0.8)
+T(RV1X - 4.6, DIS_Y - 3.5 - 3.2, "clockwise", 0.8, "right")     # the sense, left of each trimmer's body
+T(RV1X - 4.6, DIS_Y - 3.5 - 2.0, "longer", 0.8, "right")
+T(RVX - 4.6, DIS_Y + 6.1 - 3.2, "clockwise", 0.8, "right")
+T(RVX - 4.6, DIS_Y + 6.1 - 2.0, "longer", 0.8, "right")
 T(RVX + 4.2, DIS_Y + 6.1 + 0.4, "LISTEN", 0.8)
 T(RVX + 4.2, DIS_Y + 6.1 + 1.6, "TIME", 0.8)
 lines(117.0, 134.0, ["U11 NE555: 1 GND, 2 TRIG, 3 OUT, 4 RESET,", "5 CONT, 6 THRESH, 7 DISCH, 8 +15 V"], size=0.8)

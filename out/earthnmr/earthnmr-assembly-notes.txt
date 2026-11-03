@@ -14,7 +14,7 @@ U11 -- NE555 in SOIC-8, pin 1 at the upper left (the silkscreen dot).
 
 Q1 -- IRFS4227 in D2PAK (TO-263-2): the tab (drain) up, the two leads down.
 Q2, Q3 -- MMBT3904 in SOT-23, collector pad up, inside a silkscreen circle.
-D12 -- BAV99 in SOT-23: pin 3 (the common) up.
+D12 -- BAT54S in SOT-23: pin 3 (the common) up.
 
 K1 -- HFD3/12 relay, through-hole; pin 1 (the coil's +) is the square pad, at
   the upper right of the two rows.

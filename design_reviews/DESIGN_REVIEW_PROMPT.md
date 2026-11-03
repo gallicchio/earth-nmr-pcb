@@ -57,8 +57,9 @@ current off through a 130 V clamp in 0.4 ms; a DPDT relay, which by design never
 or breaks current, then hands the coil to a tank tuned to the protons (1960 Hz in
 Claremont, set on an eight-switch binary C0G bank); an OPA197 instrumentation
 amplifier (x101), a 688 Hz-4.2 kHz band-pass and a x21/x201 gain stage bring the
-1.2 µV free induction decay to about 0.8 V at OUT.  A 555 and two comparators sequence
-it; POLARIZE IN and SYNC OUT let a computer run it.
+1.2 µV free induction decay to about 0.8 V at OUT, and a VOLUME knob, a follower and a
+3.5 mm jack let you hear it.  A 555 and two comparators sequence it; POLARIZE IN and
+SYNC OUT let a computer run it.
 
 | read | for |
 |---|---|
@@ -68,7 +69,7 @@ it; POLARIZE IN and SYNC OUT let a computer run it.
 | `sim/design.py`, `sim/design.json` | the arithmetic: every value on the sheet and board comes from it |
 | `sim/nmr_sim.py`, `sim/results.json` | the ngspice simulation of the exported netlist and its checks |
 | `scripts/parts.py` | every part, its LCSC code and stock, the JLCPCB rotation table |
-| `scripts/gen_sch.py`, `scripts/check_circuit.py` | the sheet and the 365 netlist assertions |
+| `scripts/gen_sch.py`, `scripts/check_circuit.py` | the sheet and the 393 netlist assertions |
 | `scripts/layout.py`, `scripts/gen_pcb.py` | the board: placements and wires, and how each wire becomes copper and silkscreen |
 
 ## 2. The claim to break
@@ -76,7 +77,7 @@ it; POLARIZE IN and SYNC OUT let a computer run it.
 "Built by JLCPCB from `out/earthnmr/` as it stands, with the coil of the handbook and a
 12 V battery, outdoors in Claremont, it shows the protons' free induction decay at OUT,
 and nothing on the board or in its documents is wrong."  The build's own checks: ERC 0;
-DRC 0 at every severity with schematic parity; 365 circuit assertions; the simulation
+DRC 0 at every severity with schematic parity; 393 circuit assertions; the simulation
 within tolerance of the arithmetic; the fab-package checks; 13 document claims.
 
 ## 3. What to attack

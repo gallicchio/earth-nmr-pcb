@@ -10,8 +10,8 @@ how close they are.
 
 - **The coil** (section 2) and a litre of water in a plastic bottle that fits inside it.
 - **±15 V**, 100 mA each rail, into POWER (J1: +15 V, ground, -15 V, left to right).
-- **A polarizing supply**, 6-30 V and up to 3 A, into POLARIZE SUPPLY (J2, + at the
-  bottom pin).  A 12 V lead-acid or LiFePO4 battery is the quietest choice; a bench
+- **A polarizing supply**, 6-30 V and up to 3 A (26 V at most with the coil of section 2,
+  which draws 3 A through its 8.9 ohm), into POLARIZE SUPPLY (J2, + at the bottom pin).  A 12 V lead-acid or LiFePO4 battery is the quietest choice; a bench
   supply works, and its ripple does not matter (the receiver listens only while the
   supply is disconnected from the coil).
 - **A shielded twisted pair** from the coil to COIL (J3: shield, A, B from the top).
@@ -118,8 +118,8 @@ MODE back to LISTEN.
 Connect the coil.  MODE at LISTEN: the relay rests, the coil is the tank's inductor.
 OUT shows the receiver's noise, about 12 mV rms on HIGH, and whatever the room puts
 into the coil (60 Hz is mostly filtered: x1 at OUT on HIGH, against x700,000 for the
-protons).  Put a 1 V sine into CAL IN and sweep it through 2 kHz: OUT on LOW peaks at
-about 4 V where the tank resonates.  Set SW1 so the peak is at the Larmor frequency.
+protons).  Put a 50 ohm generator set to 1 V into CAL IN (0.5 V at the jack's 51 ohm
+load) and sweep it through 2 kHz: OUT on LOW peaks at about 4 V where the tank resonates.  Set SW1 so the peak is at the Larmor frequency.
 
 ### 5.4 Polarizing
 
@@ -152,7 +152,7 @@ shows what the ears get.  A mono plug, which shorts the ring to the sleeve, is s
 
 **Caution:** DRAIN, the coil and its cable reach about 130 V at every switch-off.  The
 coil dissipates 20 W while it polarizes at 1.5 A; at a 50 % duty cycle it gets warm.
-Keep the polarizing supply under 30 V and 3 A.
+Keep the polarizing supply under 30 V and 3 A (26 V with the coil of section 2).
 
 ## 6. Probe loops
 
@@ -183,7 +183,8 @@ Keep the polarizing supply under 30 V and 3 A.
 3. **T1.**  Vary POLARIZE TIME and plot the FID's starting amplitude against it: it
    grows as 1 - exp(-t/T1).  Tap water is about 2-3 s; a pinch of copper sulphate
    shortens it a lot.  For exact times, set SEQUENCE to EXT and drive POLARIZE IN from
-   a signal generator or a computer (high, above 1.3 V, polarizes).
+   a signal generator or a computer (high, above 1.3 V, polarizes; a bipolar square wave
+   polarizes on its positive half and is safe).
 4. **Other samples.**  Oil, alcohol, vinegar: other T1s, other amplitudes (the
    proton density).
 5. **The tank.**  Sweep CAL IN with the coil connected and plot OUT against frequency:
@@ -193,6 +194,7 @@ Keep the polarizing supply under 30 V and 3 A.
 
 - The polarizing current is up to 3 A (the relay's contacts and F1); the supply up to
   30 V (D6 clamps above 33 V).
+- POLARIZE IN takes ±30 V either way round (R44, D12, R59); CAL IN 5 Vpp.
 - The polarizing switch-off is the clamp's: about 130 V at 3 A, 162 V at most, against
   Q1's 200 V.
 - PHONES drives any headphones (a short draws 21 mA at most); at full volume a 32 ohm

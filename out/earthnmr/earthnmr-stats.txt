@@ -1,6 +1,6 @@
 PCB statistics report
 =====================
-- Date: 2026-11-02
+- Date: 2026-11-03
 - Project: earthnmr
 - Board name: earthnmr
 
@@ -9,21 +9,21 @@ Board
 - Width: 243.0000 mm
 - Height: 150.0000 mm
 - Area: 36442.261 mm²
-- Front copper area: 2712.072 mm²
+- Front copper area: 2715.849 mm²
 - Back copper area: 35794.816 mm²
 - Min track clearance: 0.4849 mm
 - Min track width: 0.3500 mm
 - Min drill diameter: 0.3000 mm
 - Board stackup thickness: 1.6062 mm
 
-- Front footprint area: 5023.044 mm²
+- Front footprint area: 5029.376 mm²
 - Back footprint area: 357.176 mm²
-- Front component density: 13.78 %
+- Front component density: 13.80 %
 - Back component density: 0.98 %
 Pads
 ----
 - Through hole: 56
-- SMD: 392
+- SMD: 394
 - Connector: 0
 - NPTH: 15
 - Castellated: 0
@@ -42,9 +42,9 @@ Components
 |              | Front Side | Back Side | Total |
 |--------------|------------|-----------|-------|
 |THT:          |         15 |         0 |    15 |
-|SMD:          |        171 |         0 |   171 |
+|SMD:          |        172 |         0 |   172 |
 |Unspecified:  |          4 |         0 |     4 |
-|Total:        |        190 |         0 |   190 |
+|Total:        |        191 |         0 |   191 |
 
 Drill holes
 -----------

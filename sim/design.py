@@ -208,7 +208,8 @@ V_DIODE = 0.5              # 1N4148W at a few microamps to a milliamp
 V_OH_555 = VCC - 1.4       # NE555 output high, lightly loaded (datasheet: VCC - 1.7 V at 100 mA)
 TIMER = dict(C="1uF", n_C=3, R_min="100k", RV="2M")
 DELAY = dict(R_gate="220k", R_hold="270k", C="100nF_C0G", R_th_top="10k", R_th_bot="10k")
-EXT = dict(R_series="10k", R_pd="100k", R_top="100k", R_bot="10k", R_hyst="1M", R_pu="10k")
+EXT = dict(R_series="10k", R_pd="100k", R_top="100k", R_bot="10k", R_hyst="1M", R_pu="10k", R_in="10k")
+V_EXT_MAX = 30.0           # what POLARIZE IN is promised to survive, either polarity
 RELAY = dict(coil_ohm=1028.0, operate_ms=4.0, release_ms=4.0, pull_in_V=9.0, max_V=24.0)
 GATE = dict(R_pu="4.7k", R_g="47R", R_gs="100k")
 TVS_VBR = (111.0, 123.0)   # SMCJ100A breakdown, min and max
@@ -345,9 +346,14 @@ def main():
                            E_max_J=1.0)
     d["relay"] = dict(RELAY, V_coil=VCC - 0.1, I_coil=(VCC - 0.1) / RELAY["coil_ohm"])
     d["ext"] = dict(EXT, v_th=VCC * ohms(EXT["R_bot"]) / (ohms(EXT["R_top"]) + ohms(EXT["R_bot"])),
-                    hyst=VCC * ohms(EXT["R_series"]) / ohms(EXT["R_hyst"]))
+                    hyst=VCC * ohms(EXT["R_series"]) / ohms(EXT["R_hyst"]), v_max=V_EXT_MAX,
+                    # the worst input: the clamp's current through R_series, and R_series's heat
+                    i_clamp=V_EXT_MAX / ohms(EXT["R_series"]),
+                    p_series=V_EXT_MAX ** 2 / ohms(EXT["R_series"]))
+    assert d["ext"]["p_series"] < R_0805_W, "R44 would run past its rating at the input's limit"
     d["gate"] = dict(GATE)
-    d["pol_supply"] = dict(V=POL_SUPPLY, I_max=I_POL_MAX)
+    # the reference coil's resistance caps the supply that keeps it under the fuse's 3 A
+    d["pol_supply"] = dict(V=POL_SUPPLY, I_max=I_POL_MAX, V_max_ref_coil=math.floor(I_POL_MAX * c["R"]))
     d["passives"] = sorted({INA["R_series"], INA["R_bias"], INA["R_f"], INA["R_g"], INA["R_diff"],
                             hp1["R1"], hp1["R2"], hp2["R1"], hp2["R2"], lp["R1"],
                             GAIN["R_f"], GAIN["R_lo"], GAIN["R_hi"], OUT_R, PHONES["R_feed"], PHONES["R_out"],
@@ -388,6 +394,8 @@ def report(d):
     print(f"  timer: POLARIZE {t['t_pol'][0]:.2f}-{t['t_pol'][1]:.2f} s, LISTEN {t['t_listen'][0]:.2f}-"
           f"{t['t_listen'][1]:.2f} s")
     dl = d["delay"]
+    print(f"  polarizing supply: {d['pol_supply']['V'][0]:.0f}-{d['pol_supply']['V'][1]:.0f} V, up to "
+          f"{d['pol_supply']['I_max']:.0f} A; the reference coil draws that at {d['pol_supply']['V_max_ref_coil']:.0f} V")
     print(f"  gate on {dl['t_gate'] * 1e3:.1f} ms after the relay (margin {dl['margin_on'] * 1e3:.1f} ms); "
           f"relay held {dl['t_hold'] * 1e3:.1f} ms after the gate, listening from "
           f"{dl['t_listen_start'] * 1e3:.1f} ms")

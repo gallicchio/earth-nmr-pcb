@@ -15,4 +15,8 @@ A reviewer only ever writes inside its own directory.  The brief says what to re
 how to work and what the report must contain.  A later round gets a later date, so the
 rounds sort themselves.
 
-No round has run yet: rev A, 2026-11-02, is ready for round 1.
+| round | directory | reviewer | verdict |
+|---|---|---|---|
+| 1 | `2026-11-03_Claude-Fable-5.1/` | the author (Claude Fable 5.1), before any other report | order after named fixes: 11 findings, one circuit fault (the POLARIZE IN clamp against the TS391's -0.3 V input limit), the rest labels and documents; all applied in the next commit |
+
+Rev A, 2026-11-03, is ready for outside reviewers: the brief is `DESIGN_REVIEW_PROMPT.md`.

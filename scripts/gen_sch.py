@@ -76,7 +76,7 @@ class Draw:
                        date=parts.BOARD_DATE, rev=parts.REV,
                        company="Jason Gallicchio and Claude",
                        comments=[f"Larmor frequency {D['site']['f_L']:.0f} Hz at {D['site']['name']} "
-                                 f"({D['site']['F_nT'] / 1000:.1f} uT, {D['site']['source']}); "
+                                 f"({D['site']['F_nT'] / 1000:.1f} uT, {D['site']['source']})",
                                  f"{D['world']['f_L'][0]:.0f}-{D['world']['f_L'][1]:.0f} Hz anywhere on Earth",
                                  "OPA197 for every amplifier, TS391 comparators, NE555 timer, IRFS4227 switch, HFD3 relay",
                                  "Open source, CERN-OHL-P-2.0 -- " + parts.PROJECT_URL])
@@ -230,7 +230,7 @@ class Draw:
         (+ pin, - pin, output pin)."""
         s = self.s
         s.place(sym("OPAMP"), ref, "OPA197", x, y, footprint=fp("OPAMP"), mirror=mirror,
-                fields=part_fields("OPAMP"), ref_off=(2.0, -1.2 if mirror != "x" else 1.2),
+                fields=part_fields("OPAMP"), ref_off=(2.0 if len(ref) <= 2 else 0.9, -1.2 if mirror != "x" else 1.2),
                 val_off=(2.0, 1.2), ref_justify="left", val_justify="left", hide_value=True)
         vp, vm = s.pin(ref, 1, "5"), s.pin(ref, 1, "2")
         self._dirs[vp] = "up" if vp[1] < y else "down"
@@ -243,7 +243,7 @@ class Draw:
         """A TS391 at (x, y) on +15 V and ground, + on top.  Returns (+, -, out)."""
         s = self.s
         s.place(sym("COMP"), ref, "TS391", x, y, footprint=fp("COMP"),
-                fields=part_fields("COMP"), ref_off=(2.0, -1.2), val_off=(2.0, 1.2),
+                fields=part_fields("COMP"), ref_off=(2.0 if len(ref) <= 2 else 0.9, -1.2), val_off=(2.0, 1.2),
                 ref_justify="left", val_justify="left", hide_value=True)
         vp, vm = s.pin(ref, 1, "5"), s.pin(ref, 1, "2")
         self._dirs[vp] = "up"
@@ -279,7 +279,7 @@ class Draw:
         mir = "y" if facing == "left" else None
         s.place("Connector:Conn_Coaxial", ref, "BNC", x, y, mirror=mir,
                 footprint=fp("BNC"), fields=part_fields("BNC"),
-                ref_off=(-3.0 if facing == "left" else 3.0, 4.0), val_off=(-3.0 if facing == "left" else 3.0, 5.8),
+                ref_off=(-5.6 if facing == "left" else 3.0, 4.0), val_off=(-5.6 if facing == "left" else 3.0, 5.8),
                 ref_justify="right" if facing == "left" else "left",
                 val_justify="right" if facing == "left" else "left", hide_value=True)
         pin, shield = s.pin(ref, 1, "1"), s.pin(ref, 1, "2")
@@ -324,7 +324,8 @@ def build():
     ps = D["pol_supply"]
     d.title("POLARIZING SUPPLY", g(8), g(26.5),
             [f"{ps['V'][0]:.0f}-{ps['V'][1]:.0f} V, up to {ps['I_max']:.0f} A.  A bench supply in",
-             "constant current sets the coil's current;", "or the coil's resistance does."], size=2.0)
+             "constant current sets the coil's current;", "or the coil's resistance does:",
+             f"the reference coil draws {ps['I_max']:.0f} A at {ps['V_max_ref_coil']:.0f} V."], size=2.0)
     FX = g(19.5)
     s.place(sym("PTC"), "F1", "3A", FX, VPOL_Y, rot=90, footprint=fp("PTC"), fields=part_fields("PTC"),
             ref_off=(0, -2.8), val_off=(0, 2.8))
@@ -332,7 +333,7 @@ def build():
     fl, fr = (f1, f2) if f1[0] < f2[0] else (f2, f1)
     s.wire(j2p, fl)
     # the crowbar: a reversed supply forward-biases D5 and trips F1
-    X5, X6, XC5, XL3 = g(24), g(28.5), g(33), g(38)
+    X5, X6, XC5, XL3 = g(23), g(29), g(35), g(40)
     k5, a5 = d.diode("D5", "DSCH", X5, VPOL_Y + g(2.5), rot=270, side="left")
     s.wire((X5, VPOL_Y), k5)
     s.wire(a5, (X5, VPOL_Y + g(5)))
@@ -355,7 +356,7 @@ def build():
     s.wire(r3b, a3)
     s.wire(k3, (XL3, VPOL_Y + g(10)))
     d.gnd(XL3, VPOL_Y + g(10))
-    d.text(["LED3: the supply is there"], XL3 + g(1), VPOL_Y + g(11.5), size=1.0)
+    d.text(["LED3: the supply is there"], g(30), VPOL_Y + g(12), size=1.0)
     XV = g(44)                       # +V POL comes down this column to the relay
     s.wire(fr, (XV, VPOL_Y))
     d.testpoint(XV - g(2), VPOL_Y, "V POL", rot=0)
@@ -379,8 +380,7 @@ def build():
     # pole A turned so its common faces the coil and normally-open looks up;
     # pole B so normally-open looks down, to the switch under it
     s.place(sym("RELAY"), "K1", "HFD3/12", POLE_X, YA, rot=270, mirror="x", unit=2,
-            footprint=fp("RELAY"), fields=part_fields("RELAY"),
-            ref_off=(-1.0, -5.6), val_off=(-1.0, -3.8), ref_justify="right", val_justify="right")
+            footprint=fp("RELAY"), fields=part_fields("RELAY"), hide_ref=True, hide_value=True)
     s.place(sym("RELAY"), "K1", "HFD3/12", POLE_X, YB, rot=270, unit=3,
             footprint=fp("RELAY"), fields=part_fields("RELAY"), hide_ref=True, hide_value=True)
     comA, ncA, noA = s.pin("K1", 2, "4"), s.pin("K1", 2, "3"), s.pin("K1", 2, "5")
@@ -393,7 +393,7 @@ def build():
     s.wire(noA, (XV, noA[1]), (XV, VPOL_Y))
     d.label("V_POL", XV - g(6), noA[1])
     d.text(["K1 HFD3/12: released, the coil LISTENS (as drawn);",
-            "energized, it is POLARIZED: A to V POL, B to the switch"], POLE_X - g(5), YA - g(8.5), size=1.0)
+            "energized, it is POLARIZED:", "A to V POL, B to the switch"], POLE_X - g(6), YA - g(9.5), size=1.0)
 
     # ================================================== POLARIZING SWITCH =====
     QX, QY = g(35), g(84)
@@ -418,7 +418,7 @@ def build():
     d.text([f"D7 SMCJ100A holds the drain near {D['switch_off']['v_clamp_3A']:.0f} V",
             "while the coil's current falls to zero in a",
             f"straight line ({D['switch_off']['t_ramp_ref'] * 1e3:.1f} ms for the reference coil):",
-            "faster than the protons can follow"], DCX + g(6.5), QY - g(1.5), size=1.0)
+            "faster than the protons can follow"], g(30), g(93), size=1.0)
     # the gate: 47 ohm in, 100k to the source
     r5a, r5b = d.res("R5", D["gate"]["R_g"], qg[0] - g(2.5), qg[1], rot=90, text="above")
     s.wire(r5b, qg)
@@ -428,7 +428,7 @@ def build():
     s.wire(r6b, (qs[0] - g(1.5), SRC_Y), (qs[0], SRC_Y))
     d.label("SOURCE", qs[0] - g(1.2), SRC_Y)
     d.testpoint(qs[0] - g(1.5), SRC_Y, "I POL", rot=180, dx=-1.8, dy=3.6, justify="right")
-    d.text(["I POL: 0.1 V per ampere,", "on and ramping off"], g(18), SRC_Y + g(2.4), size=1.0)
+    d.text(["I POL: 0.1 V per ampere,", "on and ramping off"], g(16), SRC_Y + g(2.4), size=1.0)
 
     # ======================================================= the TANK =========
     TP_Y, TN_Y = g(56), g(86)
@@ -757,9 +757,9 @@ def build():
     # --- POLARIZE IN: a level detector, TTL to 30 V
     EY = g(178)
     je = d.bnc("J7", g(14), EY, "POLARIZE IN", [f"high (> {ex['v_th']:.1f} V) = polarize: TTL, 3.3 V, 5 V,",
-                                                "a function generator; +/-30 V max;", "open = listen"],
+                                                f"a function generator; ±{ex['v_max']:.0f} V max;", "open = listen"],
                facing="left", text_at=(g(8), EY - g(9)))
-    r43a, r43b = d.res("R43", ex["R_pd"], je[0] + g(1), je[1] + g(3), side="left")
+    r43a, r43b = d.res("R43", ex["R_pd"], je[0] + g(1), je[1] + g(3), side="right")
     s.wire((je[0] + g(1), je[1]), r43a)
     d.gnd(*r43b)
     r44a, r44b = d.res("R44", ex["R_series"], je[0] + g(5), je[1], rot=90, text="above")
@@ -768,9 +768,14 @@ def build():
     pe, me, oe = d.comparator("U8", UX8, UY8)
     XIN = pe[0] - g(5)
     s.wire(r44b, (XIN, je[1]))
-    s.wire((XIN, je[1]), (XIN, pe[1]), pe) if abs(je[1] - pe[1]) > 0.01 else s.wire((XIN, je[1]), pe)
-    # the clamp: BAV99, pin 3 on the input, pin 1 (anode) to ground, pin 2 (cathode) to +15 V
-    s.place(sym("DCLAMP"), "D12", "BAV99", XIN - g(2), pe[1] - g(6), rot=90, footprint=fp("DCLAMP"),
+    assert abs(je[1] - pe[1]) < 0.01, (je, pe)
+    # R59: the comparator's own pin behind 10k, so the clamp's -0.35 V never puts more than
+    # microamps into it (TS391: -0.3 V absolute maximum); the hysteresis lands on the clamped node
+    r59a, r59b = d.res("R59", ex["R_in"], XIN + g(3.5), pe[1], rot=90, text="above")
+    s.wire((XIN, je[1]), r59a)
+    assert abs(r59b[0] - pe[0]) < 0.01 and abs(r59b[1] - pe[1]) < 0.01, (r59b, pe)
+    # the clamp: BAT54S, pin 3 on the node, pin 1 (anode) to ground, pin 2 (cathode) to +15 V
+    s.place(sym("DCLAMP"), "D12", parts.PARTS["DCLAMP"]["value"], XIN - g(2), pe[1] - g(6), rot=90, footprint=fp("DCLAMP"),
             fields=part_fields("DCLAMP"), ref_off=(-3.0, -1.4), val_off=(-3.0, 0.4),
             ref_justify="right", val_justify="right")
     d12_1, d12_2, d12_3 = s.pin("D12", 1, "1"), s.pin("D12", 1, "2"), s.pin("D12", 1, "3")
@@ -803,7 +808,9 @@ def build():
     d.rail("+15V", r48a[0], r48a[1] - g(1))
     s.wire((OEX + g(2), oe[1]), (OEX + g(4), oe[1]))
     d.testpoint(OEX + g(4), oe[1], "EXT", rot=180, dy=3.6)
-    d.text([f"U8: a comparator at {ex['v_th']:.1f} V (R45, R46),", f"{ex['hyst'] * 1e3:.0f} mV of hysteresis (R47)"],
+    d.text([f"U8: a comparator at {ex['v_th']:.1f} V (R45, R46),", f"{ex['hyst'] * 1e3:.0f} mV of hysteresis (R47).",
+            f"D12 clamps the input between -0.35 V and +15.3 V; R59 keeps",
+            f"the TS391's pin inside its -0.3 V limit at ±{ex['v_max']:.0f} V in"],
            UX8 - g(8), UY8 + g(11), size=1.0)
 
     # --- SEQUENCE (INT / EXT) and MODE (RUN / LISTEN ONLY)
@@ -866,7 +873,7 @@ def build():
         ca, cb = d.cap(cc, dl["C"], xn, y2 + g(3.5), side="right")
         s.wire((xn, y2), ca)
         d.gnd(*cb)
-        d.testpoint(xn, y1 - g(1.5), tp, rot=90, dx=-1.8, dy=0.0, justify="right")
+        d.testpoint(xn, y1 - g(1.5), tp, rot=90, dx=-1.8, dy=-2.4, justify="right")
         s.wire((xn, y1), (xn, y1 - g(1.5)))
         pc, mc, oc = d.comparator(uu, xn + g(10), y2 + g(2))
         s.wire((xn, y2), (pc[0] - g(2), y2), (pc[0] - g(2), pc[1]), pc)
@@ -915,7 +922,7 @@ def build():
     s.wire(kc12, q2c)
     s.wire(kc1, (kc1[0], kc1[1] - g(2)))
     d.rail("+15V", kc1[0], kc1[1] - g(2))
-    d.text(["K1 coil", "1028 ohm"], kc1[0] - g(9.5), KY - g(0.5), size=1.0)
+    d.text(["K1 coil", "1028 ohm"], kc1[0] - g(6), KY + g(1.5), size=1.0)
     DFX = kc1[0] + g(4)
     k8, a8 = d.diode("D8", "DSIG", DFX, KY, rot=270, side="right")
     s.wire((kc1[0], kc1[1] - g(1)), (DFX, kc1[1] - g(1)), k8)
@@ -944,7 +951,7 @@ def build():
     d.gnd(*r54b)
     r55a, r55b = d.res("R55", D["out"]["R"], q3e[0] + g(4), q3e[1] + g(1), rot=90, text="above")
     s.wire((q3e[0], q3e[1] + g(1)), r55a)
-    js_ = d.bnc("J8", r55b[0] + g(5), r55b[1], "SYNC OUT", ["follows POL CMD: 0 / 14 V through 1k;",
+    js_ = d.bnc("J8", r55b[0] + g(5), r55b[1], "SYNC OUT", ["follows POL CMD: 0 / 13 V open, through 1k;",
                                                             "its falling edge is the switch-off:",
                                                             "trigger the scope on it"],
                 facing="right", text_at=(r55b[0] + g(9), r55b[1] - g(4)))
@@ -1041,8 +1048,7 @@ def build():
     s.wire((cols[3], VP_Y), r1a)
     k1l, a1l = d.led("LED1", "LED", cols[3], VP_Y + g(6.5))
     s.wire(r1b, a1l)
-    s.wire(k1l, (cols[3], VP_Y + g(9)))
-    d.gnd(cols[3], VP_Y + g(9))
+    d.gnd(*k1l)
     # -15 V: D4 (clamp, cathode on ground), C2 100 uF (+ on ground), C4, R2 + LED2
     k4d, a4d = d.diode("D4", "DSCH", cols[0], VM_Y - g(3.5), rot=270, side="left")
     s.wire(a4d, (cols[0], VM_Y))
@@ -1062,8 +1068,7 @@ def build():
     s.wire((cols[3], VM_Y), r2b)
     k2l, a2l = d.led("LED2", "LED", cols[3], VM_Y - g(6.5))
     s.wire(r2a, k2l)
-    s.wire(a2l, (cols[3], VM_Y - g(9)))
-    d.gnd(cols[3], VM_Y - g(9), up=True)
+    d.gnd(*a2l, up=True)
     d.flag(RAIL_X1 + g(3), VP_Y, RAIL_X1)
     d.flag(RAIL_X1 + g(3), VM_Y, RAIL_X1)
     d.text(["D1, D2: a reversed supply does nothing", "D3, D4: clamp a rail left open",
@@ -1076,7 +1081,7 @@ def build():
         d.testpoint(x, y, "GND", rot=0, dx=1.8, dy=-3.0)
         s.wire((x, y), (x, y + g(1)))
         d.gnd(x, y + g(1))
-    d.text(["ground loops for the scope's clip"], g(60) + g(2), g(110) + g(2), size=1.0)
+    d.text(["ground loops for the scope's clip"], g(63), g(108.3), size=1.0)
     for i in range(4):
         s.place(sym("MH"), f"MH{i + 1}", "MountingHole", g(290 + 6 * i), g(185),
                 footprint=fp("MH"), in_bom=False, ref_off=(0, -3.5), val_off=(0, 3.5),

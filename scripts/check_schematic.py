@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Check the schematic sheet the way a reader would: is anything on top of
-anything else, and is it all inside the frame?
+anything else, and is it all inside the frame?  Texts against texts, and
+texts against wires (a note drawn across a wire passed the first version of
+this check: review 2026-11-03).
 
 Text extents are estimated from KiCad's stroke font, whose advance measures
 0.92 x the text height per character (calibrated against KiCad's own
@@ -39,6 +41,29 @@ def overlaps(a, b, slack=0.0):
                 or a[3] - slack <= b[1] or b[3] - slack <= a[1])
 
 
+def crosses(box, seg, slack=0.0):
+    """Does the segment pass through the box (shrunk by slack)?  Liang-Barsky."""
+    x0, y0, x1, y1 = box[0] + slack, box[1] + slack, box[2] - slack, box[3] - slack
+    if x0 >= x1 or y0 >= y1:
+        return False
+    (ax, ay), (bx, by) = seg
+    dx, dy = bx - ax, by - ay
+    t0, t1 = 0.0, 1.0
+    for p, q in ((-dx, ax - x0), (dx, x1 - ax), (-dy, ay - y0), (dy, y1 - ay)):
+        if p == 0:
+            if q < 0:
+                return False
+            continue
+        t = q / p
+        if p < 0:
+            t0 = max(t0, t)
+        else:
+            t1 = min(t1, t)
+        if t0 > t1:
+            return False
+    return True
+
+
 def collect(path):
     root = parse_file(path)
     paper = root.first("paper").atom(0)
@@ -56,6 +81,10 @@ def collect(path):
         hidden = e.first("hide") is not None and e.first("hide").atom(0) == "yes"
         return size, just, hidden
 
+    wires = []
+    for w in root.kids("wire"):
+        pts = [(float(p.atom(0)), float(p.atom(1))) for p in w.first("pts").kids("xy")]
+        wires += list(zip(pts, pts[1:]))
     for t in root.kids("text"):
         at = t.first("at")
         size, just, hidden = eff(t)
@@ -102,14 +131,14 @@ def collect(path):
                           text_box(float(at.atom(0)), float(at.atom(1)),
                                    p.atom(1), size, just,
                                    rot=total if total in (90, 270) else 0)))
-    return W, H, items
+    return W, H, items, wires
 
 
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "..", "hardware",
         "earthnmr.kicad_sch")
-    W, H, items = collect(path)
+    W, H, items, wires = collect(path)
     problems = []
 
     inner = (FRAME, FRAME, W - FRAME, H - FRAME)
@@ -127,7 +156,18 @@ def main():
             if overlaps(items[i][1], items[j][1], slack=0.35):
                 problems.append(f"overlap: {items[i][0]}  <->  {items[j][0]}")
 
-    print(f"  sheet {W:.0f} x {H:.0f} mm, {len(items)} text items checked")
+    # a text drawn across a wire (net labels sit on wires by design; a field's box is
+    # generous, so a wire has to reach 0.3 mm inside it)
+    for (name, box) in items:
+        if name.startswith("label "):
+            continue
+        for seg in wires:
+            if crosses(box, seg, slack=0.3):
+                problems.append(f"on a wire: {name} at ({box[0]:.1f},{box[1]:.1f})-({box[2]:.1f},{box[3]:.1f}), "
+                                f"the wire ({seg[0][0]:.1f},{seg[0][1]:.1f})-({seg[1][0]:.1f},{seg[1][1]:.1f})")
+                break
+
+    print(f"  sheet {W:.0f} x {H:.0f} mm, {len(items)} text items checked against each other and {len(wires)} wires")
     for p in problems[:40]:
         print(f"  FAIL {p}")
     if problems:
